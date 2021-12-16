@@ -7,25 +7,51 @@ declare let window: any;
 
 export const ContentPage: React.FC = () => {
   
-  const getContent = async () => {
+  // get post content
+  const getEntry = async (id: Number) => {
     const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
     const whitelist = [canisterId]
-    // TODO: DO NOT request connect every time
-    await window.ic.plug.requestConnect({
-      whitelist: whitelist, 
-    })
+    const result = await window.ic.plug.isConnected();
+    console.log("connected:", result)
+    // if(!result) {
+      // TODO: DO NOT request connect every time
+      await window.ic.plug.requestConnect({
+        whitelist: whitelist, 
+      })
+    // }
 
     const actor = await window.ic.plug.createActor({
       canisterId: canisterId,
       interfaceFactory: idlFactory,
     });
 
-    console.log(sessionStorage.getItem('identity'))
-    const states = await actor.getAllEntries()
-    console.log('entries: ', states)
+    const entry = await actor.getEntry(id);
+    console.log('entry: ', entry)
   }
 
-  const content = getContent()
+  // like the post
+  const like = async (id: Number) => {
+    const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
+    const whitelist = [canisterId]
+    const result = await window.ic.plug.isConnected();
+    console.log("connected:", result)
+    // if(!result) {
+      // TODO: DO NOT request connect every time
+      await window.ic.plug.requestConnect({
+        whitelist: whitelist, 
+      })
+    // }
+
+    const actor = await window.ic.plug.createActor({
+      canisterId: canisterId,
+      interfaceFactory: idlFactory,
+    });
+
+    const ret = await actor.like(id);
+    console.log('ret: ', ret)
+  }
+
+  const content = getEntry(1)
 
   return(
     <Stack>

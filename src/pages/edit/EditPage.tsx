@@ -10,16 +10,20 @@ export const EditPage: React.FC = () => {
   const createEntry = async (content: string) => {
     const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
     const whitelist = [canisterId]
-    await window.ic.plug.requestConnect({
-      whitelist: whitelist, 
-    })
+    const result = await window.ic.plug.isConnected();
+    console.log("connected:", result)
+    if(!result) {
+      // TODO: DO NOT request connect every time
+      await window.ic.plug.requestConnect({
+        whitelist: whitelist, 
+      })
+    }
 
     const actor = await window.ic.plug.createActor({
       canisterId: canisterId,
       interfaceFactory: idlFactory,
     });
 
-    console.log(sessionStorage.getItem('identity'))
     const ret = await actor.createEntry(content)
     console.log('ret: ', ret)
   }
