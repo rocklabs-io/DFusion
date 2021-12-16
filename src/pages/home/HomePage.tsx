@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./HomePage.module.css";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header";
-import { Button, Stack, ThemeProvider, Text, Box, Card } from "degen";
+import { Button, Stack, ThemeProvider, Text, Heading, Card } from "degen";
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,10 +14,10 @@ export const HomePage: React.FC = () => {
         backgroundRepeat: 'no-repeat', 
         backgroundSize: 'cover',
         backgroundPosition: 'center center' }}>
-      
       <div> logo image </div>
-      <Text>
-        <h1>Spread the idea of Web3.</h1>
+        <Card padding="20" >
+        <a style={{fontSize: '40px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
+        </Card>
         <Stack align={"center"} justify={"center"}>
           <Card padding="6" width="128" shadow>
             <Stack align={"center"} justify={"center"}>
@@ -27,8 +27,6 @@ export const HomePage: React.FC = () => {
             </Stack>
           </Card>
         </Stack>
-      </Text>
+
     </div>);
 }
-
-//
