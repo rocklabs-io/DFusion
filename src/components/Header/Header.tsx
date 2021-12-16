@@ -16,10 +16,10 @@ export const Header: React.FC = () => {
 
   const clickConnect = async () => {
     // this.setState({step: 3});  // to confirm page..    
-    const nnsCanisterId = 'ymglq-2qaaa-aaaah-qcbzq-cai'
+    const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
     // Whitelist
     const whitelist = [
-      nnsCanisterId, "yxdxv-aiaaa-aaaah-qcb3a-cai"
+      canisterId
     ];
     // Make the request
     // var result = await window.ic.plug.isConnected();
