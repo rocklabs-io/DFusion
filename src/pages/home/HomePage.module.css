@@ -1,0 +1,84 @@
+
+.page-content {
+  width: 80%;
+  height: 85%;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 90vh;
+}
+
+.big-circle-container{
+  width: 40%;
+  height: 90%;
+  float: right;
+  margin-right: 10%;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+
+.big-circle {
+  width: 100%;
+  display: inline-block;
+  border-radius: 50%;
+  border: 10px solid #F08331;
+  overflow: hidden;
+}
+
+.big-circle:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: 100%;
+  height: 0;
+}
+
+.big-circle video{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.button-arrow {
+  width: 40%;
+  float: left;
+  padding-left: 10%;
+  position: absolute;
+  bottom: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.create-now {
+  width: 30%;
+  /* width: 10%; */
+  /* float: left; */
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+.bottom {
+  height: 8%;
+  width: 25%;
+  float: left;
+  padding-left: 5%;
+  position: absolute;
+  bottom: 2%;
+  color: #F08331;
+}
+
+.bottom-link {
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottom-link span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.bottom-link img {
+  width: 15px;
+}
+
