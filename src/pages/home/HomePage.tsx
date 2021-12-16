@@ -24,17 +24,15 @@ export const HomePage: React.FC = () => {
         <a style={{fontSize: '60px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
         </Card>
       </div>
-      <div className={styles["card"]}>
-        <Stack align={"center"} justify={"center"}>
-          <Card padding="6" width="128" shadow>
-            <Stack align={"center"} justify={"center"}>
-              We're creators.
-              <h1>Let's get started</h1>
-              <Button loading={false} > New Entry </Button>
-            </Stack>
-          </Card>
-        </Stack>
-        </div>
+      <Stack align={"center"} justify={"center"}>
+        <Card padding="6" width="128" shadow>
+          <Stack align={"center"} justify={"center"}>
+            We're creators.
+            <h1>Let's get started</h1>
+            <Button loading={false} > New Entry </Button>
+          </Stack>
+        </Card>
+      </Stack>
 
     </div>);
 }

@@ -65,49 +65,6 @@
   color: #F08331;
 }
 
-.bottom-link {
-  width: 100%;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-}
-
-.bottom-link span {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.bottom-link img {
-  width: 15px;
-}
-
 .logo {
-  position: absolute;
-  left: 43.4%;
-  right: 43.4%;
-  top: 11.78%;
-  bottom: 73.44%;
-}
-
-.slogan {
-  position: absolute;
-  width: 751px;
-  height: 75px;
-  left: 345px;
-  top: 303px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 24px 164px;
-
-  position: absolute;
-  width: 20%;
-  height: 197px;
-  left: 28%;
-  top: 60%;
+  padding: 5%;
 }
