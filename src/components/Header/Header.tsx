@@ -16,10 +16,10 @@ export const Header: React.FC = () => {
 
   const clickConnect = async () => {
     // this.setState({step: 3});  // to confirm page..    
-    const nnsCanisterId = 'ymglq-2qaaa-aaaah-qcbzq-cai'
+    const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
     // Whitelist
     const whitelist = [
-      nnsCanisterId, "yxdxv-aiaaa-aaaah-qcb3a-cai"
+      canisterId
     ];
     // Make the request
     // var result = await window.ic.plug.isConnected();
@@ -75,9 +75,12 @@ export const Header: React.FC = () => {
               Logo DFusion
             </h3>
         </div>
-        <div style={{width: '30%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+        <div style={{width: '20%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
           <div className={styles.addressBlock}>
-            {add?getDropDown() : <div className={styles.dropdownList} onClick={clickConnect}> <img style={{height: '25px', paddingTop: '0'}} src='./plugDark.svg' />Connect Plug</div>}
+            {add?getDropDown() : <div className={styles.dropdownList} onClick={clickConnect}> 
+              <img style={{height: '23px', paddingTop: '0'}} src='./plugDark.svg' />
+                Connect Plug
+              </div>}
           </div>
         </div>
       </div>
