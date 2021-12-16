@@ -1,7 +1,7 @@
-
 .page-content {
   width: 80%;
-  height: 85%;
+  height: 100%;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
   min-height: 90vh;
@@ -67,4 +67,16 @@
 
 .logo {
   padding: 5%;
+}
+
+.scrollArrow {
+  position: fixed;
+  bottom: 5%;
+  align-items: center;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.scrollArrow :hover{
+  transform: scale(2);
 }

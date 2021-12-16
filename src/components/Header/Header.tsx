@@ -70,7 +70,7 @@ export const Header: React.FC = () => {
   return (
     <div className={styles.header}>
       <div className={styles.headerMain}>
-        <div className={styles.headerLogo}>
+        <div className={styles.headerLogo} onClick={()=>{navigate('/')}}>
             <h3 className={styles.headerTitle}>
               Logo DFusion
             </h3>
