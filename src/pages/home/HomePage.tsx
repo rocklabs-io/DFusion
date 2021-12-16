@@ -16,7 +16,7 @@ export const HomePage: React.FC = () => {
         backgroundPosition: 'center center' }}>
       <div> logo image </div>
         <Card padding="20" >
-        <a style={{fontSize: '40px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
+        <a style={{fontSize: '60px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
         </Card>
         <Stack align={"center"} justify={"center"}>
           <Card padding="6" width="128" shadow>
