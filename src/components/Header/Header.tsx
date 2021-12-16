@@ -75,9 +75,12 @@ export const Header: React.FC = () => {
               Logo DFusion
             </h3>
         </div>
-        <div style={{width: '30%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+        <div style={{width: '20%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
           <div className={styles.addressBlock}>
-            {add?getDropDown() : <div className={styles.dropdownList} onClick={clickConnect}> <img style={{height: '25px', paddingTop: '0'}} src='./plugDark.svg' />Connect Plug</div>}
+            {add?getDropDown() : <div className={styles.dropdownList} onClick={clickConnect}> 
+              <img style={{height: '23px', paddingTop: '0'}} src='./plugDark.svg' />
+                Connect Plug
+              </div>}
           </div>
         </div>
       </div>

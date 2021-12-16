@@ -14,19 +14,25 @@ export const HomePage: React.FC = () => {
         backgroundRepeat: 'no-repeat', 
         backgroundSize: 'cover',
         backgroundPosition: 'center center' }}>
-      <div> logo image </div>
+      <div className={styles["logo"]}> 
+      <img  src='./logo.svg' />  
+      </div>
+      <div className={styles["slogan"]}>
         <Card padding="20" >
         <a style={{fontSize: '60px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
         </Card>
+      </div>
+      <div className={styles["card"]}>
         <Stack align={"center"} justify={"center"}>
           <Card padding="6" width="128" shadow>
             <Stack align={"center"} justify={"center"}>
               We're creators.
               <h1>Let's get started</h1>
-              <Button loading={true} > New Entry </Button>
+              <Button loading={false} > New Entry </Button>
             </Stack>
           </Card>
         </Stack>
+        </div>
 
     </div>);
 }
