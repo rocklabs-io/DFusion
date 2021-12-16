@@ -6,7 +6,9 @@ import { Header } from "../../components/Header";
 import { Button, Stack, ThemeProvider, Text, Heading, Card } from "degen";
 
 export const HomePage: React.FC = () => {
-  const navigate = useNavigate();
+
+  
+
   return (
     <div className={styles["page-content"]}
       style={{ 

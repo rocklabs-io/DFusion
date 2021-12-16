@@ -1,6 +1,7 @@
 import React from "react";
-import styles from './PlazaPage.module.css'
-import { Button, Stack, Heading, Text, Box, Card, Avatar, Tag } from "degen";
+import styles from './PlazaPage.module.css';
+import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
+import Avatar from "boring-avatars";
 
 export const PlazaPage: React.FC = () => {
 
@@ -21,7 +22,12 @@ export const PlazaPage: React.FC = () => {
         <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
-              <Avatar label="writer" size='7' src='' />
+              <Avatar
+                size={40}
+                name="Maria Mitchell"
+                variant="bauhaus"
+                colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+              />
               Rocklabs
               <Tag>0x53d7</Tag>
             </Stack>
@@ -36,7 +42,12 @@ export const PlazaPage: React.FC = () => {
         <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
-              <Avatar label="writer" size='7' src='' />
+            <Avatar
+              size={40}
+              name="Maria Mitchell"
+              variant="marble"
+              colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+            />
               Rocklabs
               <Tag>0x53d7</Tag>
             </Stack>

@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider} from 'degen';
-import 'degen/dist/style.css'
+import "degen/dist/style.css"
 
 ReactDOM.render(
   <ThemeProvider>
