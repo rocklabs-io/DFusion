@@ -8,22 +8,21 @@ declare let window: any;
 export const ContentPage: React.FC = () => {
   
   const getContent = async () => {
-    const canisterId = "rrkah-fqaaa-aaaaa-aaaaq-cai"
+    const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
     const whitelist = [canisterId]
+    // TODO: DO NOT request connect every time
     await window.ic.plug.requestConnect({
       whitelist: whitelist, 
-      host: 'http://localhost:8000'
     })
 
-    const DRocksActor = await window.ic.plug.createActor({
+    const actor = await window.ic.plug.createActor({
       canisterId: canisterId,
       interfaceFactory: idlFactory,
     });
 
     console.log(sessionStorage.getItem('identity'))
-    const states = DRocksActor.getAllEntries()
+    const states = await actor.getAllEntries()
     console.log('entries: ', states)
-
   }
 
   const content = getContent()
