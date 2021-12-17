@@ -1,5 +1,4 @@
-## DFusion Frontend
+## DFusion
 
+Starting as a blogging platform, DFusion aims to be the Web3 common knowledge base on the Internet Computer.
 
-
-Code will be uploaded 12.17
