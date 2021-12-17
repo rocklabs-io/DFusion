@@ -16,7 +16,7 @@ export const ContentPage: React.FC = () => {
     // if(!result) {
       // TODO: DO NOT request connect every time
       await window.ic.plug.requestConnect({
-        whitelist: whitelist, 
+        whitelist: whitelist,
       })
     // }
 
