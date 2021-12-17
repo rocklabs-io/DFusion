@@ -16,9 +16,9 @@ type Entry = {
 export const ContentPage: React.FC = () => {
   // @ts-ignore
   const entryId = parseInt(window.location.href.split("/").pop());
-
-  const [entry, setEntry] = useState<Entry>();
+  // const [entry, setEntry] = useState<Entry>();
   const [content, setContent] = useState<string>("Hello world");
+
   // var content = "hello";
 
   // get post content
@@ -32,20 +32,22 @@ export const ContentPage: React.FC = () => {
   //     // TODO: DO NOT request connect every time
   //     await window.ic.plug.requestConnect({
   //       whitelist: whitelist,
-
   useEffect(() => {
+    // setContent("loading");
     verifyConnectionAndAgent().then(res => {
       getEntry(entryId).then(res => {
-        console.log(res);
-        setEntry(res);
-        setContent(res.content);
+        // console.log(res);
+        // setEntry(res);
+        setContent(res[0].content);
       })
     })
-  }, [entry, content])
+  }, [])
+
+  // console.log("this is state: "+content)
 
   return(
     <Stack>
-      <Editor defaultValue={entry?.content}  />
+      <Editor defaultValue="loading" value={content} readOnly={true}/>
     </Stack>
   )
 }
