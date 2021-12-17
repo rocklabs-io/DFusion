@@ -1,18 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './PlazaPage.module.css';
 import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
 import Avatar from "boring-avatars";
 import { getAllEntries } from "../../canisters/utils";
 
+
+const EntryElement = (article: any) => {
+
+  // procss article props
+  article = article.article
+  var time = new Date(parseInt(article.createAt)).toLocaleString();
+  var creator = article.creator.toText(); 
+
+  return (
+    <Stack align='center'>
+      <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
+        <Stack direction="horizontal" align="center">
+          <Avatar
+            size={40}
+            name="Maria Mitchell"
+            variant="bauhaus"
+            colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+          />
+          {creator.substring(0, 5)+"..."}
+          <Tag>{creator.substring(0, 10)+"..."}</Tag>
+        </Stack>
+        <Box padding='2'><Heading align="left">Heading</Heading></Box>
+        <Box padding='2'><Text align='left'>{article.content}</Text></Box>
+        <Stack direction="horizontal" align="center" justify='space-between'>
+          <Tag>{time}</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 37</Tag>
+        </Stack>
+      </Box>
+    </Stack>
+  )
+}
+
 export const PlazaPage: React.FC = () => {
+  const [articleList, setArticleList] = useState([])
+  const [mounted, setMounted] = useState(false)
 
-
+  // update states
   useEffect(() => {
     getAllEntries().then(res => {
-      console.log(res);
+      // console.log(res);
+      var articles:any = [];
+      if(res.length > 0) {
+        for (var i=0; i<res.length; i++){
+          articles.push(<EntryElement article={res[i]} key={i} />)
+        }
+      }
+      if (!mounted){
+        setArticleList(articles)
+        setMounted(true)
+        console.log(articleList)
+      }
     })
-  })
-
+  }, [])
 
   return (
     <>
@@ -28,6 +71,8 @@ export const PlazaPage: React.FC = () => {
         <Card padding="5" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
+        
+        { articleList }
         <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
@@ -47,7 +92,6 @@ export const PlazaPage: React.FC = () => {
             </Stack>
           </Box>
         </Stack>
-
         <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
@@ -72,3 +116,8 @@ export const PlazaPage: React.FC = () => {
     </>
   )
 }
+
+/**
+
+
+ */
