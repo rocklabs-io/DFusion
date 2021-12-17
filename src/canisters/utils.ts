@@ -2,6 +2,9 @@ import { Principal } from "@dfinity/principal";
 import { idlFactory } from "./dfusion.did";
 
 
+export const shortPrincipal = (principal: string) => `${principal.substr(0,8)}...${principal.substr(-4)}`
+
+
 const getDFusionActor = async () => {
     // @ts-ignore
     return window.ic.plug.createActor({
