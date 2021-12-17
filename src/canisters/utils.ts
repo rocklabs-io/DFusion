@@ -2,6 +2,9 @@ import { Principal } from "@dfinity/principal";
 import { idlFactory } from "./dfusion.did";
 
 
+export const shortPrincipal = (principal: string) => `${principal.substr(0,8)}...${principal.substr(-4)}`
+
+
 const getDFusionActor = async () => {
     // @ts-ignore
     return window.ic.plug.createActor({
@@ -20,12 +23,12 @@ export const verifyConnectionAndAgent = async () => {
     });
     // @ts-ignore
     // @ts-ignore
-    // if (connected && !window.ic.plug.agent) {
-    //     // @ts-ignore
-    //     await window.ic.plug.createAgent({
-    //         whitelist:"kqomr-yaaaa-aaaai-qbdzq-cai"
-    //     })
-    // }
+    if (connected && !window.ic.plug.agent) {
+        // @ts-ignore
+        await window.ic.plug.createAgent({
+            whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
+        })
+    }
     return true;
 }
 
