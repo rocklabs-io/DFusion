@@ -4,7 +4,7 @@ import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
 import Avatar from "boring-avatars";
 import { getAllEntries } from "../../canisters/utils";
 import { useNavigate } from "react-router-dom";
-// import { ContentPage } from "../content";
+import { getTimeString, shortPrincipal } from "../../canisters/utils";
 
 // element 
 const EntryElement = (article: any) => {
@@ -14,24 +14,18 @@ const EntryElement = (article: any) => {
   let navigate = useNavigate()
   // procss article props
   article = article.article
-  console.log(article.createAt)
-  // console.log(article.createAt.toString())
-  var time = Date()
-  // time = time.setMilliseconds(article.createAt) //time.split("GMT")[0]
-  var creator = article.creator.toText()
+  var creator = shortPrincipal(article.creator.toText())
   var paras = article.content.split('\n')
+  var time = getTimeString(article.createAt)
 
-  // var creatorstring = creator.replace('-', '');
-  // var colorList = {"#"+creatorstring.substring(0,5),}
-  //colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
 
   return (
     <Stack align='center'>
       <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
         <Stack direction="horizontal" align="center">
           <Avatar size={32} name={creator} variant="marble" />
-          {creator.substring(0, 5)+"..."}
-          <Tag>{creator.substring(0, 10)+"..."}</Tag>
+          {creator}
+          <Tag>{creator}</Tag>
         </Stack>
         <Box padding='2' cursor="pointer"><div onClick={()=>navigate('/entry/'+index)}><Heading align="left" >{paras.length>1?paras[0].replace('#', ''):" No Title"}</Heading></div></Box>
         <Box padding='2'><Text align='left'>{article.content.replace('\n', '').replace('#', '')}</Text></Box>
