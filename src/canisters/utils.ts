@@ -20,12 +20,12 @@ export const verifyConnectionAndAgent = async () => {
     });
     // @ts-ignore
     // @ts-ignore
-    // if (connected && !window.ic.plug.agent) {
-    //     // @ts-ignore
-    //     await window.ic.plug.createAgent({
-    //         whitelist:"kqomr-yaaaa-aaaai-qbdzq-cai"
-    //     })
-    // }
+    if (connected && !window.ic.plug.agent) {
+        // @ts-ignore
+        await window.ic.plug.createAgent({
+            whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
+        })
+    }
     return true;
 }
 
