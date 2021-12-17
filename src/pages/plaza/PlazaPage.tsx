@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
 
 // element 
-const EntryElement = (article: any, key: number) => {
+const EntryElement = (article: any) => {
 
+  console.log('/entry/'+article.index)
+  var index = article.index
   let navigate = useNavigate()
-
   // procss article props
   article = article.article
   var creator = shortPrincipal(article.creator.toText())
@@ -25,7 +26,7 @@ const EntryElement = (article: any, key: number) => {
           {creator}
           <Tag>{creator}</Tag>
         </Stack>
-        <Box padding='2' cursor="pointer"><Heading align="left" >{paras.length>1?paras[0].replace('#', ''):" No Title"}</Heading></Box>
+        <Box padding='2' cursor="pointer"><div onClick={()=>navigate('/entry/'+index)}><Heading align="left" >{paras.length>1?paras[0].replace('#', ''):" No Title"}</Heading></div></Box>
         <Box padding='2'><Text align='left'>{article.content.replace('\n', '').replace('#', '')}</Text></Box>
         <Stack direction="horizontal" align="center" justify='space-between'>
           <Tag>{time}</Tag><Tag> <a style={{color:'red'}}>&hearts; </a>{article.likes.length}</Tag>
@@ -46,7 +47,7 @@ export const PlazaPage: React.FC = () => {
       var articles:any = [];
       if(res.length > 0) {
         for (var i=0; i<res.length; i++){
-          articles.push(<EntryElement article={res[i]} key={i} />)
+          articles.push(<EntryElement article={res[i]} index={3} key={i} />)
         }
       }
       if (!mounted){
@@ -85,7 +86,7 @@ export const PlazaPage: React.FC = () => {
               Rocklabs
               <Tag>0x53d7</Tag>
             </Stack>
-            <Box padding='2' onClick={() => {console.log(';')}}><Heading align="left">Heading</Heading></Box>
+            <Box padding='2'><Heading align="left">Heading</Heading></Box>
             <Box padding='2'><Text align='left'>I encouraged the folks who started the ESR (e.g.,  @msbernst) to do this and helped get financial support. It has been a very positive experience for all (yes the researchers going through it) and I hope other universities do something similar. </Text></Box>
             <Stack direction="horizontal" align="center" justify='space-between'>
               <Tag>Decenmber 13th, 2021</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 37</Tag>
