@@ -88,7 +88,7 @@ export const PlazaPage: React.FC = () => {
         </Card>
         
         { articleList }
-        <Stack align='center'>
+        {/* <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
               <Avatar
@@ -125,7 +125,7 @@ export const PlazaPage: React.FC = () => {
               <Tag>Decenmber 13th, 2021</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 44</Tag>
             </Stack>
           </Box>
-        </Stack>
+        </Stack> */}
 
       </div>
     </>

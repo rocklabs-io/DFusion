@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useLocation, useMatch, useNavigate, useParams } from "react-router";
 import { Stack, Button } from "degen"; 
+import { shortPrincipal } from "../../canisters/utils";
 import styles from './Header.module.css';
 declare let window: any;
 
@@ -34,7 +35,8 @@ export const Header: React.FC = () => {
         sessionStorage.setItem("address",address)
         setAddState(true)
         console.log("in pid: "+address)
-        setAddString((""+address as string).substring(0, 7)+"...")
+        // setAddString((""+address as string).substring(0, 7)+"...")
+        setAddString((shortPrincipal(address.toText())))
       }
     }    
   }
