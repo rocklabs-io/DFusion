@@ -5,6 +5,7 @@ import { Principal } from "@dfinity/principal";
 import { scryRenderedDOMComponentsWithClass } from "react-dom/test-utils";
 import Editor from "rich-markdown-editor";
 import { getEntry, like, verifyConnectionAndAgent } from "../../canisters/utils";
+import styles from "./ContentPage.module.css"
 
 type Entry = {
   content: string;
@@ -46,8 +47,10 @@ export const ContentPage: React.FC = () => {
   // console.log("this is state: "+content)
 
   return(
-    <Stack>
-      <Editor defaultValue="loading" value={content} readOnly={true}/>
-    </Stack>
+    <div className={styles.pageContent}>
+      <Stack>
+        <Editor defaultValue="loading" value={content} readOnly={false}/>
+      </Stack>
+    </div>
   )
 }

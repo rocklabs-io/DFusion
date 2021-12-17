@@ -1,0 +1,8 @@
+.pageContent {
+  width: 60%;
+  height: 85%;
+  /* text-align: center; */
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 90vh;
+}
