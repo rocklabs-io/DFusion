@@ -1,34 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from './PlazaPage.module.css';
 import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
 import Avatar from "boring-avatars";
-import { idlFactory } from "../../canisters/dfusion.did";
-declare let window: any;
+import { getAllEntries } from "../../canisters/utils";
 
 export const PlazaPage: React.FC = () => {
 
-  const getAllEntries = async () => {
-    const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
-    const whitelist = [canisterId]
-    const result = await window.ic.plug.isConnected();
-    console.log("connected:", result)
-    // if(!result) {
-      // TODO: DO NOT request connect every time
-      await window.ic.plug.requestConnect({
-        whitelist: whitelist, 
-      })
-    // }
 
-    const actor = await window.ic.plug.createActor({
-      canisterId: canisterId,
-      interfaceFactory: idlFactory,
-    });
+  useEffect(() => {
+    getAllEntries().then(res => {
+      console.log(res);
+    })
+  })
 
-    const entries = await actor.getAllEntries();
-    console.log('entries: ', entries)
-  }
-
-  // getAllEntries()
 
   return (
     <>

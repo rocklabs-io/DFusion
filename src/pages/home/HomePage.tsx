@@ -33,6 +33,7 @@ export const HomePage: React.FC = () => {
   if(offset>70){
     mountedRef.current=false
     navigate('/plaza')
+    // navigate('/content')
   }
 
   scrollArrow?.addEventListener("click", ()=>{})

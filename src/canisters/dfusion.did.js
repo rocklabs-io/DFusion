@@ -17,7 +17,7 @@ export const idlFactory = ({ IDL }) => {
     'createEntry' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'follow' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllEntries' : IDL.Func([], [IDL.Vec(EntryExt)], ['query']),
-    'getEntry' : IDL.Func([], [EntryExt], ['query']),
+    'getEntry' : IDL.Func([IDL.Nat], [IDL.Opt(EntryExt)], ['query']),
     'getUser' : IDL.Func([IDL.Principal], [UserExt], ['query']),
     'getUserEntries' : IDL.Func(
         [IDL.Principal],
