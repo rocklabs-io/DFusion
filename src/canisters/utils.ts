@@ -4,6 +4,11 @@ import { idlFactory } from "./dfusion.did";
 
 export const shortPrincipal = (principal: string) => `${principal.substr(0,8)}...${principal.substr(-4)}`
 
+export const getTimeString = (t: bigint) => {
+
+    var d = new Date(Number(t/BigInt(1000000)));
+    return d.toLocaleString('en-GB', { timeZone: 'UTC' });
+}
 
 const getDFusionActor = async () => {
     // @ts-ignore
