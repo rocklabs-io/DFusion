@@ -20,7 +20,7 @@ const EntryElement = (article: any) => {
   // time = time.setMilliseconds(article.createAt) //time.split("GMT")[0]
   var creator = article.creator.toText()
   var paras = article.content.split('\n')
-  
+
   // var creatorstring = creator.replace('-', '');
   // var colorList = {"#"+creatorstring.substring(0,5),}
   //colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
@@ -54,7 +54,7 @@ export const PlazaPage: React.FC = () => {
       var articles:any = [];
       if(res.length > 0) {
         for (var i=0; i<res.length; i++){
-          articles.push(<EntryElement article={res[i]} index={3} key={i} />)
+          articles.push(<EntryElement article={res[i]} index={i} key={i} />)
         }
       }
       if (!mounted){

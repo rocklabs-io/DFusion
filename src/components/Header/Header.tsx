@@ -8,15 +8,13 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
-  var address = " "
 
-  const [add, setAdd] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [addState, setAddState] = useState(false);
+  const [addString, setAddString] = useState("Not Connected");
 
   console.log("location:"+location.pathname)
 
-  const clickConnect = async () => {
-    // this.setState({step: 3});  // to confirm page..    
+  const clickConnect = async () => {   
     const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
     // Whitelist
     const whitelist = [
@@ -30,42 +28,21 @@ export const Header: React.FC = () => {
     // }
     // console.log(result)
     if(result){
-      address = await window.ic.plug.agent.getPrincipal();
+      var address = await window.ic.plug.agent.getPrincipal();
+      console.log(address)
       if(address!=""){
         sessionStorage.setItem("address",address)
-        setAdd(true)
+        setAddState(true)
         console.log("in pid: "+address)
-        address = (sessionStorage.getItem("address") as string).substring(0, 7)+"..."
-        setAdd(true)
+        setAddString((""+address as string).substring(0, 7)+"...")
       }
     }    
   }
 
-  // dropdown state
-  const handleDropDown = () => {
-    setOpen(!open)
-  }
-
   // disconnect account
   const disConnect = () => {
-    setAdd(false)
+    setAddState(false)
     sessionStorage.removeItem("address")
-  }
-
-  const getDropDown = () => {
-    return (
-      <div className={styles.dropdownList}>
-      { address }
-      <img src='./tri.svg' onClick={handleDropDown}/> 
-      { open 
-      ? 
-      <ul>
-      <li onClick={disConnect}>Logout</li>
-      </ul>
-      :
-      null}
-    </div>
-    )
   }
 
   return (
@@ -77,23 +54,33 @@ export const Header: React.FC = () => {
             </h3>
         </div>
         <div style={{width: '20%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-        {/* <Stack align="center">
-          <Button
+        {addState? <Stack align="center">
+          <Button onClick={clickConnect}
+            // prefix={<IconLockClosed />}
+            variant="primary"
+            width={{ xs: 'full', md: 'max' }}
+          >
+            {addString}
+          </Button>
+        </Stack>
+        :
+        <Stack align="center">
+          <Button onClick={clickConnect}
             // prefix={<IconLockClosed />}
             variant="primary"
             width={{ xs: 'full', md: 'max' }}
           >
             Connect Plug
           </Button>
-        </Stack> */}
+        </Stack>}
 
         <div className={styles.addressBlock}>
-          {add?getDropDown() : <div className={styles.dropdownList} onClick={clickConnect}> 
+          <div className={styles.dropdownList} onClick={clickConnect}>
             <img style={{height: '23px', paddingTop: '0'}} src='./plugDark.svg' />
-              Connect Plug
-            </div>}
+           { addState ? addString : "Connect Plug"}
+            </div>
         </div>
-        
+
         </div>
       </div>
 
