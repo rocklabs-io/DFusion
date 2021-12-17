@@ -5,6 +5,7 @@ import Avatar from "boring-avatars";
 import { getAllEntries } from "../../canisters/utils";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
+declare let window: any;
 
 // element 
 const EntryElement = (article: any) => {
@@ -17,7 +18,6 @@ const EntryElement = (article: any) => {
   var creator = shortPrincipal(article.creator.toText())
   var paras = article.content.split('\n')
   var time = getTimeString(article.createAt)
-
 
   return (
     <Stack align='center'>
@@ -41,8 +41,21 @@ export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
   const [mounted, setMounted] = useState(false)
   let navigate = useNavigate()
+  
+  // verify connect
+  const verifyConnection = async () => {
+    const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
+    // Whitelist
+    const whitelist = [
+      canisterId
+    ];
+    const connected = await window.ic.plug.isConnected();
+    if (!connected) await window.ic.plug.requestConnect({ whitelist });
+  };
+
   // update states
-  useEffect(() => {
+  useEffect( () => {
+    verifyConnection();
     getAllEntries().then(res => {
       // console.log(res);
       var articles:any = [];

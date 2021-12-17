@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
     // var result = await window.ic.plug.isConnected();
     // console.log(result)
     // if(!result) {
-    var result = await window.ic.plug.requestConnect({whitelist,}); // 
+    var result = await window.ic.plug.requestConnect({whitelist}); // 
     // }
     // console.log(result)
     if(result){

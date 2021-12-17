@@ -1,33 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import styles from "./HomePage.module.css";
 import { Button, Stack, Card, Box } from "degen";
 import { useNavigate } from "react-router-dom";
 
 export const HomePage: React.FC = () => {
 
-  const [state, setState] = useState({});
-
   const [offset, setOffset] = useState(0);
-  const scrollArrow = document.getElementById("scrollArrow")
   const mountedRef = useRef(true)
   // let mounted = false // set false after navigate
   let navigate = useNavigate()
   
   useEffect(()=>{
+    var scrollArrow = document.getElementById("scrollArrow")
     if(mountedRef){
       window.onscroll = () => {
         setOffset(window.pageYOffset)
         if(scrollArrow){
           var nscale = 1.0+window.pageYOffset/100
           var ntranslatex = 50/nscale
-          scrollArrow.style.transform="scale("+nscale+") translate(-"+ntranslatex+"%, 0)"
+          scrollArrow.style.transform="scale("+nscale+") translate(-"+ntranslatex+"%, -50%)"
         }
       }
     }
-    return () => {
-      setState({}); 
-    };
   }, []);
 
   if(offset>70){
@@ -35,8 +29,6 @@ export const HomePage: React.FC = () => {
     navigate('/plaza')
     // navigate('/content')
   }
-
-  scrollArrow?.addEventListener("click", ()=>{})
 
   return (
     <div className={styles["page-content"]}

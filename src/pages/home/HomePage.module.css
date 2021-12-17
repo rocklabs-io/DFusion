@@ -87,8 +87,3 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
-.scrollArrow :hover{
-  margin-left: 20%;
-  transform: scale(2);
-}
