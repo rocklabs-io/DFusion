@@ -54,10 +54,9 @@ export const PlazaPage: React.FC = () => {
   };
 
   // update states
-  useEffect( () => {
+  useEffect(() => {
     verifyConnection();
     getAllEntries().then(res => {
-      // console.log(res);
       var articles:any = [];
       if(res.length > 0) {
         for (var i=0; i<res.length; i++){
@@ -82,7 +81,10 @@ export const PlazaPage: React.FC = () => {
           backgroundPosition: 'center center'
         }}>
 
-        <div> logo image </div>
+        {/* <div> logo image </div> */}
+        <div className={styles.logo}> 
+          <img src='./logo.svg' />  
+        </div>
         <Card padding="5" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
