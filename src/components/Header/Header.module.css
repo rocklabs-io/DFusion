@@ -6,7 +6,7 @@
 
 .header {
   background-color: #ffffff !important;
-  height: 10% ;
+  height: 8% ;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -17,7 +17,7 @@
 }
 
 .headerMain {
-  width: 88%;
+  width: 98%;
   display: flex;
   justify-content: space-between;
 }

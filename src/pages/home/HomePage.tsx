@@ -46,19 +46,19 @@ export const HomePage: React.FC = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center center' }}>
       <div className={styles.logo}> 
-      <img  src='./logo.svg' />  
+      <img src='./logo.svg' />  
       </div>
       <div className={styles["slogan"]}>
         <Card padding="10" >
-        <a style={{fontSize: '60px', fontWeight: 'bold'}} >Spread the idea of Web3.</a>
+        <a style={{textAlign:'center', fontSize: '60px', fontWeight: 'bold'}}>Connect to Web3 via <img className={styles.textLogo} src="./dfusion244.svg" /></a>
         </Card>
       </div>
       <Stack align={"center"} justify={"center"}>
         <Card padding="6" width="128" shadow>
           <Stack align={"center"} justify={"center"}>
-            We're creators.
+            Creators,
             <h1>Let's get started</h1>
-            <Button loading={false} > New Entry </Button>
+            <Button loading={false} onClick={()=>navigate('/edit')}> New Entry </Button>
           </Stack>
         </Card>
         

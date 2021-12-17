@@ -7,6 +7,15 @@
   min-height: 90vh;
 }
 
+.page-content img{
+  transform: translate(0, 20%);
+}
+
+.page-content img:hover{
+  transform: translate(0, 40%);
+  transform: scale(1.2);
+}
+
 .big-circle-container{
   width: 40%;
   height: 90%;
@@ -49,8 +58,6 @@
 
 .create-now {
   width: 30%;
-  /* width: 10%; */
-  /* float: left; */
   padding-right: 30px;
   cursor: pointer;
 }
@@ -69,6 +76,10 @@
   padding: 5%;
 }
 
+.textLogo {
+  transform: translate(0, 15%);
+}
+
 .scrollArrow {
   position: fixed;
   bottom: 5%;
@@ -78,5 +89,6 @@
 }
 
 .scrollArrow :hover{
+  margin-left: 20%;
   transform: scale(2);
 }

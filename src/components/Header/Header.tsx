@@ -49,16 +49,15 @@ export const Header: React.FC = () => {
     <div className={styles.header}>
       <div className={styles.headerMain}>
         <div className={styles.headerLogo} onClick={()=>{navigate('/')}}>
-            <h3 className={styles.headerTitle}>
-              Logo DFusion
-            </h3>
+            <img src="./dfusion136.svg" alt="DFUSION" />
         </div>
-        <div style={{width: '20%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
         {addState? <Stack align="center">
           <Button onClick={clickConnect}
+            width='40'
             // prefix={<IconLockClosed />}
             variant="primary"
-            width={{ xs: 'full', md: 'max' }}
+            // width={{ xs: 'full', md: 'max' }}
           >
             {addString}
           </Button>
@@ -66,21 +65,21 @@ export const Header: React.FC = () => {
         :
         <Stack align="center">
           <Button onClick={clickConnect}
+            width='40'
             // prefix={<IconLockClosed />}
             variant="primary"
-            width={{ xs: 'full', md: 'max' }}
+            // width={{ xs: 'full', md: 'max' }}
           >
             Connect Plug
           </Button>
         </Stack>}
 
-        <div className={styles.addressBlock}>
+        {/* <div className={styles.addressBlock}>
           <div className={styles.dropdownList} onClick={clickConnect}>
             <img style={{height: '23px', paddingTop: '0'}} src='./plugDark.svg' />
            { addState ? addString : "Connect Plug"}
             </div>
-        </div>
-
+        </div> */}
         </div>
       </div>
 
