@@ -57,6 +57,7 @@ export const PlazaPage: React.FC = () => {
     getAllEntries().then(res => {
       // console.log(res);
       var articles:any = []
+
       if(res.length > 0) {
         for (var i=0; i<res.length; i++){
           articles.push(<EntryElement article={res[i]} index={i} key={i} />)
@@ -87,13 +88,16 @@ export const PlazaPage: React.FC = () => {
           backgroundPosition: 'center center'
         }}>
 
-        <div> </div>
+        {/* <div> logo image </div> */}
+        <div className={styles.logo}> 
+          <img src='./logo.svg' />  
+        </div>
         <Card padding="5" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
         
         { articleList }
-        <Stack align='center'>
+        {/* <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
               <Avatar
@@ -130,7 +134,7 @@ export const PlazaPage: React.FC = () => {
               <Tag>Decenmber 13th, 2021</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 44</Tag>
             </Stack>
           </Box>
-        </Stack>
+        </Stack> */}
 
       </div>
     </>

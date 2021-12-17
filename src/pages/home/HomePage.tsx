@@ -48,7 +48,7 @@ export const HomePage: React.FC = () => {
       <Stack align={"center"} justify={"center"}>
         <Card padding="6" width="128" shadow>
           <Stack align={"center"} justify={"center"}>
-            Creators,
+            Thinkers,
             <h1>Let's get started</h1>
             <Button loading={false} onClick={()=>navigate('/edit')}> New Entry </Button>
           </Stack>

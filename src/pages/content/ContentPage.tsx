@@ -18,33 +18,16 @@ export const ContentPage: React.FC = () => {
   // @ts-ignore
   const entryId = parseInt(window.location.href.split("/").pop());
   // const [entry, setEntry] = useState<Entry>();
-  const [content, setContent] = useState<string>("Hello world");
-
-  // var content = "hello";
+  const [content, setContent] = useState<string>("loading...");
 
   // get post content
-
-  // const getEntry = async (id: Number) => {
-  //   const canisterId = "kqomr-yaaaa-aaaai-qbdzq-cai"
-  //   const whitelist = [canisterId]
-  //   const result = await window.ic.plug.isConnected();
-  //   console.log("connected:", result)
-  //   // if(!result) {
-  //     // TODO: DO NOT request connect every time
-  //     await window.ic.plug.requestConnect({
-  //       whitelist: whitelist,
   useEffect(() => {
-    // setContent("loading");
     verifyConnectionAndAgent().then(res => {
       getEntry(entryId).then(res => {
-        // console.log(res);
-        // setEntry(res);
         setContent(res[0].content);
       })
     })
   }, [])
-
-  // console.log("this is state: "+content)
 
   return(
     <div className={styles.pageContent}>
