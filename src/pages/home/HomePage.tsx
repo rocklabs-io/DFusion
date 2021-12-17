@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 export const HomePage: React.FC = () => {
 
+  const [state, setState] = useState({});
+
   const [offset, setOffset] = useState(0);
   const scrollArrow = document.getElementById("scrollArrow")
   const mountedRef = useRef(true)
@@ -23,6 +25,9 @@ export const HomePage: React.FC = () => {
         }
       }
     }
+    return () => {
+      setState({}); 
+    };
   }, []);
 
   if(offset>70){
