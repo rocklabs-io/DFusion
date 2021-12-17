@@ -1,0 +1,7 @@
+{
+  "canisters": {
+    "dfusion": {
+      "main": "src/dfusion.mo"
+    }
+  }
+}
