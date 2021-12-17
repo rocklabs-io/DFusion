@@ -5,6 +5,7 @@ import Avatar from "boring-avatars";
 import { getAllEntries } from "../../canisters/utils";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
+import { Header } from "../../components/Header";
 declare let window: any;
 
 // element 
@@ -40,6 +41,7 @@ const EntryElement = (article: any) => {
 export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
   const [mounted, setMounted] = useState(false)
+  const [connected, setConnected] = useState(false)
   let navigate = useNavigate()
   
   // verify connect
@@ -50,15 +52,11 @@ export const PlazaPage: React.FC = () => {
       canisterId
     ];
     const connected = await window.ic.plug.isConnected();
-    if (!connected) await window.ic.plug.requestConnect({ whitelist });
-  };
-
-  // update states
-  useEffect( () => {
-    verifyConnection();
+    if (!connected) {await window.ic.plug.requestConnect({ whitelist});
+    console.log('send request')
     getAllEntries().then(res => {
       // console.log(res);
-      var articles:any = [];
+      var articles:any = []
       if(res.length > 0) {
         for (var i=0; i<res.length; i++){
           articles.push(<EntryElement article={res[i]} index={i} key={i} />)
@@ -70,10 +68,17 @@ export const PlazaPage: React.FC = () => {
         console.log(articleList)
       }
     })
+  }
+  };
+
+  // update states
+  useEffect(() => {
+    verifyConnection()
   }, [])
 
   return (
     <>
+      <Header/>
       <div className={styles.pageContent}
         style={{
           backgroundImage: `url("./homebg.jpg")`,
@@ -82,7 +87,7 @@ export const PlazaPage: React.FC = () => {
           backgroundPosition: 'center center'
         }}>
 
-        <div> logo image </div>
+        <div> </div>
         <Card padding="5" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
