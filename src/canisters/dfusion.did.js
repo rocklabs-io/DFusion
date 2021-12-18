@@ -15,7 +15,7 @@ export const idlFactory = ({ IDL }) => {
     'following' : IDL.Vec(IDL.Principal),
   });
   const DFusion = IDL.Service({
-    'createEntry' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'createEntry' : IDL.Func([IDL.Text], [IDL.Nat], []),
     'follow' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllEntries' : IDL.Func([], [IDL.Vec(EntryExt)], ['query']),
     'getEntry' : IDL.Func([IDL.Nat], [IDL.Opt(EntryExt)], ['query']),

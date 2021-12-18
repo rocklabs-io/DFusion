@@ -62,6 +62,9 @@ export const PlazaPage: React.FC = () => {
         var articles:any = []
         if(res.length > 0) {
           for (var i=0; i<res.length; i++){
+            if(res[i].deleted) {
+              continue;
+            }
             articles.push(<EntryElement article={res[i]} index={i} key={i} />)
           }
         }
