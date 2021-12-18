@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from './PlazaPage.module.css';
-import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
+import { Spinner, Stack, Heading, Text, Box, Card, Tag } from "degen";
 import Avatar from "boring-avatars";
 import { getAllEntries } from "../../canisters/utils";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ const EntryElement = (article: any) => {
           <Tag>{creator}</Tag>
         </Stack>
         <Box padding='2' cursor="pointer"><div onClick={()=>navigate('/entry/'+index)}><Heading align="left" >{paras.length>1?paras[0].replace('#', ''):" No Title"}</Heading></div></Box>
-        <Box padding='2'><Text align='left'>{article.content.replace('\n', '').replace('#', '')}</Text></Box>
+        <Box padding='2'><Text align='left'>{article.content.replace('\n', '').replace('#', '').substring(0, 100)+'...'}</Text></Box>
         <Stack direction="horizontal" align="center" justify='space-between'>
           <Tag>{time}</Tag><Tag> <a style={{color:'red'}}>&hearts; </a>{article.likes.length}</Tag>
         </Stack>
@@ -99,8 +99,7 @@ export const PlazaPage: React.FC = () => {
         <Card padding="1" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
-        
-        { articleList }
+        { articleList.length <= 0 ? <Stack align="center" ><Box padding="40" justifyContent="center"><Spinner size="large" color="accent" /></Box></Stack>:articleList }
         {/* <Stack align='center'>
           <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
             <Stack direction="horizontal" align="center">
