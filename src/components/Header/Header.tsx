@@ -62,7 +62,7 @@ export const Header: React.FC = () => {
     <div className={styles.header}>
       <div className={styles.headerMain}>
         <div className={styles.headerLogo} onClick={()=>{navigate('/')}}>
-            <img src="./dfusion136.svg" alt="DFUSION" />
+            <img src="/dfusion136.svg" alt="DFUSION" />
         </div>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
         {addState? <Stack align="center">

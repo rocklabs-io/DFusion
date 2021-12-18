@@ -14,6 +14,7 @@ const App = () => {
   <div className="App">
     <BrowserRouter>
     <Header/>
+    <div style={{width:"100%", height: "8%"}}></div>
       <Routes>
           <Route path="/" element={<HomePage />}/>
           <Route path="/edit" element={<EditPage />}/>
