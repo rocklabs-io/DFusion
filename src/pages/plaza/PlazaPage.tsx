@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from './PlazaPage.module.css';
 import { Button, Stack, Heading, Text, Box, Card, Tag } from "degen";
 import Avatar from "boring-avatars";
