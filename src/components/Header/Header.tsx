@@ -56,6 +56,7 @@ export const Header: React.FC = () => {
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
         {addState? <Stack align="center">
           <Button onClick={clickConnect}
+            size="small"
             width='40'
             // prefix={<IconLockClosed />}
             variant="primary"
@@ -67,6 +68,7 @@ export const Header: React.FC = () => {
         :
         <Stack align="center">
           <Button onClick={clickConnect}
+            size="small"
             width='40'
             // prefix={<IconLockClosed />}
             variant="primary"

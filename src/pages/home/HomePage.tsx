@@ -38,7 +38,7 @@ export const HomePage: React.FC = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center center' }}>
       <div className={styles.logo}> 
-      <img src='./logo.svg' />  
+      <img src='./wifilogo190.svg' />  
       </div>
       <div className={styles["slogan"]}>
         <Card padding="10" >

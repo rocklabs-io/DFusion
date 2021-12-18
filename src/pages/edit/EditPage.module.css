@@ -1,12 +1,36 @@
 
 .pageContent {
   width: 60%;
-  height: 85%;
+  height: 92%;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 3%;
   min-height: 90vh;
+  font-size: 25;
 }
 
 svg {
   color: #3478F6;
+}
+
+.buttonBox {
+  position: fixed;
+  bottom:3%;
+}
+
+h1 {
+    font-size: 80px;
+    font-weight: bolder;
+}
+
+h2 {
+  font-size: 60px;
+}
+
+h3 {
+  font-size: 40px;
+}
+
+h4 {
+  font-size: 30px;
 }

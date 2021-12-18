@@ -1,8 +1,9 @@
 import React from "react";
 import Editor from "rich-markdown-editor";
-import { Button } from "degen";
+import { Button, Box } from "degen";
 import styles from "./EditPage.module.css"
 import { createEntry } from "../../canisters/utils";
+import {light as lightTheme} from "./styles/theme";
 
 export const EditPage: React.FC = () => {
   var content = "";
@@ -19,11 +20,13 @@ export const EditPage: React.FC = () => {
   }
 
   return(
+    <>
     <div className={styles.pageContent}>
-      <Button onClick={handleSubmit} > submit </Button>
-
       <Editor
+        theme={lightTheme}
         onChange={getValue => onChange(getValue())}
-        defaultValue="# Hello world!"/>
-    </div>)
+        placeholder="# Hello creator! Write something here."/><Box className={styles.buttonBox}><Button onClick={handleSubmit} > submit </Button></Box>
+    </div>
+    
+    </>)
 }

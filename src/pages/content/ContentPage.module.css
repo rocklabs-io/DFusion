@@ -6,3 +6,20 @@
   margin-right: auto;
   min-height: 90vh;
 }
+
+h1 {
+  font-size: 80px;
+  font-weight: bolder;
+}
+
+h2 {
+font-size: 60px;
+}
+
+h3 {
+font-size: 40px;
+}
+
+h4 {
+font-size: 30px;
+}

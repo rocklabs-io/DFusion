@@ -82,7 +82,6 @@ export const PlazaPage: React.FC = () => {
 
   return (
     <>
-      <Header/>
       <div className={styles.pageContent}
         style={{
           backgroundImage: `url("./homebg.jpg")`,
@@ -90,12 +89,11 @@ export const PlazaPage: React.FC = () => {
           backgroundSize: 'cover',
           backgroundPosition: 'center center'
         }}>
-
         {/* <div> logo image </div> */}
         <div className={styles.logo}> 
-          <img src='./logo.svg' />  
+          <img src='./wifilogo75.svg' />  
         </div>
-        <Card padding="5" >
+        <Card padding="1" >
           <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
         </Card>
         
