@@ -33,7 +33,7 @@ export const ContentPage: React.FC = () => {
     <div className={styles.pageContent}>
       {/* <h1>content</h1> */}
       <Stack align="center" direction="vertical">{content.length<=0?<><Box padding="40"><Spinner size="large" color="accent" /></Box></> :
-        <Editor defaultValue="loading" value={content} readOnly={false}/>}
+        <Editor defaultValue="loading" value={content} readOnly={true}/>}
       </Stack>
     </div>
   )

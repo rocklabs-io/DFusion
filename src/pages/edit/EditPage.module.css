@@ -20,15 +20,18 @@ svg {
 
 h1 {
     font-size: 80px;
+    line-height: 90px;
     font-weight: bolder;
 }
 
 h2 {
   font-size: 60px;
+  line-height: 67px;
 }
 
 h3 {
   font-size: 40px;
+  line-height: 45px;
 }
 
 h4 {
