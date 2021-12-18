@@ -16,6 +16,10 @@ const getDFusionActor = async () => {
         await window.ic.plug.requestConnect({
             whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
         });
+        // @ts-ignore
+        var principal = await window.ic.plug.agent.getPrincipal();
+        localStorage.setItem("principal", principal.toText());
+        localStorage.setItem("hasAgent", "true");
     }
     // @ts-ignore
     return window.ic.plug.createActor({
