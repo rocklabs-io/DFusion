@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
           <Stack align={"center"} justify={"center"}>
             Thinkers,
             <div style={{fontWeight:'bold', fontSize: '40px'}}>Let's get started</div>
-            <Button loading={false} onClick={()=>navigate('/edit')}> New Entry </Button>
+            <Button loading={false} size="small" onClick={()=>navigate('/edit')}> New Entry </Button>
           </Stack>
         </Card>
         
