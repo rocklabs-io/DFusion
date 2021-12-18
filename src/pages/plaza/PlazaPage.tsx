@@ -51,12 +51,12 @@ export const PlazaPage: React.FC = () => {
     const whitelist = [
       canisterId
     ];
-    const connected = await window.ic.plug.isConnected();
-    if (!connected) {
-      await window.ic.plug.requestConnect({ whitelist});
-      console.log('send request')  
-    }
-    else {
+    // const connected = await window.ic.plug.isConnected();
+    // if (!connected) {
+    //   await window.ic.plug.requestConnect({ whitelist});
+    //   console.log('send request')  
+    // }
+    // else {
       getAllEntries().then(res => {
         // console.log(res);
         var articles:any = []
@@ -74,7 +74,7 @@ export const PlazaPage: React.FC = () => {
           console.log(articleList)
         }
       })
-    }
+    // }
   };
 
   // update states
