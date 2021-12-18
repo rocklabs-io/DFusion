@@ -51,15 +51,15 @@ export const ContentPage: React.FC = () => {
       {/* <h1>content</h1> */}
         {title.length<=0
         ?
-        <>
-          <Box padding="40"><Spinner size="large" color="accent" /></Box>
+        <><Stack align="center">
+          <Box padding="40"><Spinner size="large" color="accent" /></Box></Stack>
         </> 
         : 
         <>
           <Stack align="center"><h1>{title}</h1></Stack>
           <Stack direction="vertical">
           <Box width="full">
-          <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator} <Tag>{createTime}</Tag></Stack></Box>
+          <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
             <Editor defaultValue="loading" value={content} readOnly={true}/>
           </Stack>
         </>
