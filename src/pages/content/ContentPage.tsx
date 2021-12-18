@@ -1,4 +1,4 @@
-import { Stack } from "degen";
+import { Box, Spinner, Stack } from "degen";
 import { Session } from "inspector";
 import React, { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
@@ -18,7 +18,7 @@ export const ContentPage: React.FC = () => {
   // @ts-ignore
   const entryId = parseInt(window.location.href.split("/").pop());
   // const [entry, setEntry] = useState<Entry>();
-  const [content, setContent] = useState<string>("loading...");
+  const [content, setContent] = useState<string>("");
 
   // get post content
   useEffect(() => {
@@ -31,8 +31,9 @@ export const ContentPage: React.FC = () => {
 
   return(
     <div className={styles.pageContent}>
-      <Stack>
-        <Editor defaultValue="loading" value={content} readOnly={false}/>
+      {/* <h1>content</h1> */}
+      <Stack align="center" direction="vertical">{content.length<=0?<><Box padding="40"><Spinner size="large" color="accent" /></Box></> :
+        <Editor defaultValue="loading" value={content} readOnly={false}/>}
       </Stack>
     </div>
   )

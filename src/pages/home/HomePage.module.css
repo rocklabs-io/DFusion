@@ -7,6 +7,10 @@
   min-height: 90vh;
 }
 
+h1 {
+  font-size: 30px;
+}
+
 .page-content img{
   transform: translate(0, 20%);
 }
@@ -82,7 +86,7 @@
 
 .scrollArrow {
   position: fixed;
-  bottom: 5%;
+  bottom: 2%;
   align-items: center;
   left: 50%;
   transform: translate(-50%, -50%);

@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
     }
   }, []);
 
-  if(offset>70){
+  if(document.documentElement.scrollHeight === window.pageYOffset + window.innerHeight){
     mountedRef.current=false
     navigate('/plaza')
     // navigate('/content')
@@ -46,10 +46,10 @@ export const HomePage: React.FC = () => {
         </Card>
       </div>
       <Stack align={"center"} justify={"center"}>
-        <Card padding="6" width="128" shadow>
+        <Card padding="6" width="auto" shadow>
           <Stack align={"center"} justify={"center"}>
             Thinkers,
-            <h1>Let's get started</h1>
+            <div style={{fontWeight:'bold', fontSize: '40px'}}>Let's get started</div>
             <Button loading={false} onClick={()=>navigate('/edit')}> New Entry </Button>
           </Stack>
         </Card>
