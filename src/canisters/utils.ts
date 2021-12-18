@@ -1,5 +1,11 @@
 import { Principal } from "@dfinity/principal";
 import { idlFactory } from "./dfusion.did";
+import {
+    Actor,
+    ActorSubclass,
+    HttpAgent,
+    Identity,
+  } from "@dfinity/agent";
 
 
 export const shortPrincipal = (principal: string) => `${principal.substr(0,5)}...${principal.substr(-4)}`
@@ -9,42 +15,60 @@ export const getTimeString = (t: bigint) => {
     return d.toLocaleString('en-GB', { timeZone: 'UTC' });
 }
 
+const getReadActor = async () => {
+    const agent = new HttpAgent({
+        host: "https://boundary.ic0.app/",
+    });
+    return Actor.createActor(idlFactory, 
+        {agent, canisterId: "kqomr-yaaaa-aaaai-qbdzq-cai"}
+    );
+}
+
 const getDFusionActor = async () => {
-    // @ts-ignore
-    if(!window.ic?.plug?.agent) {
+    try {
         // @ts-ignore
-        await window.ic.plug.requestConnect({
-            whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
-        });
+        if(!window.ic?.plug?.agent) {
+            // @ts-ignore
+            await window.ic.plug.requestConnect({
+                whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
+            });
+            // @ts-ignore
+            var principal = await window.ic.plug.agent.getPrincipal();
+            localStorage.setItem("principal", principal.toText());
+            localStorage.setItem("hasAgent", "true");
+        }
         // @ts-ignore
-        var principal = await window.ic.plug.agent.getPrincipal();
-        localStorage.setItem("principal", principal.toText());
-        localStorage.setItem("hasAgent", "true");
+        return window.ic.plug.createActor({
+            canisterId: "kqomr-yaaaa-aaaai-qbdzq-cai",
+            interfaceFactory: idlFactory
+        })
+    } catch (e) {
+        console.log(e);
+        return await getReadActor();
     }
-    // @ts-ignore
-    return window.ic.plug.createActor({
-        canisterId: "kqomr-yaaaa-aaaai-qbdzq-cai",
-        interfaceFactory: idlFactory
-    })
 }
 
 export const verifyConnectionAndAgent = async () => {
-    // @ts-ignore
-    const connected = await window.ic.plug.isConnected();
-    // @ts-ignore
-    // @ts-ignore
-    if (!connected) await window.ic.plug.requestConnect({
-        whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
-    });
-    // @ts-ignore
-    // @ts-ignore
-    if (connected && !window.ic.plug.agent) {
+    try {
         // @ts-ignore
-        await window.ic.plug.createAgent({
+        const connected = await window.ic.plug.isConnected();
+        // @ts-ignore
+        // @ts-ignore
+        if (!connected) await window.ic.plug.requestConnect({
             whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
-        })
+        });
+        // @ts-ignore
+        // @ts-ignore
+        if (connected && !window.ic.plug.agent) {
+            // @ts-ignore
+            await window.ic.plug.createAgent({
+                whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
+            })
+        }
+        return true;
+    } catch (e) {
+        console.log(e);
     }
-    return true;
 }
 
 export const getAllEntries = async () => {
