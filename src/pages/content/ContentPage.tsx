@@ -56,7 +56,8 @@ export const ContentPage: React.FC = () => {
         </> 
         : 
         <>
-          <Stack align="center"><h1>{title}</h1></Stack>
+          <Stack align="center">
+            <h1 style={{width: "140%", textAlign: "center"}}>{title}</h1></Stack>
           <Stack direction="vertical">
           <Box width="full">
           <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
