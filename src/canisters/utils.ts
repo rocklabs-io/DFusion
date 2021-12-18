@@ -11,6 +11,13 @@ export const getTimeString = (t: bigint) => {
 
 const getDFusionActor = async () => {
     // @ts-ignore
+    if(!window.ic?.plug?.agent) {
+        // @ts-ignore
+        await window.ic.plug.requestConnect({
+            whitelist:["kqomr-yaaaa-aaaai-qbdzq-cai"]
+        });
+    }
+    // @ts-ignore
     return window.ic.plug.createActor({
         canisterId: "kqomr-yaaaa-aaaai-qbdzq-cai",
         interfaceFactory: idlFactory
