@@ -6,6 +6,7 @@ export const idlFactory = ({ IDL }) => {
     'content' : IDL.Text,
     'createAt' : Time,
     'likes' : IDL.Vec(IDL.Principal),
+    'deleted' : IDL.Bool,
   });
   const UserExt = IDL.Record({
     'id' : IDL.Principal,

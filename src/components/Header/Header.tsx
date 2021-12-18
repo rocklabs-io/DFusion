@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useLocation, useMatch, useNavigate, useParams } from "react-router";
 import { Stack, Button } from "degen"; 
 import { shortPrincipal } from "../../canisters/utils";
@@ -15,28 +15,39 @@ export const Header: React.FC = () => {
 
   console.log("location:"+location.pathname)
 
+  useEffect(() => {
+    const hasAgent = localStorage.getItem("hasAgent");
+    if(hasAgent != "true") {
+      return;
+    }
+    const pid = localStorage.getItem("principal");
+    console.log(pid)
+    if(pid && pid != "") {
+      setAddState(true);
+      setAddString((shortPrincipal(pid)));
+    }
+  })
+
   const clickConnect = async () => {   
+    const pid = localStorage.getItem("principal");
+    console.log(pid)
+    if(pid && pid != "") {
+      setAddState(true)
+      setAddString((shortPrincipal(pid)))
+      return;
+    }
+
     const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
-    // Whitelist
     const whitelist = [
       canisterId
     ];
-    // Make the request
-    // var result = await window.ic.plug.isConnected();
-    // console.log(result)
-    // if(!result) {
     var result = await window.ic.plug.requestConnect({whitelist}); // 
-    // }
-    // console.log(result)
     if(result){
-      var address = await window.ic.plug.agent.getPrincipal();
-      console.log(address)
-      if(address!=""){
-        sessionStorage.setItem("address",address)
+      var principal = await window.ic.plug.agent.getPrincipal();
+      if(principal != ""){
+        localStorage.setItem("principal", principal.toText())
         setAddState(true)
-        console.log("in pid: "+address)
-        // setAddString((""+address as string).substring(0, 7)+"...")
-        setAddString((shortPrincipal(address.toText())))
+        setAddString((shortPrincipal(principal.toText())))
       }
     }    
   }
@@ -44,7 +55,7 @@ export const Header: React.FC = () => {
   // disconnect account
   const disConnect = () => {
     setAddState(false)
-    sessionStorage.removeItem("address")
+    localStorage.removeItem("principal")
   }
 
   return (
