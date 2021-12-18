@@ -52,29 +52,32 @@ export const PlazaPage: React.FC = () => {
       canisterId
     ];
     const connected = await window.ic.plug.isConnected();
-    if (!connected) {await window.ic.plug.requestConnect({ whitelist});
-    console.log('send request')
-    getAllEntries().then(res => {
-      // console.log(res);
-      var articles:any = []
-
-      if(res.length > 0) {
-        for (var i=0; i<res.length; i++){
-          articles.push(<EntryElement article={res[i]} index={i} key={i} />)
+    if (!connected) {
+      await window.ic.plug.requestConnect({ whitelist});
+      console.log('send request')  
+    }
+    else {
+      getAllEntries().then(res => {
+        // console.log(res);
+        var articles:any = []
+        if(res.length > 0) {
+          for (var i=0; i<res.length; i++){
+            articles.push(<EntryElement article={res[i]} index={i} key={i} />)
+          }
         }
-      }
-      if (!mounted){
-        setArticleList(articles)
-        setMounted(true)
-        console.log(articleList)
-      }
-    })
-  }
+        if (!mounted){
+          setArticleList(articles)
+          setMounted(true)
+          console.log(articleList)
+        }
+      })
+    }
   };
 
   // update states
   useEffect(() => {
     verifyConnection()
+    console.log('sent')
   }, [])
 
   return (
