@@ -8,9 +8,12 @@
 }
 
 h1 {
+  width: 140%;
   font-size: 80px;
   line-height: 90px;
   font-weight: bolder;
+  margin: 4px;
+  text-align: center;
 }
 
 h2 {
