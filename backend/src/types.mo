@@ -60,6 +60,16 @@ module {
         title: Text;
         contentDigest: Text;
         createAt: Time.Time;
+        var likesNum: Nat;
+    };
+
+    public type EntryDigestExt = {
+        id: Nat;
+        creator: Principal;
+        title: Text;
+        contentDigest: Text;
+        createAt: Time.Time;
+        likesNum: Nat;
     };
 
     public func userToExt(user: User) : UserExt {
@@ -91,6 +101,7 @@ module {
             title = entry.title;
             contentDigest = substr(entry.content, 50);
             createAt = entry.createAt;
+            var likesNum = TrieSet.size(entry.likes);
         }
     };
 
@@ -115,6 +126,17 @@ module {
             createAt = entry.createAt;
             var likes = TrieSet.fromArray<Principal>(entry.likes, Principal.hash,  Principal.equal);
             var deleted = entry.deleted;
+        }
+    };
+
+    public func digestToExt(entry: EntryDigest) : EntryDigestExt {
+        {
+            id = entry.id;
+            creator = entry.creator;
+            title = entry.title;
+            contentDigest = entry.contentDigest;
+            createAt = entry.createAt;
+            likesNum = entry.likesNum;
         }
     };
 

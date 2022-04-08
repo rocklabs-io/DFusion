@@ -1,0 +1,34 @@
+type Time = int;
+type Result_2 = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: EntryExt;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: bool;
+ };
+type EntryExt = 
+ record {
+   content: text;
+   createAt: Time;
+   creator: principal;
+   deleted: bool;
+   id: nat;
+   likes: vec principal;
+   title: text;
+ };
+type Bucket = 
+ service {
+   createEntry: (EntryExt) -> (Result_2);
+   getEntry: (nat) -> (Result_1) query;
+   getStableSize: () -> (nat64) query;
+   like: (nat, principal) -> (Result);
+ };
+service : (principal) -> Bucket

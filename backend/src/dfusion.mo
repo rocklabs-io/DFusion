@@ -33,6 +33,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type Entry = Types.Entry;
 	type EntryExt = Types.EntryExt;
 	type EntryDigest = Types.EntryDigest;
+	type EntryDigestExt = Types.EntryDigestExt;
 	type User = Types.User;
 	type UserExt = Types.UserExt;
 
@@ -185,6 +186,14 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	// turn true if like, otherwise unlike
 	public shared(msg) func like(entryId: Nat): async Result.Result<Bool, Text> {
 		let caller = msg.caller;
+		let entry = switch(entries.get(entryId)) {
+			case (null) { 
+				return #err("entry not exist"); 
+			};
+			case (?e) {
+				e
+			};
+		};
 		let user = userRegister(caller);
 		let bucket_principal = getBucket(entryId);
 		let bucket: Bucket.Bucket = actor(Principal.toText(bucket_principal));
@@ -195,8 +204,10 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			case (#ok(o)) {
 				if (o) {
 					user.likes :=  TrieSet.put(user.likes, entryId, Hash.hash(entryId), Nat.equal);
+					entry.likesNum += 1;
 				} else {
 					user.likes :=  TrieSet.delete(user.likes, entryId, Hash.hash(entryId), Nat.equal);
+					entry.likesNum -= 1;
 				};
 				return #ok(o);
 			};
@@ -221,6 +232,12 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	};
 
 	public func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {
+		switch(entries.get(entryId)) {
+			case (null) { 
+				return #err("entry not exist"); 
+			};
+			case (?e) {};
+		};
 		let bucket_principal = getBucket(entryId);
 		let bucket: Bucket.Bucket = actor(Principal.toText(bucket_principal));
 		let res = await bucket.getEntry(entryId);
@@ -254,7 +271,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		true
 	};
 
-	public query func getUserEntries(id: Principal): async [EntryDigest] {
+	public query func getUserEntries(id: Principal): async [EntryDigestExt] {
 		let user = switch (allUsers.get(id)) {
 			case (null) { 
 				return []; 
@@ -266,19 +283,19 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		let user_entries = user.entries;
 		Array.mapFilter(
 			TrieSet.toArray(user.entries), 
-			func (e: Nat): ?EntryDigest {
-				entries.get(e)
+			func (e: Nat): ?EntryDigestExt {
+				Option.map(entries.get(e), Types.digestToExt)
 			}
 		)
 	};
 
-	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigest] {
-		let buf = Buffer.Buffer<EntryDigest>(Nat32.toNat(skip));
+	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigestExt] {
+		let buf = Buffer.Buffer<EntryDigestExt>(Nat32.toNat(skip));
 		for (i in Iter.range(Nat32.toNat(skip), Nat32.toNat(first + skip))) {
 			switch(entries.get(i)) {
 				case (null) { };
 				case (?e) {
-					buf.add(e)
+					buf.add(Types.digestToExt(e))
 				}
 			};
 		};

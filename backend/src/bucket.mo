@@ -41,6 +41,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
             title = store.title;
             contentDigest = Types.substr(content, 50);
             createAt = store.createAt;
+            var likesNum = TrieSet.size(store.likes)
         }
     };
 
