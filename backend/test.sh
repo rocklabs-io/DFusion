@@ -20,7 +20,7 @@ echo Alice id = $ALICE_PUBLIC_KEY
 echo Bob id = $BOB_PUBLIC_KEY
 
 HOME=$ALICE_HOME
-dfx start --background
+# dfx start --background
 dfx canister --no-wallet create --all
 dfx build
 
@@ -77,7 +77,26 @@ eval dfx canister --no-wallet call dfusion getUser "'($ALICE_PUBLIC_KEY)'"
 echo Bob:
 eval dfx canister --no-wallet call dfusion getUser "'($BOB_PUBLIC_KEY)'"
 
+HOME=$ALICE_HOME
+echo add Bob as admin
+eval dfx canister --no-wallet call dfusion addAuth "'($BOB_PUBLIC_KEY)'"
+
+HOME=$BOB_HOME
 echo getAllEntries
 eval dfx canister --no-wallet call dfusion getAllEntries
+
+echo delete entry 0
+eval dfx canister --no-wallet call dfusion deleteEntry 0
+
+echo getAllEntries
+eval dfx canister --no-wallet call dfusion getAllEntries
+
+HOME=$ALICE_HOME
+echo delete admin Bob
+eval dfx canister --no-wallet call dfusion removeAuth "'($BOB_PUBLIC_KEY)'"
+
+HOME=$BOB_HOME
+echo delete entry 0 fail
+eval dfx canister --no-wallet call dfusion deleteEntry 0
 
 dfx stop
