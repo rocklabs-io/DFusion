@@ -32,12 +32,13 @@ type EntryExt =
    likes: vec principal;
    title: text;
  };
-type EntryDigest = 
+type EntryDigestExt = 
  record {
    contentDigest: text;
    createAt: Time;
    creator: principal;
    id: nat;
+   likesNum: nat;
    title: text;
  };
 type DFusion = 
@@ -47,10 +48,10 @@ type DFusion =
    follow: (principal) -> (bool);
    getBucketInfo: () -> (vec nat, vec nat, vec principal) query;
    getBucketStableSize: (principal) -> (nat64);
-   getEntries: (nat32, nat32) -> (vec EntryDigest) query;
+   getEntries: (nat32, nat32) -> (vec EntryDigestExt) query;
    getEntry: (nat) -> (Result_1);
    getUser: (principal) -> (opt UserExt) query;
-   getUserEntries: (principal) -> (vec EntryDigest) query;
+   getUserEntries: (principal) -> (vec EntryDigestExt) query;
    like: (nat) -> (Result);
    removeAuth: (principal) -> (bool);
    setLimit: (opt nat, opt nat) -> (bool);

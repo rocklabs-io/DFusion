@@ -1,11 +1,12 @@
 export const idlFactory = ({ IDL }) => {
   const Result_2 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
   const Time = IDL.Int;
-  const EntryDigest = IDL.Record({
+  const EntryDigestExt = IDL.Record({
     'id' : IDL.Nat,
     'title' : IDL.Text,
     'creator' : IDL.Principal,
     'createAt' : Time,
+    'likesNum' : IDL.Nat,
     'contentDigest' : IDL.Text,
   });
   const EntryExt = IDL.Record({
@@ -38,14 +39,14 @@ export const idlFactory = ({ IDL }) => {
     'getBucketStableSize' : IDL.Func([IDL.Principal], [IDL.Nat64], []),
     'getEntries' : IDL.Func(
         [IDL.Nat32, IDL.Nat32],
-        [IDL.Vec(EntryDigest)],
+        [IDL.Vec(EntryDigestExt)],
         ['query'],
       ),
     'getEntry' : IDL.Func([IDL.Nat], [Result_1], []),
     'getUser' : IDL.Func([IDL.Principal], [IDL.Opt(UserExt)], ['query']),
     'getUserEntries' : IDL.Func(
         [IDL.Principal],
-        [IDL.Vec(EntryDigest)],
+        [IDL.Vec(EntryDigestExt)],
         ['query'],
       ),
     'like' : IDL.Func([IDL.Nat], [Result], []),

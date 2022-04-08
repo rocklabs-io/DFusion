@@ -7,19 +7,22 @@ export interface DFusion {
       [Array<bigint>, Array<bigint>, Array<Principal>]
     >,
   'getBucketStableSize' : (arg_0: Principal) => Promise<bigint>,
-  'getEntries' : (arg_0: number, arg_1: number) => Promise<Array<EntryDigest>>,
+  'getEntries' : (arg_0: number, arg_1: number) => Promise<
+      Array<EntryDigestExt>
+    >,
   'getEntry' : (arg_0: bigint) => Promise<Result_1>,
   'getUser' : (arg_0: Principal) => Promise<[] | [UserExt]>,
-  'getUserEntries' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
+  'getUserEntries' : (arg_0: Principal) => Promise<Array<EntryDigestExt>>,
   'like' : (arg_0: bigint) => Promise<Result>,
   'removeAuth' : (arg_0: Principal) => Promise<boolean>,
   'setLimit' : (arg_0: [] | [bigint], arg_1: [] | [bigint]) => Promise<boolean>,
 }
-export interface EntryDigest {
+export interface EntryDigestExt {
   'id' : bigint,
   'title' : string,
   'creator' : Principal,
   'createAt' : Time,
+  'likesNum' : bigint,
   'contentDigest' : string,
 }
 export interface EntryExt {
