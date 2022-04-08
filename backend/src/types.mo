@@ -60,7 +60,6 @@ module {
         title: Text;
         contentDigest: Text;
         createAt: Time.Time;
-        likesNum: Nat;
     };
 
     public func userToExt(user: User) : UserExt {
@@ -92,7 +91,6 @@ module {
             title = entry.title;
             contentDigest = substr(entry.content, 50);
             createAt = entry.createAt;
-            likesNum = TrieSet.size(entry.likes);
         }
     };
 

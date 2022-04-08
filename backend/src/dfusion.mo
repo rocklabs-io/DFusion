@@ -16,6 +16,7 @@ import Error "mo:base/Error";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
 import Option "mo:base/Option";
 import Order "mo:base/Order";
 import Prelude "mo:base/Prelude";
@@ -31,6 +32,7 @@ import Types "./types";
 shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type Entry = Types.Entry;
 	type EntryExt = Types.EntryExt;
+	type EntryDigest = Types.EntryDigest;
 	type User = Types.User;
 	type UserExt = Types.UserExt;
 
@@ -38,9 +40,11 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	private stable var authEntries : [(Principal, Bool)] = [(owner, true)];
 	private let auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
-	
+
 	// incremental id 
 	private stable var id_count = 0;
+	private stable var entryEntries : [(Nat, EntryDigest)] = [];
+	private let entries = TrieMap.fromEntries<Nat, EntryDigest>(entryEntries.vals(), Nat.equal, Hash.hash);
 	// ignore performance issue of Array.append it would be called few times
 	private stable var index: [Nat] = [];
 	private stable var consume: [Nat] = [];
@@ -51,8 +55,8 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	private var creating: Bool = false;
 	private stable var title_limit = 256;
-	private stable var content_limit = 2 * 1024 * 1024;
-	private let bucket_limit = 4 * 1024 * 1024 * 1024;
+	private stable var content_limit = 2 * 1024 * 1024; // 2M
+	private let bucket_limit = 4 * 1024 * 1024 * 1024; // 4G
 
 	private func _newUser(id : Principal) : User {
 		{
@@ -104,7 +108,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	private func createBucket(entryId: Nat) : async Principal {
 		creating := true;
-		Cycle.add(2_000_000_000_000); // 1T cycles
+		Cycle.add(2_000_000_000_000); // 2T cycles
 		let res = await Bucket.Bucket(Principal.fromActor(this));
 		consume := Array.append(consume, [0]);
 		index := Array.append(index, [entryId]);
@@ -172,6 +176,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			};
 		};
 
+		entries.put(ret, Types.entryToDigest(entry));
 		user.entries := TrieSet.put(user.entries, ret, Hash.hash(ret), Nat.equal);
 		#ok(ret)
 	};
@@ -249,20 +254,36 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		true
 	};
 
-	// public query func getUserEntries(id: Principal): async [EntryExt] {
-	// 	let user =  userRegister(id);
-	// 	let entries = user.entries;
-	// 	var res : [EntryExt] = [];
-	// 	for ((entryId, _) in Trie.iter(entries)) {
-	// 		let entry : Entry = allEntries[entryId];
-	// 		res := Array.append<EntryExt>(res, [_entryToExt(entry)]);
-	// 	};
-	// 	res
-	// };
+	public query func getUserEntries(id: Principal): async [EntryDigest] {
+		let user = switch (allUsers.get(id)) {
+			case (null) { 
+				return []; 
+			};
+			case (?u) {
+				u
+			};
+		};
+		let user_entries = user.entries;
+		Array.mapFilter(
+			TrieSet.toArray(user.entries), 
+			func (e: Nat): ?EntryDigest {
+				entries.get(e)
+			}
+		)
+	};
 
-	// public query func getAllEntries(): async [EntryExt] {
-	// 	Array.map<Entry, EntryExt>(allEntries, _entryToExt)
-	// };
+	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigest] {
+		let buf = Buffer.Buffer<EntryDigest>(Nat32.toNat(skip));
+		for (i in Iter.range(Nat32.toNat(skip), Nat32.toNat(first + skip))) {
+			switch(entries.get(i)) {
+				case (null) { };
+				case (?e) {
+					buf.add(e)
+				}
+			};
+		};
+		buf.toArray()
+	};
 
 	// get user
 	public query func getUser(id: Principal): async ?UserExt {
@@ -282,10 +303,12 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	system func preupgrade() {
     	userEntries := Iter.toArray(allUsers.entries());
 		authEntries := Iter.toArray(auths.entries());
+		entryEntries := Iter.toArray(entries.entries());
   	};
 
 	system func postupgrade() {
 		userEntries := [];
 		authEntries := [];
+		entryEntries := [];
 	};
 }

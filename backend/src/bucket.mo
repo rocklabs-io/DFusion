@@ -19,6 +19,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
     type EntryDigest = Types.EntryDigest;
 
     // private let registry: Registry.DFusion = actor(Principal.toText(registry_));
+    private stable let registry: Principal = registry_;
 
     private stable var stable_offset: Nat64 = 0;
     private stable var stable_capacity: Nat64 = 0;
@@ -29,7 +30,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
     // private let entries = Buffer.Buffer<EntryStore>(entry_upgrade.size());
 
     private func _authorized(caller: Principal): Bool {
-        caller == registry_
+        caller == registry
     };
 
     private func _storeToDigest(store: EntryStore) : EntryDigest {
@@ -40,7 +41,6 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
             title = store.title;
             contentDigest = Types.substr(content, 50);
             createAt = store.createAt;
-            likesNum = TrieSet.size(store.likes);
         }
     };
 
