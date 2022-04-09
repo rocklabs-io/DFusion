@@ -11,7 +11,6 @@ import { useAppDispatch } from "src/store";
 
 // element 
 const EntryElement = ({ article }: { article: EntryDigestExt }) => {
-
   var index = article.id
   let navigate = useNavigate()
   // procss article props
