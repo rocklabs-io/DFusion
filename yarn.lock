@@ -2169,7 +2169,7 @@
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.11.5.tgz"
   "version" "2.11.5"
 
-"@psychedelic/plug-inpage-provider@^1.8.0":
+"@psychedelic/plug-inpage-provider@^1.6.1":
   "integrity" "sha512-1dVU+7ZA9kjZjq/Fv7DIrRAWNr4GlBtS7ZnPk46PcwpDgRUQAFVNoRQNcxuTHptdmxwWEA7yPOCmi4JJte42eA=="
   "resolved" "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.8.0/ecc7a21482477303ff334e94c8d43c82aa12901936e11b8cc0ee61324cb2ed08"
   "version" "1.8.0"
