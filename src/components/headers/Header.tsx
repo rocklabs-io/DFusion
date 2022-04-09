@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { useLocation, useMatch, useNavigate, useParams } from "react-router";
 import { Stack, Button } from "degen"; 
-import { shortPrincipal } from "../../canisters/utils";
+import { shortPrincipal } from "src/canisters/utils";
 import styles from './Header.module.css';
+import { ConnectButton } from "../connectButton";
 declare let window: any;
 
 export const Header: React.FC = () => {
@@ -15,48 +16,48 @@ export const Header: React.FC = () => {
 
   console.log("location:"+location.pathname)
 
-  useEffect(() => {
-    const hasAgent = localStorage.getItem("hasAgent");
-    if(hasAgent != "true") {
-      return;
-    }
-    const pid = localStorage.getItem("principal");
-    console.log(pid)
-    if(pid && pid != "") {
-      setAddState(true);
-      setAddString((shortPrincipal(pid)));
-    }
-  })
+  // useEffect(() => {
+  //   const hasAgent = localStorage.getItem("hasAgent");
+  //   if(hasAgent != "true") {
+  //     return;
+  //   }
+  //   const pid = localStorage.getItem("principal");
+  //   console.log(pid)
+  //   if(pid && pid != "") {
+  //     setAddState(true);
+  //     setAddString((shortPrincipal(pid)));
+  //   }
+  // })
 
-  const clickConnect = async () => {   
-    const pid = localStorage.getItem("principal");
-    console.log(pid)
-    if(pid && pid != "") {
-      setAddState(true)
-      setAddString((shortPrincipal(pid)))
-      return;
-    }
+  // const clickConnect = async () => {   
+  //   const pid = localStorage.getItem("principal");
+  //   console.log(pid)
+  //   if(pid && pid != "") {
+  //     setAddState(true)
+  //     setAddString((shortPrincipal(pid)))
+  //     return;
+  //   }
 
-    const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
-    const whitelist = [
-      canisterId
-    ];
-    var result = await window.ic.plug.requestConnect({whitelist}); // 
-    if(result){
-      var principal = await window.ic.plug.agent.getPrincipal();
-      if(principal != ""){
-        localStorage.setItem("principal", principal.toText())
-        setAddState(true)
-        setAddString((shortPrincipal(principal.toText())))
-      }
-    }    
-  }
+  //   const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
+  //   const whitelist = [
+  //     canisterId
+  //   ];
+  //   var result = await window.ic.plug.requestConnect({whitelist}); // 
+  //   if(result){
+  //     var principal = await window.ic.plug.agent.getPrincipal();
+  //     if(principal != ""){
+  //       localStorage.setItem("principal", principal.toText())
+  //       setAddState(true)
+  //       setAddString((shortPrincipal(principal.toText())))
+  //     }
+  //   }    
+  // }
 
   // disconnect account
-  const disConnect = () => {
-    setAddState(false)
-    localStorage.removeItem("principal")
-  }
+  // const disConnect = () => {
+  //   setAddState(false)
+  //   localStorage.removeItem("principal")
+  // }
 
   return (
     <div className={styles.header}>
@@ -65,7 +66,8 @@ export const Header: React.FC = () => {
             <img src="/dfusion136.svg" alt="DFUSION" />
         </div>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-        {addState? <Stack align="center">
+        <ConnectButton />
+        {/* {addState? <Stack align="center">
           <Button onClick={clickConnect}
             size="small"
             width='40'
@@ -87,7 +89,7 @@ export const Header: React.FC = () => {
           >
             Connect Plug
           </Button>
-        </Stack>}
+        </Stack>} */}
 
         {/* <div className={styles.addressBlock}>
           <div className={styles.dropdownList} onClick={clickConnect}>

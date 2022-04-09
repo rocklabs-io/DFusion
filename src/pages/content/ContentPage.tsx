@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
 import { scryRenderedDOMComponentsWithClass } from "react-dom/test-utils";
 import Editor from "rich-markdown-editor";
-import { getEntry, like, verifyConnectionAndAgent } from "../../canisters/utils";
 import { shortPrincipal } from "../../canisters/utils";
 import { getTimeString } from "../../canisters/utils";
+import { Text } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import styles from "./ContentPage.module.css"
+import { useDfusionActor } from "src/canisters/actor";
 
 type Entry = {
   content: string;
@@ -25,47 +26,52 @@ export const ContentPage: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [creator, setCreator] = useState<string>("");
   const [createTime, setTime] = useState<string>("");
+  const dfusionActor = useDfusionActor(undefined)
+
   // get post content
   useEffect(() => {
-    verifyConnectionAndAgent().then(res => {
-      getEntry(entryId).then(res => {
-        var npara = res[0].content.split('\n').length
-        setCreator(shortPrincipal(res[0].creator.toText()))
-        setTime(getTimeString(res[0].createAt))
-        var titlestring = ""
-        if(npara>0) {
-          titlestring = res[0].content.split('\n')[0]
-          setTitle(titlestring.replace('#', ""))
-        }
-        if (npara>1){
-          setContent(res[0].content.replace(titlestring, ""))
-        }
-        // setTitle(titlestring)
-        // setContent(res[0].content);
-      })
+    dfusionActor?.getEntry(BigInt(entryId)).then(res => {
+      console.log(entryId)
+      console.log(res)
+      if ('ok' in res) {
+        let entry = res['ok']
+        console.log(entry.title)
+        setCreator(shortPrincipal(entry.creator.toText()) as string)
+        setTime(getTimeString(entry.createAt))
+        setTitle(entry.title ? entry.title.replace('#', "") : "Untitled")
+        setContent(entry.content ? entry.content : "No content.")
+      } else {
+        setContent("Error")
+      }
     })
-  }, [])
+  }, [dfusionActor])
 
-  return(
+  return (
     <div className={styles.pageContent}>
       {/* <h1>content</h1> */}
-        {title.length<=0
+      {title.length <= 0
         ?
         <><Stack align="center">
           <Box padding="40"><Spinner size="large" color="accent" /></Box></Stack>
-        </> 
-        : 
+        </>
+        :
         <>
           <Stack align="center">
-            <h1 style={{width: "140%", textAlign: "center"}}>{title}</h1></Stack>
+            <Text marginTop='5vh'
+              fontSize='6xl' 
+              fontWeight='bold' 
+              textAlign='center'>
+              {title}
+            </Text>
+          </Stack>
           <Stack direction="vertical">
-          <Box width="full">
-          <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
-            <Editor defaultValue="loading" value={content} readOnly={true}/>
+            <Box width="full">
+              <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
+            <Editor defaultValue="loading" value={content} readOnly={true} />
           </Stack>
         </>
-        }
-      
+      }
+
     </div>
   )
 }

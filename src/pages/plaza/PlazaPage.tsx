@@ -1,38 +1,69 @@
-import React, { useEffect, useRef, useState } from "react";
-import styles from './PlazaPage.module.css';
-import { Spinner, Stack, Heading, Text, Box, Card, Tag } from "degen";
+import React, { useEffect, useState } from "react";
+import { Stack, Heading, Text, Box, Tag, Image, Skeleton } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
-import { getAllEntries } from "../../canisters/utils";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
-import { Header } from "../../components/Header";
-declare let window: any;
+import { Identity, useDfusionActor } from "src/canisters/actor";
+import { EntryDigestExt } from "src/canisters/model/dfusiondid";
+import { Flex } from "@chakra-ui/react";
 
 // element 
-const EntryElement = (article: any) => {
+const EntryElement = ({ article }: { article: EntryDigestExt }) => {
 
-  console.log('/entry/'+article.index)
-  var index = article.index
+  var index = article.id
   let navigate = useNavigate()
   // procss article props
-  article = article.article
   var creator = shortPrincipal(article.creator.toText())
-  var paras = article.content.split('\n')
   var time = getTimeString(article.createAt)
+  const dfusionActor = useDfusionActor(Identity.caller ?? undefined)
+
+  const handleLike = () => {
+    dfusionActor?.like(article.id).then(res => {
+      
+    })
+  }
 
   return (
-    <Stack align='center'>
-      <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
-        <Stack direction="horizontal" align="center">
+    <Stack align='center' width='100%'>
+      <Box borderBottomWidth="0.5"
+        width="100%"
+        borderColor='foregroundSecondary'
+        padding="5">
+        <Flex align="center">
           <Avatar size={32} name={creator} variant="marble" />
+          &nbsp; &nbsp;
           {creator}
+          &nbsp; &nbsp;
           <Tag>{creator}</Tag>
-        </Stack>
-        <Box padding='2' cursor="pointer"><div onClick={()=>navigate('/entry/'+index)}><Heading align="left" >{paras.length>1?paras[0].replace('#', ''):" No Title"}</Heading></div></Box>
-        <Box padding='2'><Text align='left'>{article.content.replace('\n', '').replace('#', '').substring(0, 100)+'...'}</Text></Box>
-        <Stack direction="horizontal" align="center" justify='space-between'>
-          <Tag>{time}</Tag><Tag> <a style={{color:'red'}}>&hearts; </a>{article.likes.length}</Tag>
-        </Stack>
+        </Flex>
+        <Box padding='2' cursor="pointer"><div onClick={() => navigate('/entry/' + index)}>
+          <Heading>
+            {article.title ? article.title.replace('#', '') : "Untitled"}
+          </Heading>
+        </div>
+        </Box>
+        <Box padding='2'>
+          <Text align='left'>{
+            // article.content.replace(/#/g, '').replace(/\n/g, '').substring(0, 100) 
+            article.contentDigest.replace('#', '') + '...'}
+          </Text>
+        </Box>
+        <Flex align="center" justify='space-between'>
+          <Tag>{time}</Tag>
+          <Tag>
+            
+            <Text color="grey.300"
+              cursor='pointer'
+              onClick={handleLike}>
+              &hearts;
+            </Text>
+
+            &nbsp;
+            <Text color='grey'>
+              {Number(article.likesNum).toString()}
+            </Text>
+          </Tag>
+        </Flex>
       </Box>
     </Stack>
   )
@@ -43,108 +74,63 @@ export const PlazaPage: React.FC = () => {
   const [mounted, setMounted] = useState(false)
   const [connected, setConnected] = useState(false)
   let navigate = useNavigate()
-  
+  const dfusionActor = useDfusionActor(undefined)
+
   // verify connect
-  const verifyConnection = async () => {
-    const canisterId = 'kqomr-yaaaa-aaaai-qbdzq-cai'
-    // Whitelist
-    const whitelist = [
-      canisterId
-    ];
-    // const connected = await window.ic.plug.isConnected();
-    // if (!connected) {
-    //   await window.ic.plug.requestConnect({ whitelist});
-    //   console.log('send request')  
-    // }
-    // else {
-      getAllEntries().then(res => {
-        // console.log(res);
-        var articles:any = []
-        if(res.length > 0) {
-          for (var i=0; i<res.length; i++){
-            if(res[i].deleted) {
-              continue;
-            }
-            articles.push(<EntryElement article={res[i]} index={i} key={i} />)
-          }
+  const getEntries = async () => {
+    dfusionActor?.getEntries(10, 0).then(res => {
+      console.log(res);
+      var articles: any = []
+      if (res.length > 0) {
+        for (var i = res.length - 1; i >= 0; i--) {
+          // if (res[i].deleted) {
+          //   continue;
+          // }
+          articles.push(<EntryElement article={res[i]} key={i} />)
         }
-        if (!mounted){
-          setArticleList(articles)
-          setMounted(true)
-          console.log(articleList)
-        }
-      })
-    // }
+      }
+      if (!mounted) {
+        setArticleList(articles)
+        setMounted(true)
+        console.log(articleList)
+      }
+    })
   };
 
   // update states
   useEffect(() => {
-    verifyConnection()
+    getEntries()
     console.log('sent')
-  }, [])
+  }, [dfusionActor])
 
   return (
-    <>
-      <div className={styles.pageContent}
-        style={{
-          backgroundImage: `url("./homebg.jpg")`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center center'
-        }}>
-        {/* <div> logo image </div> */}
-        <div className={styles.logo}> 
-          <img src='./wifilogo75.svg' />  
-        </div>
-        <Card padding="1" >
-          <a style={{ fontSize: '30px', fontWeight: 'bold' }} >Spread the idea of Web3.</a>
-        </Card>
-        { articleList.length <= 0 ? <Stack align="center" ><Box padding="40" justifyContent="center"><Spinner size="large" color="accent" /></Box></Stack>:articleList }
-        {/* <Stack align='center'>
-          <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
-            <Stack direction="horizontal" align="center">
-              <Avatar
-                size={40}
-                name="Maria Mitchell"
-                variant="bauhaus"
-                colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
-              />
-              Rocklabs
-              <Tag>0x53d7</Tag>
-            </Stack>
-            <Box padding='2'><Heading align="left">Heading</Heading></Box>
-            <Box padding='2'><Text align='left'>I encouraged the folks who started the ESR (e.g.,  @msbernst) to do this and helped get financial support. It has been a very positive experience for all (yes the researchers going through it) and I hope other universities do something similar. </Text></Box>
-            <Stack direction="horizontal" align="center" justify='space-between'>
-              <Tag>Decenmber 13th, 2021</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 37</Tag>
-            </Stack>
-          </Box>
-        </Stack>
-        <Stack align='center'>
-          <Box borderBottomWidth="0.5" width="2/3" borderColor='foregroundSecondary' padding="5">
-            <Stack direction="horizontal" align="center">
-            <Avatar
-              size={40}
-              name="Maria Mitchell"
-              variant="marble"
-              colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
-            />
-              Rocklabs
-              <Tag>0x53d7</Tag>
-            </Stack>
-            <Box padding='2'><Heading align="left">Start writing on mirror</Heading></Box>
-            <Box padding='2'><Text align='left'>I encouraged  </Text></Box>
-            <Stack direction="horizontal" align="center" justify='space-between'>
-              <Tag>Decenmber 13th, 2021</Tag><Tag> <a style={{color:'red'}}>&hearts;</a> 44</Tag>
-            </Stack>
-          </Box>
-        </Stack> */}
-
-      </div>
-    </>
+    <Flex flexDir='column'
+      alignItems='center'
+      width='100%'
+      maxWidth='632px'
+      height='85%'
+      margin='auto'
+      minHeight='90vh'
+      style={{
+        backgroundImage: `url("./homebg.jpg")`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center'
+      }}>
+      <br />
+      <Image src='./wifilogo75.svg' padding='10px' />
+      <Box padding="1" >
+        <Text fontSize='2xl' fontWeight='bold' >Spread the idea of Web3.</Text>
+      </Box>
+      {articleList.length <= 0 ?
+        <>
+          <Skeleton isLoaded={false} width='100%' height='150px' />
+          <br />
+          <Skeleton isLoaded={false} width='100%' height='150px' />
+          <br />
+          <Skeleton isLoaded={false} width='100%' height='150px' />
+        </>
+        : articleList}
+    </Flex>
   )
 }
-
-/**
-
-
- */
