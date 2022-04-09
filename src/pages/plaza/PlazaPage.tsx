@@ -9,7 +9,7 @@ import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";
 
-// element 
+// element
 const EntryElement = ({ article }: { article: EntryDigestExt }) => {
   var index = article.id
   let navigate = useNavigate()
