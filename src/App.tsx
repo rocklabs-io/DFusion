@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -7,9 +6,8 @@ import { EditPage } from './pages/edit';
 import { PlazaPage } from './pages/plaza';
 import { ContentPage } from './pages/content';
 import { store } from 'src/store';
-import { Header } from './components/Header';
+import { Header } from './components/header';
 import "@fontsource/roboto"
-import { ThemeProvider, Button, useTheme } from 'degen';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 declare global {
   interface Window { ic: any; }

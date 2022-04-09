@@ -1,8 +1,5 @@
-import { Box, Spinner, Stack, Tag } from "degen";
-import { Session } from "inspector";
+import { Box, Spinner, Stack, Tag } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Principal } from "@dfinity/principal";
-import { scryRenderedDOMComponentsWithClass } from "react-dom/test-utils";
 import Editor from "rich-markdown-editor";
 import { shortPrincipal } from "../../canisters/utils";
 import { getTimeString } from "../../canisters/utils";
@@ -10,13 +7,6 @@ import { Text } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import styles from "./ContentPage.module.css"
 import { useDfusionActor } from "src/canisters/actor";
-
-type Entry = {
-  content: string;
-  creator: Principal;
-  createAt: Number;
-  likes: [Principal];
-};
 
 export const ContentPage: React.FC = () => {
   // @ts-ignore
@@ -52,7 +42,7 @@ export const ContentPage: React.FC = () => {
       {title.length <= 0
         ?
         <><Stack align="center">
-          <Box padding="40"><Spinner size="large" color="accent" /></Box></Stack>
+          <Spinner size="lg" margin='30vh' /></Stack>
         </>
         :
         <>
@@ -64,14 +54,13 @@ export const ContentPage: React.FC = () => {
               {title}
             </Text>
           </Stack>
-          <Stack direction="vertical">
+          <Stack direction='column'>
             <Box width="full">
-              <Stack direction="horizontal" align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
+              <Stack direction='row' align="center"><Avatar size={32} name={creator} variant="marble" />{creator}<Tag>{creator}</Tag> <Tag>{createTime}</Tag></Stack></Box>
             <Editor defaultValue="loading" value={content} readOnly={true} />
           </Stack>
         </>
       }
-
     </div>
   )
 }

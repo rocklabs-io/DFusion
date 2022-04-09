@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { useLocation, useMatch, useNavigate, useParams } from "react-router";
-import { Stack, Button } from "degen"; 
-import { shortPrincipal } from "src/canisters/utils";
-import styles from './Header.module.css';
+import styles from './header.module.css';
 import { ConnectButton } from "../connectButton";
+import { useUserExtInit } from "../userExt/use-userExt-init";
 declare let window: any;
 
 export const Header: React.FC = () => {
@@ -15,6 +14,9 @@ export const Header: React.FC = () => {
   const [addString, setAddString] = useState("Not Connected");
 
   console.log("location:"+location.pathname)
+
+  // init all user info, valid after connect plug
+  useUserExtInit()
 
   // useEffect(() => {
   //   const hasAgent = localStorage.getItem("hasAgent");
@@ -63,7 +65,7 @@ export const Header: React.FC = () => {
     <div className={styles.header}>
       <div className={styles.headerMain}>
         <div className={styles.headerLogo} onClick={()=>{navigate('/')}}>
-            <img src="/dfusion136.svg" alt="DFUSION" />
+        <img src="/dfusion136.svg" alt="DFUSION" />
         </div>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
         <ConnectButton />

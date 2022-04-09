@@ -21,6 +21,7 @@
     "boring-avatars": "^1.5.8",
     "degen": "^0.0.44",
     "framer-motion": "^4.1.17",
+    "jsonfile": "^6.1.0",
     "mime": "^3.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -58,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^17.0.37"
+    "@types/react": "^17.0.37",
+    "webpack-config-utils": "^2.3.1"
   }
 }

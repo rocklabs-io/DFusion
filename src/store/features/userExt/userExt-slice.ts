@@ -4,19 +4,33 @@ import { UserExt } from "src/canisters/model/dfusiondid";
 import { RootState } from "src/store/store";
 
 const initialState: UserExt = {
-  id: Principal.fromText('aaaaa-aa'), 
+  id: Principal.fromText('aaaaa-aa'),
   likes: [],
   entries: [],
   following: [],
   followers: [],
 }
 
+// interface likeOperate {
+//   entryId: bigint, 
+//   like: boolean
+// }
+
 export const userExtSlice = createSlice({
   name: 'userExt',
   initialState,
   reducers: {
-    setLikes: (state, action: PayloadAction<Array<bigint>>) => {
-      state.likes = action.payload;
+    setAllLikes: (state, action: PayloadAction<Array<bigint>>) => {
+      state.likes = action.payload
+    },
+    setLike: (state, action: PayloadAction<bigint>) => {
+      state.likes.push(action.payload)
+    },
+    setUnlike: (state, action: PayloadAction<bigint>) => {
+      state.likes.filter(
+        (value, index) =>
+          value !== action.payload
+      )
     },
     setEntries: (state, action: PayloadAction<Array<bigint>>) => {
       state.likes = action.payload;

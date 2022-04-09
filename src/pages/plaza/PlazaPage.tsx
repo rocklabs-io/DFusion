@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Heading, Text, Box, Tag, Image, Skeleton } from "@chakra-ui/react";
+import { Stack, Heading, Text, Box, Tag, Image, Skeleton, useToast, Spinner } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
 import { EntryDigestExt } from "src/canisters/model/dfusiondid";
 import { Flex } from "@chakra-ui/react";
+import { userExtAction, useUserExtStore } from "src/store/features/userExt";
+import { useAppDispatch } from "src/store";
 
 // element 
 const EntryElement = ({ article }: { article: EntryDigestExt }) => {
@@ -15,13 +17,52 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
   // procss article props
   var creator = shortPrincipal(article.creator.toText())
   var time = getTimeString(article.createAt)
-  const dfusionActor = useDfusionActor(Identity.caller ?? undefined)
+  const dfusionActor = useDfusionActor(Identity.caller ?? undefined);
+  const dispatch = useAppDispatch();
+  const toast = useToast();
+  const [liking, setLiking] = useState(false);
+  
+  // state: if this passage is liked by the user
+  const [isLiked, setIsLiked] = useState(false);
+  
+  // all liked entries id
+  const { likes } = useUserExtStore();
 
   const handleLike = () => {
+    setLiking(true);
     dfusionActor?.like(article.id).then(res => {
-      
+      console.log('like: ', res)
+      if ('ok' in res) {
+        toast({
+          status: 'success',
+          title: 'Success!',
+          description: (res.ok ? 'Liked' : 'Unliked') + ' successfully',
+          duration: 3000
+        })
+        res.ok ?
+          dispatch(userExtAction.setLike(
+            article.id
+          )) :
+          dispatch(userExtAction.setUnlike(
+            article.id
+          ))
+      } else {
+        toast({
+          status: 'error',
+          title: 'Failed',
+          description: 'Operation failed: ' + res.err,
+          duration: 3000
+        })
+      }
+    }).finally(() => {
+      setLiking(false)
     })
   }
+
+  // update state from the store
+  useEffect(() => {
+    setIsLiked(likes.includes(article.id));
+  }, [likes])
 
   return (
     <Stack align='center' width='100%'>
@@ -51,16 +92,24 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
         <Flex align="center" justify='space-between'>
           <Tag>{time}</Tag>
           <Tag>
-            
-            <Text color="grey.300"
-              cursor='pointer'
-              onClick={handleLike}>
-              &hearts;
-            </Text>
-
+            {
+              liking 
+              ? 
+              <Spinner size='xs' color="grey" />
+              :
+              <Text color=
+                {
+                  isLiked ?
+                    "red" : "grey.300"
+                }
+                cursor='pointer'
+                onClick={handleLike}>
+                &hearts;
+              </Text>
+            }
             &nbsp;
             <Text color='grey'>
-              {Number(article.likesNum).toString()}
+              {(Number(article.likesNum) + Number(isLiked)).toString()}
             </Text>
           </Tag>
         </Flex>
@@ -72,8 +121,6 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
 export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
   const [mounted, setMounted] = useState(false)
-  const [connected, setConnected] = useState(false)
-  let navigate = useNavigate()
   const dfusionActor = useDfusionActor(undefined)
 
   // verify connect

@@ -2,11 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Editor from "rich-markdown-editor";
-import { Button, Box } from "degen";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Button, Box } from "@chakra-ui/react";
 
 export const EditPage: React.FC = () => {
   var text = "";
@@ -52,9 +51,12 @@ export const EditPage: React.FC = () => {
         <Editor
           theme={lightTheme}
           onChange={(value) => onChange(value())}
-          placeholder="# Hello creator! Write something here." />
+          placeholder={'\# Title \n Hello creator! Write something here.'}/>
         <Box className={styles.buttonBox}>
-          <Button onClick={handleSubmit} loading={loading} disabled={loading}> Publish </Button>
+          <Button onClick={handleSubmit} 
+            colorScheme='regular'
+            isLoading={loading} 
+            disabled={loading}> Publish </Button>
         </Box>
       </div>
     </>)
