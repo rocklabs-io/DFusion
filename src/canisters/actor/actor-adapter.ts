@@ -2,7 +2,7 @@ import { Actor, HttpAgent, } from '@dfinity/agent';
 import { IDL } from '@dfinity/candid';
 import { ENV } from 'src/config/env';
 import type { Provider } from '@psychedelic/plug-inpage-provider';
-import { ActorRepository, AppActors, Identity } from './models';
+import { ActorRepository, AppActors, Identity } from './models'; 
 
 export const appActors: Record<string, any> = {};
 export const appAnonymousActors: Record<string, any> = {};
