@@ -86,13 +86,13 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
                 e
             };
         };	
-		if (TrieSet.mem(entry.likes, caller, Principal.hash(caller),  Principal.equal)) {
+		if (TrieSet.mem(entry.likes, liker, Principal.hash(liker),  Principal.equal)) {
 			// already liked this article, unlike
-			entry.likes :=  TrieSet.delete(entry.likes, caller, Principal.hash(liker), Principal.equal);
+			entry.likes :=  TrieSet.delete(entry.likes, liker, Principal.hash(liker), Principal.equal);
 			#ok(false)
 		} else {
 			// like this article
-			entry.likes :=  TrieSet.put(entry.likes, caller, Principal.hash(liker), Principal.equal);
+			entry.likes :=  TrieSet.put(entry.likes, liker, Principal.hash(liker), Principal.equal);
 			#ok(true)
 		};
 	};

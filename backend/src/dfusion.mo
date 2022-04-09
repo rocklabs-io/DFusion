@@ -317,6 +317,35 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		res
 	};
 
+	type ICActor = actor {
+        update_settings: shared(params: UpdateSettingsParams) -> async ();
+    };
+	type CanisterId = {
+        canister_id: Principal;
+    };
+	type UpdateSettingsParams = {
+        canister_id: Principal;
+        settings: CanisterSettings;
+    };
+	type CanisterSettings = {
+        controllers : ?[Principal];
+        compute_allocation : ?Nat;
+        memory_allocation : ?Nat;
+        freezing_threshold : ?Nat;
+    };
+	public shared(msg) func addControllerToBucket(bucket_principal: Principal, controllers: [Principal]) {
+		let ic : ICActor = actor("aaaaa-aa");
+		await ic.update_settings({
+			canister_id = bucket_principal;
+			settings = {
+				controllers = ?controllers;
+				compute_allocation = null;
+				memory_allocation = null;
+				freezing_threshold = null;
+			};
+		});
+	};
+
 	system func preupgrade() {
     	userEntries := Iter.toArray(allUsers.entries());
 		authEntries := Iter.toArray(auths.entries());
