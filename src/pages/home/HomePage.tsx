@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./HomePage.module.css";
-import { Button, Stack, Card, Box } from "degen";
+import { Button, Stack, Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Image } from "@chakra-ui/react";
 
 export const HomePage: React.FC = () => {
 
@@ -9,55 +10,90 @@ export const HomePage: React.FC = () => {
   const mountedRef = useRef(true)
   // let mounted = false // set false after navigate
   let navigate = useNavigate()
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     var scrollArrow = document.getElementById("scrollArrow")
-    if(mountedRef){
+    if (mountedRef) {
       window.onscroll = () => {
         setOffset(window.pageYOffset)
-        if(scrollArrow){
-          var nscale = 1.0+window.pageYOffset/100
-          var ntranslatex = 50/nscale
-          scrollArrow.style.transform="scale("+nscale+") translate(-"+ntranslatex+"%, -50%)"
+        if (scrollArrow) {
+          var nscale = 1.0 + window.pageYOffset / 100
+          var ntranslatex = 50 / nscale
+          scrollArrow.style.transform = "scale(" + nscale + ") translate(-" + ntranslatex + "%, -50%)"
         }
       }
     }
   }, []);
 
-  if(document.documentElement.scrollHeight === window.pageYOffset + window.innerHeight){
-    mountedRef.current=false
+  if (document.documentElement.scrollHeight === window.pageYOffset + window.innerHeight) {
+    mountedRef.current = false
+    // console.log('/plaza')
     navigate('/plaza')
-    // navigate('/content')
   }
 
+  // const [lastScrollPosition, setSP ] = useState(0)
+  // window.onscroll = function(event)
+  // {
+  //   console.log(document.body.scrollTop)
+  //   if((document.body.scrollTop == 0)&&(lastScrollPosition > 0))
+  //   {
+  //     alert("refresh");
+  //   }
+  //   setSP(document.body.scrollTop);
+  // }
+
+
   return (
-    <div className={styles["page-content"]}
-      style={{ 
-        backgroundImage: `url("./homebg.jpg")`, 
-        backgroundRepeat: 'no-repeat', 
+    <Flex className={styles["page-content"]}
+      flexDirection='column'
+      alignItems='center'
+      style={{
+        backgroundImage: `url("./homebg.jpg")`,
+        backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundPosition: 'center center' }}>
-      <div className={styles.logo}> 
-      <img src='./wifilogo190.svg' />  
-      </div>
+        backgroundPosition: 'center center'
+      }}>
+      <Image marginTop='10vh' src='./wifilogo190.svg' />
       <div className={styles["slogan"]}>
-        <Card padding="10" >
-        <a style={{textAlign:'center', fontSize: '60px', fontWeight: 'bold'}}>Connect to Web3 via <img className={styles.textLogo} src="./dfusion244.svg" /></a>
-        </Card>
+        <Flex flexDir='column'
+          alignItems='center'
+          padding="10" >
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: '60px',
+              fontWeight: 'bold'
+            }}
+          >
+            Connect to Web3 via
+          </Text>
+          <Image className={styles.textLogo} src="./dfusion244.svg" />
+        </Flex>
       </div>
-      <Stack align={"center"} justify={"center"}>
-        <Card padding="6" width="auto" shadow>
+      <Stack borderRadius='12px'
+        align={"center"}
+        justify={"center"}
+        shadow='2xl'>
+        <Box 
+          padding="6"
+          width="auto" 
+          dropShadow='outline'>
           <Stack align={"center"} justify={"center"}>
             Thinkers,
-            <div style={{fontWeight:'bold', fontSize: '40px'}}>Let's get started</div>
-            <Button loading={false} size="small" onClick={()=>navigate('/edit')}> New Entry </Button>
+            <div style={{ fontWeight: 'bold', fontSize: '40px' }}>Let's get started</div>
+            <Button colorScheme='regular'
+              onClick={() => 
+              navigate('/edit')}> New Entry </Button>
           </Stack>
-        </Card>
-        
+        </Box>
       </Stack>
-      <Box alignItems='center' justifySelf='center' id="scrollArrow" className={styles.scrollArrow}>
+      <Flex flexDir='column'
+        alignItems='center'
+        id="scrollArrow"
+        className={styles.scrollArrow}
+      >
         <img src="./chevrons-down.svg"></img>
         <div>Scroll down to enter the Web3</div>
-      </Box>
-    </div>);
+      </Flex>
+    </Flex>);
 }

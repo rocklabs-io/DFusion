@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider} from 'degen';
-import "degen/dist/style.css"
+// import { ThemeProvider} from 'degen';
+// import "degen/dist/style.css"
 
 ReactDOM.render(
-  <ThemeProvider>
+  // <ThemeProvider>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </ThemeProvider>
   ,
   document.getElementById('root')
 );

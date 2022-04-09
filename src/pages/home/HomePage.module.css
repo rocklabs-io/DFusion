@@ -15,7 +15,7 @@ h1 {
   transform: translate(0, 20%);
 }
 
-.page-content img:hover{
+.page-content img :hover{
   transform: translate(0, 40%);
   transform: scale(1.2);
 }
