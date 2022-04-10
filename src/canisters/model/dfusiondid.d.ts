@@ -1,6 +1,10 @@
 import type { Principal } from '@dfinity/principal';
 export interface DFusion {
   'addAuth' : (arg_0: Principal) => Promise<boolean>,
+  'addControllerToBucket' : (
+      arg_0: Principal,
+      arg_1: Array<Principal>,
+    ) => Promise<undefined>,
   'createEntry' : (arg_0: string, arg_1: string) => Promise<Result_2>,
   'follow' : (arg_0: Principal) => Promise<boolean>,
   'getBucketInfo' : () => Promise<
