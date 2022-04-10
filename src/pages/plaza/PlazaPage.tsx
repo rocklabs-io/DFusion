@@ -118,9 +118,8 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
 
 export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
-  const [mounted, setMounted] = useState(false)
   const dfusionActor = useDfusionActor(undefined)
-  
+
   // update states
   useEffect(() => {
     dfusionActor && dfusionActor?.getEntries(Number(10), Number(0)).then(res => {
