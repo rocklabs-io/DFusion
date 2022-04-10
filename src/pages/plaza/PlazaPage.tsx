@@ -125,7 +125,7 @@ export const PlazaPage: React.FC = () => {
   // verify connect
   const getEntries = async () => {
     dfusionActor?.getEntries(10, 0).then(res => {
-      console.log(res);
+      // console.log(res);
       var articles: any = []
       if (res.length > 0) {
         for (var i = res.length - 1; i >= 0; i--) {
@@ -140,6 +140,8 @@ export const PlazaPage: React.FC = () => {
         setMounted(true)
         console.log(articleList)
       }
+    }).catch(error => {
+      console.log('error: ', error)
     })
   };
 
