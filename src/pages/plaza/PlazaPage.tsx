@@ -30,7 +30,6 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
   const handleLike = () => {
     setLiking(true);
     dfusionActor?.like(article.id).then(res => {
-      console.log('like: ', res)
       if ('ok' in res) {
         toast({
           status: 'success',
@@ -148,7 +147,6 @@ export const PlazaPage: React.FC = () => {
   // update states
   useEffect(() => {
     getEntries()
-    console.log('sent')
   }, [dfusionActor])
 
   return (
