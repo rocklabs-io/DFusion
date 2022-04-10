@@ -76,7 +76,7 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
           &nbsp; &nbsp;
           <Tag>{creator}</Tag>
         </Flex>
-        <Box padding='2' cursor="pointer"><div onClick={() => navigate('/entry/' + index)}>
+        <Box padding='2' cursor="pointer"><div onClick={() => navigate('/entry/' + Number(index))}>
           <Heading>
             {article.title ? article.title.replace('#', '') : "Untitled"}
           </Heading>
