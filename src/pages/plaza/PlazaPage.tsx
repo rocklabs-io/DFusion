@@ -120,10 +120,10 @@ export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
   const [mounted, setMounted] = useState(false)
   const dfusionActor = useDfusionActor(undefined)
-
-  // verify connect
-  const getEntries = async () => {
-    dfusionActor?.getEntries(10, 0).then(res => {
+  
+  // update states
+  useEffect(() => {
+    dfusionActor && dfusionActor?.getEntries(10, 0).then(res => {
       console.log('res: ', res);
       var articles: any = []
       if (res.length > 0) {
@@ -134,19 +134,14 @@ export const PlazaPage: React.FC = () => {
           articles.push(<EntryElement article={res[i]} key={i} />)
         }
       }
-      if (!mounted) {
-        setArticleList(articles)
-        setMounted(true)
-        console.log(articleList)
-      }
+      // if (!mounted) {
+      //   setArticleList(articles)
+      //   setMounted(true)
+      //   console.log(articleList)
+      // }
     }).catch(error => {
       console.log('error: ', error)
     })
-  };
-
-  // update states
-  useEffect(() => {
-    getEntries()
   }, [dfusionActor])
 
   return (
