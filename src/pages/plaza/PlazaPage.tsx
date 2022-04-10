@@ -123,7 +123,7 @@ export const PlazaPage: React.FC = () => {
   
   // update states
   useEffect(() => {
-    dfusionActor && dfusionActor?.getEntries(10, 0).then(res => {
+    dfusionActor && dfusionActor?.getEntries(Number(10), Number(0)).then(res => {
       console.log('res: ', res);
       var articles: any = []
       if (res.length > 0) {
