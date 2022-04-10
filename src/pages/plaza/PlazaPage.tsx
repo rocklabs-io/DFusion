@@ -11,7 +11,7 @@ import { useAppDispatch } from "src/store";
 
 // element
 const EntryElement = ({ article }: { article: EntryDigestExt }) => {
-  var index = article.id
+  var index = Number(article.id)
   let navigate = useNavigate()
   // procss article props
   var creator = shortPrincipal(article.creator.toText())
@@ -76,7 +76,7 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
           &nbsp; &nbsp;
           <Tag>{creator}</Tag>
         </Flex>
-        <Box padding='2' cursor="pointer"><div onClick={() => navigate('/entry/' + Number(index))}>
+        <Box padding='2' cursor="pointer"><div onClick={() => navigate('/entry/' + index.toString())}>
           <Heading>
             {article.title ? article.title.replace('#', '') : "Untitled"}
           </Heading>
@@ -125,7 +125,7 @@ export const PlazaPage: React.FC = () => {
   // verify connect
   const getEntries = async () => {
     dfusionActor?.getEntries(10, 0).then(res => {
-      // console.log(res);
+      console.log('res: ', res);
       var articles: any = []
       if (res.length > 0) {
         for (var i = res.length - 1; i >= 0; i--) {
