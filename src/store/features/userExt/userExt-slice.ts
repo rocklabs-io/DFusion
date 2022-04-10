@@ -27,9 +27,8 @@ export const userExtSlice = createSlice({
       state.likes.push(action.payload)
     },
     setUnlike: (state, action: PayloadAction<bigint>) => {
-      state.likes.filter(
-        (value, index) =>
-          value !== action.payload
+      state.likes = state.likes.filter(
+        value => value !== action.payload
       )
     },
     setEntries: (state, action: PayloadAction<Array<bigint>>) => {

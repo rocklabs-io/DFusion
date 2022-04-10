@@ -25,7 +25,7 @@ export const HomePage: React.FC = () => {
     }
   }, []);
 
-  if (document.documentElement.scrollHeight === window.pageYOffset + window.innerHeight) {
+  if (document.documentElement.scrollHeight >= window.pageYOffset + window.innerHeight - 10 ) {
     mountedRef.current = false
     // console.log('/plaza')
     navigate('/plaza')
