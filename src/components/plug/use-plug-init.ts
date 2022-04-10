@@ -1,3 +1,4 @@
+import { ICNSReverseController } from '@psychedelic/icns-js';
 import { useEffect } from 'react';
 import {
   FeatureState,
@@ -7,12 +8,11 @@ import {
 } from 'src/store';
 
 import { checkIsConnected, getPrincipal } from '.';
-import { useReverseRegistrarActor } from '../../canisters/actor/use-reverse-registrar-actor';
 
 export const usePlugInit = () => {
   const { isConnected } = usePlugStore();
   const dispatch = useAppDispatch();
-  const reverseNameActor = useReverseRegistrarActor()
+  const nameActor = new ICNSReverseController();
 
   useEffect(() => {
     dispatch(plugActions.setState(FeatureState.Loading));
@@ -35,7 +35,7 @@ export const usePlugInit = () => {
           const principal = await getPrincipal();
           if (principal) {
             dispatch(plugActions.setPrincipalId(principal.toString()));
-            const reverseName = await reverseNameActor?.getName(principal)
+            const reverseName = await nameActor?.getReverseName(principal)
             if (reverseName)
               dispatch(plugActions.setReverseName(reverseName as string))
           }
