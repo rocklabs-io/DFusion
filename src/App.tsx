@@ -12,6 +12,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 declare global {
   interface Window { ic: any; }
 }
+global.Buffer = global.Buffer || require('buffer').Buffer;
 
 const App = () => {
 
