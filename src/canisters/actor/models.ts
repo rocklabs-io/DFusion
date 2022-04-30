@@ -2,13 +2,8 @@ import { IDL } from '@dfinity/candid';
 import {
   DFusion,
 } from 'src/canisters/model/dfusiondid';
-import {
-  ICNSReverseRegistrar
-} from 'src/canisters/model/reverse_registrardid';
 
-export type AppActors =
-  ICNSReverseRegistrar  
-  | DFusion
+export type AppActors = DFusion
   
 
 

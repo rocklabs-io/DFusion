@@ -118,6 +118,7 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
 
 export const PlazaPage: React.FC = () => {
   const [articleList, setArticleList] = useState([])
+  const [mounted, setMounted] = useState(false)
   const dfusionActor = useDfusionActor(undefined)
 
   // update states
@@ -133,11 +134,10 @@ export const PlazaPage: React.FC = () => {
           articles.push(<EntryElement article={res[i]} key={i} />)
         }
       }
-      // if (!mounted) {
-      //   setArticleList(articles)
-      //   setMounted(true)
-      //   console.log(articleList)
-      // }
+      if (!mounted) {
+        setArticleList(articles)
+        setMounted(true)
+      }
     }).catch(error => {
       console.log('error: ', error)
     })

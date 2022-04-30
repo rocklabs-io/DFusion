@@ -4,7 +4,7 @@ import { GoTriangleDown } from 'react-icons/go'
 import { useAppDispatch, usePlugStore, plugActions, FeatureState,} from "src/store";
 import { ENV } from "src/config/env"
 import { disconnect, requestConnect, usePlugInit } from 'src/components/plug';
-import { Button, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, useClipboard, useToast } from "@chakra-ui/react";
+import { Button, Icon, Menu, MenuButton, MenuItem, MenuList, useClipboard, useToast } from "@chakra-ui/react";
 
 export const ConnectButton = () => {
 
