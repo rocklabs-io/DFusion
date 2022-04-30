@@ -1,9 +1,8 @@
 import type { Principal } from '@dfinity/principal';
 export interface Bucket {
-  'createEntry' : (arg_0: EntryExt) => Promise<Result_2>,
-  'getEntry' : (arg_0: bigint) => Promise<Result_1>,
+  'createEntry' : (arg_0: EntryExt) => Promise<Result_1>,
+  'getEntry' : (arg_0: bigint) => Promise<Result>,
   'getStableSize' : () => Promise<bigint>,
-  'like' : (arg_0: bigint, arg_1: Principal) => Promise<Result>,
 }
 export interface EntryExt {
   'id' : bigint,
@@ -14,11 +13,9 @@ export interface EntryExt {
   'createAt' : Time,
   'likes' : Array<Principal>,
 }
-export type Result = { 'ok' : boolean } |
+export type Result = { 'ok' : EntryExt } |
   { 'err' : string };
-export type Result_1 = { 'ok' : EntryExt } |
-  { 'err' : string };
-export type Result_2 = { 'ok' : bigint } |
+export type Result_1 = { 'ok' : bigint } |
   { 'err' : string };
 export type Time = bigint;
 export interface _SERVICE extends Bucket {}

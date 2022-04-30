@@ -1,12 +1,27 @@
 type UserExt = 
  record {
+   bio: opt text;
    entries: vec nat;
    followers: vec principal;
    following: vec principal;
    id: principal;
    likes: vec nat;
+   name: opt text;
  };
 type Time = int;
+type SetUserRequest = 
+ record {
+   bio: opt text;
+   name: opt text;
+ };
+type SetConfigRequest = 
+ record {
+   bioLimit: opt nat;
+   bucketLimit: opt nat;
+   contentLimit: opt nat;
+   nameLimit: opt nat;
+   titleLimit: opt nat;
+ };
 type Result_2 = 
  variant {
    err: text;
@@ -32,28 +47,31 @@ type EntryExt =
    likes: vec principal;
    title: text;
  };
-type EntryDigestExt = 
+type EntryDigest = 
  record {
    contentDigest: text;
    createAt: Time;
    creator: principal;
+   deleted: bool;
    id: nat;
-   likesNum: nat;
+   likes: vec principal;
    title: text;
  };
 type DFusion = 
  service {
    addAuth: (principal) -> (bool);
+   addControllerToBucket: (principal, vec principal) -> () oneway;
    createEntry: (text, text) -> (Result_2);
    follow: (principal) -> (bool);
    getBucketInfo: () -> (vec nat, vec nat, vec principal) query;
    getBucketStableSize: (principal) -> (nat64);
-   getEntries: (nat32, nat32) -> (vec EntryDigestExt) query;
+   getEntries: (nat32, nat32) -> (vec EntryDigest) query;
    getEntry: (nat) -> (Result_1);
    getUser: (principal) -> (opt UserExt) query;
-   getUserEntries: (principal) -> (vec EntryDigestExt) query;
+   getUserEntries: (principal) -> (vec EntryDigest) query;
    like: (nat) -> (Result);
    removeAuth: (principal) -> (bool);
-   setLimit: (opt nat, opt nat) -> (bool);
+   setLimit: (SetConfigRequest) -> (bool);
+   setUserInfo: (SetUserRequest) -> () oneway;
  };
 service : (principal) -> DFusion

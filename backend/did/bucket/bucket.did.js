@@ -9,14 +9,12 @@ export const idlFactory = ({ IDL }) => {
     'createAt' : Time,
     'likes' : IDL.Vec(IDL.Principal),
   });
-  const Result_2 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
-  const Result_1 = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
-  const Result = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+  const Result = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
   const Bucket = IDL.Service({
-    'createEntry' : IDL.Func([EntryExt], [Result_2], []),
-    'getEntry' : IDL.Func([IDL.Nat], [Result_1], ['query']),
+    'createEntry' : IDL.Func([EntryExt], [Result_1], []),
+    'getEntry' : IDL.Func([IDL.Nat], [Result], ['query']),
     'getStableSize' : IDL.Func([], [IDL.Nat64], ['query']),
-    'like' : IDL.Func([IDL.Nat, IDL.Principal], [Result], []),
   });
   return Bucket;
 };
