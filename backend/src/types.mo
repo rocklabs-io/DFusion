@@ -10,6 +10,8 @@ import TrieSet "mo:base/TrieSet";
 module {
     public type User = {
         id: Principal;
+        var name: ?Text; // <= 32 characters
+        var bio: ?Text; // <= 256 characters
 		var entries: TrieSet.Set<Nat>; // article indexes
 		var followers: TrieSet.Set<Principal>;
 		var following: TrieSet.Set<Principal>;
@@ -18,6 +20,8 @@ module {
 
     public type UserExt = {
         id: Principal;
+        name: ?Text; // <= 32 characters
+        bio: ?Text; // <= 256 characters
         entries: [Nat]; // sorted
 		followers: [Principal];
 		following: [Principal];
@@ -72,9 +76,32 @@ module {
         likesNum: Nat;
     };
 
+    public type Config = {
+        var titleLimit: Nat;
+		var contentLimit: Nat;
+		var bucketLimit: Nat;
+        var nameLimit: Nat;
+        var bioLimit: Nat;
+    };
+
+    public type SetConfigRequest = {
+        titleLimit: ?Nat;
+        contentLimit: ?Nat;
+        bucketLimit: ?Nat;
+        nameLimit: ?Nat;
+        bioLimit: ?Nat;
+    };
+
+    public type SetUserRequest = {
+        name: ?Text;
+        bio: ?Text;
+    };
+
     public func userToExt(user: User) : UserExt {
 		{
 			id  = user.id;
+            name = user.name;
+            bio = user.bio;
 			entries = Array.sort(TrieSet.toArray(user.entries), Nat.compare);
 			followers = TrieSet.toArray(user.followers);
 			following = TrieSet.toArray(user.following);

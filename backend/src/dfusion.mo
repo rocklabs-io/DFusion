@@ -36,6 +36,9 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type EntryDigestExt = Types.EntryDigestExt;
 	type User = Types.User;
 	type UserExt = Types.UserExt;
+	type Config = Types.Config;
+	type SetConfigRequest = Types.SetConfigRequest;
+	type SetUserRequest = Types.SetUserRequest;
 
 	private let owner: Principal = owner_;
 
@@ -55,13 +58,20 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	private let allUsers = TrieMap.fromEntries<Principal, User>(userEntries.vals(), Principal.equal, Principal.hash);
 
 	private var creating: Bool = false;
-	private stable var title_limit = 256;
-	private stable var content_limit = 2 * 1024 * 1024; // 2M
-	private let bucket_limit = 4 * 1024 * 1024 * 1024; // 4G
+
+	private stable let config: Config  = {
+		var titleLimit = 256;
+		var contentLimit = 2 * 1024 * 1024;
+		var bucketLimit = 4 * 1024 * 1024 * 1024;
+		var nameLimit = 32;
+		var bioLimit = 256;
+	};
 
 	private func _newUser(id : Principal) : User {
 		{
 			id = id;
+			var name = null;
+			var bio = null;
 			var entries = TrieSet.empty<Nat>();
 			var followers = TrieSet.empty<Principal>();
 			var following = TrieSet.empty<Principal>();
@@ -109,7 +119,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	private func createBucket(entryId: Nat) : async Principal {
 		creating := true;
-		Cycle.add(2_000_000_000_000); // 2T cycles
+		Cycle.add(1_000_000_000_000); // 1T cycles
 		let res = await Bucket.Bucket(Principal.fromActor(this));
 		consume := Array.append(consume, [0]);
 		index := Array.append(index, [entryId]);
@@ -149,17 +159,17 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		};
 		let caller = msg.caller;
 		let user = userRegister(caller);
-		if (Text.size(title) > title_limit) {
+		if (Text.size(title) > config.titleLimit) {
 			return #err("Title length over limit");
 		};
-		if (Text.size(content) > content_limit) {
+		if (Text.size(content) > config.contentLimit) {
 			return #err("Content length over limit");
 		};
 		let content_length = Text.encodeUtf8(content).size();
 		let entry = _newEntry(caller, title, content);
 		let bucket_principal = if (table.size() == 0) {
 			await createBucket(entry.id)
-		} else if (consume[table.size() -1] + content_length >= bucket_limit) {
+		} else if (consume[table.size() -1] + content_length >= config.contentLimit) {
 			await createBucket(entry.id)
 		} else {
 			table[table.size() - 1]
@@ -231,6 +241,23 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		};
 	};
 
+	public shared(msg) func setUserInfo(info: SetUserRequest) {
+		let caller = msg.caller;
+		let user = userRegister(caller);
+		switch (info.name) {
+			case (null) {};
+			case (?name) {
+				user.name := ?name;
+			};
+		};
+		switch(info.bio) {
+			case (null) {};
+			case (?bio) {
+				user.bio := ?bio;
+			};
+		};
+	};
+
 	public func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {
 		switch(entries.get(entryId)) {
 			case (null) { 
@@ -264,10 +291,13 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	// 	true
 	// };
 
-	public shared(msg) func setLimit(titleLimit: ?Nat, contentLimit: ?Nat) : async Bool {
+	public shared(msg) func setLimit(setConfigRequest: SetConfigRequest) : async Bool {
 		assert(_checkAuth(msg.caller));
-		title_limit := Option.get(titleLimit, title_limit);
-		content_limit := Option.get(contentLimit, content_limit);
+		config.titleLimit := Option.get(setConfigRequest.titleLimit, config.titleLimit);
+		config.contentLimit := Option.get(setConfigRequest.contentLimit, config.contentLimit);
+		config.bucketLimit := Option.get(setConfigRequest.bucketLimit, config.bucketLimit);
+		config.nameLimit := Option.get(setConfigRequest.nameLimit, config.nameLimit);
+		config.bioLimit := Option.get(setConfigRequest.bioLimit, config.bioLimit);
 		true
 	};
 
