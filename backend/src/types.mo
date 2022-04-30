@@ -44,7 +44,6 @@ module {
         title: Text;
 		content: Memory.Position;
 		createAt: Time.Time;
-		var likes: TrieSet.Set<Principal>;
 		var deleted: Bool;
     };
 
@@ -59,22 +58,14 @@ module {
 	};
 
     public type EntryDigest = {
-        id: Nat;
-        creator: Principal;
+		id: Nat;
+		creator: Principal;
         title: Text;
-        contentDigest: Text;
-        createAt: Time.Time;
-        var likesNum: Nat;
-    };
-
-    public type EntryDigestExt = {
-        id: Nat;
-        creator: Principal;
-        title: Text;
-        contentDigest: Text;
-        createAt: Time.Time;
-        likesNum: Nat;
-    };
+		contentDigest: Text;
+		createAt: Time.Time;
+		likes: [Principal];
+		deleted : Bool;
+	};
 
     public type Config = {
         var titleLimit: Nat;
@@ -121,17 +112,6 @@ module {
 		}
 	};
 
-    public func entryToDigest(entry: Entry) : EntryDigest {
-        {
-            id = entry.id;
-            creator = entry.creator;
-            title = entry.title;
-            contentDigest = substr(entry.content, 50);
-            createAt = entry.createAt;
-            var likesNum = TrieSet.size(entry.likes);
-        }
-    };
-
     public func entryToStore(entry: Entry, position: Memory.Position) : EntryStore {
         {
             id = entry.id;
@@ -139,7 +119,6 @@ module {
             title = entry.title;
             content = position;
             createAt = entry.createAt;
-            var likes = entry.likes;
             var deleted = entry.deleted;
         }
     };
@@ -151,20 +130,32 @@ module {
             title = entry.title;
             content = position;
             createAt = entry.createAt;
-            var likes = TrieSet.fromArray<Principal>(entry.likes, Principal.hash,  Principal.equal);
             var deleted = entry.deleted;
         }
     };
 
-    public func digestToExt(entry: EntryDigest) : EntryDigestExt {
+    public func digestEntry(entry: Entry) : Entry {
         {
             id = entry.id;
             creator = entry.creator;
             title = entry.title;
-            contentDigest = entry.contentDigest;
+            content = substr(entry.content, 64);
             createAt = entry.createAt;
-            likesNum = entry.likesNum;
+            var likes = entry.likes;
+            var deleted = entry.deleted;
         }
+    };
+
+    public func entryToDigest(entry: Entry) : EntryDigest {
+        {
+			id = entry.id;
+			creator = entry.creator;
+            title = entry.title;
+			contentDigest = entry.content;
+			createAt = entry.createAt;
+			likes = TrieSet.toArray(entry.likes);
+			deleted = entry.deleted;
+		}
     };
 
     public func substr(text: Text, len: Nat) : Text {

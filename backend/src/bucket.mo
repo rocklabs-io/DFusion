@@ -16,7 +16,6 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
     type Entry = Types.Entry;
     type EntryStore = Types.EntryStore;
     type EntryExt = Types.EntryExt;
-    type EntryDigest = Types.EntryDigest;
 
     // private let registry: Registry.DFusion = actor(Principal.toText(registry_));
     private stable let registry: Principal = registry_;
@@ -33,18 +32,6 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
         caller == registry
     };
 
-    private func _storeToDigest(store: EntryStore) : EntryDigest {
-        let content = stable_memory.read(store.content.offset, store.content.len);
-        {
-            id = store.id;
-            creator = store.creator;
-            title = store.title;
-            contentDigest = Types.substr(content, 50);
-            createAt = store.createAt;
-            var likesNum = TrieSet.size(store.likes)
-        }
-    };
-
     private func _storeToExt(store: EntryStore) : EntryExt {
         let content = stable_memory.read(store.content.offset, store.content.len);
         {
@@ -53,7 +40,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
             title = store.title;
 			content = content;
 			createAt = store.createAt;
-			likes = TrieSet.toArray(store.likes);
+            likes = [];
 			deleted = store.deleted;
 		}
     };
@@ -68,33 +55,6 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
         let entry_store = Types.extToStore(entry, position);
         entry_index.put(entry_store.id, entry_store);
         #ok(entry_store.id)
-	};
-
-    // like an article,  or unlike an article if called twice
-	// turn true if like, otherwise unlike
-	public shared(msg) func like(entryId: Nat, liker: Principal): async Result.Result<Bool, Text> {
-        let caller = msg.caller;
-        if (_authorized(caller) == false) {
-            Debug.trap("Unauthorized");
-        };
-		
-		let entry = switch (entry_index.get(entryId)) {
-            case (null) {
-                return #err("Entry not exist");
-            };
-            case (?e) {
-                e
-            };
-        };	
-		if (TrieSet.mem(entry.likes, liker, Principal.hash(liker),  Principal.equal)) {
-			// already liked this article, unlike
-			entry.likes :=  TrieSet.delete(entry.likes, liker, Principal.hash(liker), Principal.equal);
-			#ok(false)
-		} else {
-			// like this article
-			entry.likes :=  TrieSet.put(entry.likes, liker, Principal.hash(liker), Principal.equal);
-			#ok(true)
-		};
 	};
 
     public query func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {        

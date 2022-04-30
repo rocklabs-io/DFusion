@@ -33,7 +33,6 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type Entry = Types.Entry;
 	type EntryExt = Types.EntryExt;
 	type EntryDigest = Types.EntryDigest;
-	type EntryDigestExt = Types.EntryDigestExt;
 	type User = Types.User;
 	type UserExt = Types.UserExt;
 	type Config = Types.Config;
@@ -47,8 +46,8 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	// incremental id 
 	private stable var id_count = 0;
-	private stable var entryEntries : [(Nat, EntryDigest)] = [];
-	private let entries = TrieMap.fromEntries<Nat, EntryDigest>(entryEntries.vals(), Nat.equal, Hash.hash);
+	private stable var entryEntries : [(Nat, Entry)] = [];
+	private let entries = TrieMap.fromEntries<Nat, Entry>(entryEntries.vals(), Nat.equal, Hash.hash);
 	// ignore performance issue of Array.append it would be called few times
 	private stable var index: [Nat] = [];
 	private stable var consume: [Nat] = [];
@@ -187,7 +186,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			};
 		};
 
-		entries.put(ret, Types.entryToDigest(entry));
+		entries.put(ret, Types.digestEntry(entry));
 		user.entries := TrieSet.put(user.entries, ret, Hash.hash(ret), Nat.equal);
 		#ok(ret)
 	};
@@ -204,23 +203,14 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 				e
 			};
 		};
-		let user = userRegister(caller);
-		let bucket_principal = getBucket(entryId);
-		let bucket: Bucket.Bucket = actor(Principal.toText(bucket_principal));
-		switch (await bucket.like(entryId, caller)) {
-			case (#err(e)) {
-				return #err(e);
-			};
-			case (#ok(o)) {
-				if (o) {
-					user.likes :=  TrieSet.put(user.likes, entryId, Hash.hash(entryId), Nat.equal);
-					entry.likesNum += 1;
-				} else {
-					user.likes :=  TrieSet.delete(user.likes, entryId, Hash.hash(entryId), Nat.equal);
-					entry.likesNum -= 1;
-				};
-				return #ok(o);
-			};
+		if (TrieSet.mem(entry.likes, caller, Principal.hash(caller),  Principal.equal)) {
+			// already liked this article, unlike
+			entry.likes :=  TrieSet.delete(entry.likes, caller, Principal.hash(caller), Principal.equal);
+			#ok(false)
+		} else {
+			// like this article
+			entry.likes :=  TrieSet.put(entry.likes, caller, Principal.hash(caller), Principal.equal);
+			#ok(true)
 		};
 	};
 
@@ -301,7 +291,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		true
 	};
 
-	public query func getUserEntries(id: Principal): async [EntryDigestExt] {
+	public query func getUserEntries(id: Principal): async [EntryDigest] {
 		let user = switch (allUsers.get(id)) {
 			case (null) { 
 				return []; 
@@ -313,19 +303,22 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		let user_entries = user.entries;
 		Array.mapFilter(
 			TrieSet.toArray(user.entries), 
-			func (e: Nat): ?EntryDigestExt {
-				Option.map(entries.get(e), Types.digestToExt)
+			func (e: Nat): ?EntryDigest {
+				Option.map(entries.get(e), Types.entryToDigest)
 			}
 		)
 	};
 
-	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigestExt] {
-		let buf = Buffer.Buffer<EntryDigestExt>(Nat32.toNat(skip));
-		for (i in Iter.range(Nat32.toNat(skip), Nat32.toNat(first + skip))) {
-			switch(entries.get(i)) {
+	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigest] {
+		let buf = Buffer.Buffer<EntryDigest>(Nat32.toNat(skip));
+		label pagination for (i in Iter.range(Nat32.toNat(skip), Nat32.toNat(first + skip))) {
+			if (id_count <= i) {
+				break pagination;
+			};
+			switch(entries.get(id_count - i - 1)) {
 				case (null) { };
 				case (?e) {
-					buf.add(Types.digestToExt(e))
+					buf.add(Types.entryToDigest(e))
 				}
 			};
 		};
