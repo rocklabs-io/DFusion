@@ -1,24 +1,31 @@
 import type { Principal } from '@dfinity/principal';
+export interface CreateEntryRequest {
+  'title' : string,
+  'content' : string,
+  'cover' : [] | [string],
+}
 export interface DFusion {
   'addAuth' : (arg_0: Principal) => Promise<boolean>,
   'addControllerToBucket' : (
       arg_0: Principal,
       arg_1: Array<Principal>,
     ) => Promise<undefined>,
-  'createEntry' : (arg_0: string, arg_1: string) => Promise<Result_2>,
+  'createEntry' : (arg_0: CreateEntryRequest) => Promise<Result_3>,
+  'favor' : (arg_0: bigint) => Promise<Result_1>,
   'follow' : (arg_0: Principal) => Promise<boolean>,
   'getBucketInfo' : () => Promise<
       [Array<bigint>, Array<bigint>, Array<Principal>]
     >,
   'getBucketStableSize' : (arg_0: Principal) => Promise<bigint>,
   'getEntries' : (arg_0: number, arg_1: number) => Promise<Array<EntryDigest>>,
-  'getEntry' : (arg_0: bigint) => Promise<Result_1>,
+  'getEntry' : (arg_0: bigint) => Promise<Result_2>,
   'getUser' : (arg_0: Principal) => Promise<[] | [UserExt]>,
   'getUserEntries' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
-  'like' : (arg_0: bigint) => Promise<Result>,
+  'getUserFavorites' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
+  'like' : (arg_0: bigint) => Promise<Result_1>,
   'removeAuth' : (arg_0: Principal) => Promise<boolean>,
   'setLimit' : (arg_0: SetConfigRequest) => Promise<boolean>,
-  'setUserInfo' : (arg_0: SetUserRequest) => Promise<undefined>,
+  'setUserInfo' : (arg_0: SetUserRequest) => Promise<Result>,
 }
 export interface EntryDigest {
   'id' : bigint,
@@ -26,6 +33,7 @@ export interface EntryDigest {
   'creator' : Principal,
   'deleted' : boolean,
   'createAt' : Time,
+  'cover' : [] | [string],
   'likes' : Array<Principal>,
   'contentDigest' : string,
 }
@@ -36,15 +44,20 @@ export interface EntryExt {
   'deleted' : boolean,
   'content' : string,
   'createAt' : Time,
+  'favorites' : Array<Principal>,
+  'cover' : [] | [string],
   'likes' : Array<Principal>,
 }
-export type Result = { 'ok' : boolean } |
+export type Result = { 'ok' : null } |
   { 'err' : string };
-export type Result_1 = { 'ok' : EntryExt } |
+export type Result_1 = { 'ok' : boolean } |
   { 'err' : string };
-export type Result_2 = { 'ok' : bigint } |
+export type Result_2 = { 'ok' : EntryExt } |
+  { 'err' : string };
+export type Result_3 = { 'ok' : bigint } |
   { 'err' : string };
 export interface SetConfigRequest {
+  'coverLimit' : [] | [bigint],
   'contentLimit' : [] | [bigint],
   'bioLimit' : [] | [bigint],
   'nameLimit' : [] | [bigint],
@@ -59,6 +72,7 @@ export type Time = bigint;
 export interface UserExt {
   'id' : Principal,
   'bio' : [] | [string],
+  'favorites' : Array<bigint>,
   'name' : [] | [string],
   'likes' : Array<bigint>,
   'entries' : Array<bigint>,

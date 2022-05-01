@@ -7,6 +7,8 @@ export const idlFactory = ({ IDL }) => {
     'deleted' : IDL.Bool,
     'content' : IDL.Text,
     'createAt' : Time,
+    'favorites' : IDL.Vec(IDL.Principal),
+    'cover' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Principal),
   });
   const Result_1 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });

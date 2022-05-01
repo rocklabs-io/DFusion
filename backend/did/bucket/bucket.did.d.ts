@@ -11,6 +11,8 @@ export interface EntryExt {
   'deleted' : boolean,
   'content' : string,
   'createAt' : Time,
+  'favorites' : Array<Principal>,
+  'cover' : [] | [string],
   'likes' : Array<Principal>,
 }
 export type Result = { 'ok' : EntryExt } |

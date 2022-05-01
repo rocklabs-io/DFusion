@@ -12,9 +12,11 @@ type Result =
 type EntryExt = 
  record {
    content: text;
+   cover: opt text;
    createAt: Time;
    creator: principal;
    deleted: bool;
+   favorites: vec principal;
    id: nat;
    likes: vec principal;
    title: text;

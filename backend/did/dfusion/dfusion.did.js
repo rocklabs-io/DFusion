@@ -1,5 +1,11 @@
 export const idlFactory = ({ IDL }) => {
-  const Result_2 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+  const CreateEntryRequest = IDL.Record({
+    'title' : IDL.Text,
+    'content' : IDL.Text,
+    'cover' : IDL.Opt(IDL.Text),
+  });
+  const Result_3 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   const Time = IDL.Int;
   const EntryDigest = IDL.Record({
     'id' : IDL.Nat,
@@ -7,6 +13,7 @@ export const idlFactory = ({ IDL }) => {
     'creator' : IDL.Principal,
     'deleted' : IDL.Bool,
     'createAt' : Time,
+    'cover' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Principal),
     'contentDigest' : IDL.Text,
   });
@@ -17,20 +24,23 @@ export const idlFactory = ({ IDL }) => {
     'deleted' : IDL.Bool,
     'content' : IDL.Text,
     'createAt' : Time,
+    'favorites' : IDL.Vec(IDL.Principal),
+    'cover' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Principal),
   });
-  const Result_1 = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
+  const Result_2 = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
   const UserExt = IDL.Record({
     'id' : IDL.Principal,
     'bio' : IDL.Opt(IDL.Text),
+    'favorites' : IDL.Vec(IDL.Nat),
     'name' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Nat),
     'entries' : IDL.Vec(IDL.Nat),
     'followers' : IDL.Vec(IDL.Principal),
     'following' : IDL.Vec(IDL.Principal),
   });
-  const Result = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   const SetConfigRequest = IDL.Record({
+    'coverLimit' : IDL.Opt(IDL.Nat),
     'contentLimit' : IDL.Opt(IDL.Nat),
     'bioLimit' : IDL.Opt(IDL.Nat),
     'nameLimit' : IDL.Opt(IDL.Nat),
@@ -41,6 +51,7 @@ export const idlFactory = ({ IDL }) => {
     'bio' : IDL.Opt(IDL.Text),
     'name' : IDL.Opt(IDL.Text),
   });
+  const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
   const DFusion = IDL.Service({
     'addAuth' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'addControllerToBucket' : IDL.Func(
@@ -48,7 +59,8 @@ export const idlFactory = ({ IDL }) => {
         [],
         ['oneway'],
       ),
-    'createEntry' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
+    'createEntry' : IDL.Func([CreateEntryRequest], [Result_3], []),
+    'favor' : IDL.Func([IDL.Nat], [Result_1], []),
     'follow' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getBucketInfo' : IDL.Func(
         [],
@@ -61,17 +73,22 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(EntryDigest)],
         ['query'],
       ),
-    'getEntry' : IDL.Func([IDL.Nat], [Result_1], []),
+    'getEntry' : IDL.Func([IDL.Nat], [Result_2], []),
     'getUser' : IDL.Func([IDL.Principal], [IDL.Opt(UserExt)], ['query']),
     'getUserEntries' : IDL.Func(
         [IDL.Principal],
         [IDL.Vec(EntryDigest)],
         ['query'],
       ),
-    'like' : IDL.Func([IDL.Nat], [Result], []),
+    'getUserFavorites' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(EntryDigest)],
+        ['query'],
+      ),
+    'like' : IDL.Func([IDL.Nat], [Result_1], []),
     'removeAuth' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'setLimit' : IDL.Func([SetConfigRequest], [IDL.Bool], []),
-    'setUserInfo' : IDL.Func([SetUserRequest], [], ['oneway']),
+    'setUserInfo' : IDL.Func([SetUserRequest], [Result], []),
   });
   return DFusion;
 };

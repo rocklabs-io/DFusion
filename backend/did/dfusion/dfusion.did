@@ -2,6 +2,7 @@ type UserExt =
  record {
    bio: opt text;
    entries: vec nat;
+   favorites: vec nat;
    followers: vec principal;
    following: vec principal;
    id: principal;
@@ -19,30 +20,38 @@ type SetConfigRequest =
    bioLimit: opt nat;
    bucketLimit: opt nat;
    contentLimit: opt nat;
+   coverLimit: opt nat;
    nameLimit: opt nat;
    titleLimit: opt nat;
  };
-type Result_2 = 
+type Result_3 = 
  variant {
    err: text;
    ok: nat;
  };
-type Result_1 = 
+type Result_2 = 
  variant {
    err: text;
    ok: EntryExt;
  };
-type Result = 
+type Result_1 = 
  variant {
    err: text;
    ok: bool;
  };
+type Result = 
+ variant {
+   err: text;
+   ok;
+ };
 type EntryExt = 
  record {
    content: text;
+   cover: opt text;
    createAt: Time;
    creator: principal;
    deleted: bool;
+   favorites: vec principal;
    id: nat;
    likes: vec principal;
    title: text;
@@ -50,6 +59,7 @@ type EntryExt =
 type EntryDigest = 
  record {
    contentDigest: text;
+   cover: opt text;
    createAt: Time;
    creator: principal;
    deleted: bool;
@@ -61,17 +71,25 @@ type DFusion =
  service {
    addAuth: (principal) -> (bool);
    addControllerToBucket: (principal, vec principal) -> () oneway;
-   createEntry: (text, text) -> (Result_2);
+   createEntry: (CreateEntryRequest) -> (Result_3);
+   favor: (nat) -> (Result_1);
    follow: (principal) -> (bool);
    getBucketInfo: () -> (vec nat, vec nat, vec principal) query;
    getBucketStableSize: (principal) -> (nat64);
    getEntries: (nat32, nat32) -> (vec EntryDigest) query;
-   getEntry: (nat) -> (Result_1);
+   getEntry: (nat) -> (Result_2);
    getUser: (principal) -> (opt UserExt) query;
    getUserEntries: (principal) -> (vec EntryDigest) query;
-   like: (nat) -> (Result);
+   getUserFavorites: (principal) -> (vec EntryDigest) query;
+   like: (nat) -> (Result_1);
    removeAuth: (principal) -> (bool);
    setLimit: (SetConfigRequest) -> (bool);
-   setUserInfo: (SetUserRequest) -> () oneway;
+   setUserInfo: (SetUserRequest) -> (Result);
+ };
+type CreateEntryRequest = 
+ record {
+   content: text;
+   cover: opt text;
+   title: text;
  };
 service : (principal) -> DFusion
