@@ -72,6 +72,7 @@ module {
 		contentDigest: Text;
 		createAt: Time.Time;
 		likes: [Principal];
+        favorites: [Principal];
 		deleted : Bool;
 	};
 
@@ -82,6 +83,7 @@ module {
 		var bucketLimit: Nat;
         var nameLimit: Nat;
         var bioLimit: Nat;
+        var digestLimit: Nat;
     };
 
     public type SetConfigRequest = {
@@ -91,6 +93,7 @@ module {
         bucketLimit: ?Nat;
         nameLimit: ?Nat;
         bioLimit: ?Nat;
+        digestLimit: ?Nat;
     };
 
     public type SetUserRequest = {
@@ -155,13 +158,13 @@ module {
         }
     };
 
-    public func digestEntry(entry: Entry) : Entry {
+    public func digestEntry(entry: Entry, digestEntry: Nat) : Entry {
         {
             id = entry.id;
             creator = entry.creator;
             title = entry.title;
             cover = entry.cover;
-            content = substr(entry.content, 64);
+            content = substr(entry.content, digestEntry);
             createAt = entry.createAt;
             var likes = entry.likes;
             var favorites = entry.favorites;

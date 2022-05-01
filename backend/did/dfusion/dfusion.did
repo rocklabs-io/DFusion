@@ -21,6 +21,7 @@ type SetConfigRequest =
    bucketLimit: opt nat;
    contentLimit: opt nat;
    coverLimit: opt nat;
+   digestLimit: opt nat;
    nameLimit: opt nat;
    titleLimit: opt nat;
  };
@@ -63,6 +64,7 @@ type EntryDigest =
    createAt: Time;
    creator: principal;
    deleted: bool;
+   favorites: vec principal;
    id: nat;
    likes: vec principal;
    title: text;

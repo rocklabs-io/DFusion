@@ -13,6 +13,7 @@ export const idlFactory = ({ IDL }) => {
     'creator' : IDL.Principal,
     'deleted' : IDL.Bool,
     'createAt' : Time,
+    'favorites' : IDL.Vec(IDL.Principal),
     'cover' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Principal),
     'contentDigest' : IDL.Text,
@@ -46,6 +47,7 @@ export const idlFactory = ({ IDL }) => {
     'nameLimit' : IDL.Opt(IDL.Nat),
     'bucketLimit' : IDL.Opt(IDL.Nat),
     'titleLimit' : IDL.Opt(IDL.Nat),
+    'digestLimit' : IDL.Opt(IDL.Nat),
   });
   const SetUserRequest = IDL.Record({
     'bio' : IDL.Opt(IDL.Text),

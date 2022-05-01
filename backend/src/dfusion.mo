@@ -66,6 +66,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		var bucketLimit = 4 * 1024 * 1024 * 1024;
 		var nameLimit = 32;
 		var bioLimit = 256;
+		var digestLimit = 128;
 	};
 
 	private func _newUser(id : Principal) : User {
@@ -199,7 +200,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			};
 		};
 
-		entries.put(ret, Types.digestEntry(entry));
+		entries.put(ret, Types.digestEntry(entry, config.digestLimit));
 		user.entries := TrieSet.put(user.entries, ret, Hash.hash(ret), Nat.equal);
 		#ok(ret)
 	};
@@ -355,6 +356,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		config.bucketLimit := Option.get(setConfigRequest.bucketLimit, config.bucketLimit);
 		config.nameLimit := Option.get(setConfigRequest.nameLimit, config.nameLimit);
 		config.bioLimit := Option.get(setConfigRequest.bioLimit, config.bioLimit);
+		config.digestLimit := Option.get(setConfigRequest.digestLimit, config.digestLimit);
 		true
 	};
 
@@ -446,6 +448,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
         freezing_threshold : ?Nat;
     };
 	public shared(msg) func addControllerToBucket(bucket_principal: Principal, controllers: [Principal]) {
+		assert(_checkAuth(msg.caller));
 		let ic : ICActor = actor("aaaaa-aa");
 		await ic.update_settings({
 			canister_id = bucket_principal;

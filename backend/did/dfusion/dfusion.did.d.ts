@@ -33,6 +33,7 @@ export interface EntryDigest {
   'creator' : Principal,
   'deleted' : boolean,
   'createAt' : Time,
+  'favorites' : Array<Principal>,
   'cover' : [] | [string],
   'likes' : Array<Principal>,
   'contentDigest' : string,
@@ -63,6 +64,7 @@ export interface SetConfigRequest {
   'nameLimit' : [] | [bigint],
   'bucketLimit' : [] | [bigint],
   'titleLimit' : [] | [bigint],
+  'digestLimit' : [] | [bigint],
 }
 export interface SetUserRequest {
   'bio' : [] | [string],
