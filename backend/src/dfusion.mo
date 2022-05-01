@@ -231,21 +231,28 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		};
 	};
 
-	public shared(msg) func setUserInfo(info: SetUserRequest) {
+	public shared(msg) func setUserInfo(info: SetUserRequest) : async Result.Result<(), Text> {
 		let caller = msg.caller;
 		let user = userRegister(caller);
 		switch (info.name) {
 			case (null) {};
 			case (?name) {
+				if (Text.size(name) > config.nameLimit) {
+					return #err("name length must less than " # Nat.toText(config.nameLimit));
+				};
 				user.name := ?name;
 			};
 		};
 		switch(info.bio) {
 			case (null) {};
 			case (?bio) {
+				if (Text.size(bio) > config.bioLimit) {
+					return #err("bio length must less than " # Nat.toText(config.bioLimit));
+				};
 				user.bio := ?bio;
 			};
 		};
+		#ok()
 	};
 
 	public func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {
