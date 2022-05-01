@@ -4,11 +4,14 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { HomePage } from './pages/home/HomePage';
 import { EditPage } from './pages/edit';
 import { PlazaPage } from './pages/plaza';
+import { SettingPage } from './pages/setting';
+import { ProfilePage } from './pages/profile';
 import { ContentPage } from './pages/content';
 import { store } from 'src/store';
 import { Header } from './components/header';
 import "@fontsource/roboto"
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+
 declare global {
   interface Window { ic: any; }
 }
@@ -20,10 +23,11 @@ const App = () => {
     components: {
       Button: {
         baseStyle: {
+          borderRadius: '16px',
           _focus: {
             boxShadow: 'none'
           }
-        }
+        },
       }
     },
     fonts: {
@@ -33,7 +37,10 @@ const App = () => {
     colors: {
       regular: {
         100: '#ECF1FF',
-        500: '#3478F6', // solid
+        200: '#ECF1FF',
+        300: '#ECF1FF',
+        400: '#2663FF', // solid
+        500: '#2663FF', // solid
         600: '#1C4FE8', // outline 
       },
       grey: {
@@ -49,7 +56,7 @@ const App = () => {
           fontSize: '80px',
           lineHeight: '90px',
           fontWeight: 'bolder',
-      },
+        },
         h2: {
           fontSize: '60px',
           lineHeight: '67px'
@@ -71,11 +78,13 @@ const App = () => {
         <ReduxProvider store={store} >
           <BrowserRouter>
             <Header />
-            <div style={{ width: "100%", height: "8%" }}></div>
+            <div style={{ width: "100%", height: "60px" }}></div>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/edit" element={<EditPage />} />
               <Route path="/plaza" element={<PlazaPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/setting" element={<SettingPage />} />
               <Route path="/entry/:id" element={<ContentPage />} />
             </Routes>
           </BrowserRouter>

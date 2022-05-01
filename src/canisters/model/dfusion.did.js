@@ -29,11 +29,6 @@ export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   const DFusion = IDL.Service({
     'addAuth' : IDL.Func([IDL.Principal], [IDL.Bool], []),
-    'addControllerToBucket' : IDL.Func(
-        [IDL.Principal, IDL.Vec(IDL.Principal)],
-        [],
-        ['oneway'],
-      ),
     'createEntry' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
     'follow' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getBucketInfo' : IDL.Func(
