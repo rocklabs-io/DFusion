@@ -33,7 +33,11 @@ export const EditPage: React.FC = () => {
     let titleEnd = text.indexOf('\n');
     let title = text.slice(0, titleEnd);
     let content = text.slice(titleEnd + 1);
-    dfusionActor?.createEntry(title, content).then((result)=>{
+    dfusionActor?.createEntry({
+      title, 
+      content, 
+      cover: []
+    }).then((result)=>{
       if (!result || 'err' in result) {
         toast({
           title: "Fail",

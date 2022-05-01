@@ -4,13 +4,13 @@ import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { EntryDigestExt } from "src/canisters/model/dfusiondid";
+import { EntryDigest } from "src/canisters/model/dfusiondid";
 import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";
 
 // element
-const EntryElement = ({ article }: { article: EntryDigestExt }) => {
+const EntryElement = ({ article }: { article: EntryDigest }) => {
   var index = Number(article.id)
   let navigate = useNavigate()
   // procss article props
@@ -107,7 +107,7 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
             }
             &nbsp;
             <Text color='grey'>
-              {(Number(article.likesNum) + Number(isLiked)).toString()}
+              {(Number(article.likes.length) + Number(isLiked)).toString()}
             </Text>
           </Tag>
         </Flex>

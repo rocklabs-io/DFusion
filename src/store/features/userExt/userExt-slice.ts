@@ -5,16 +5,14 @@ import { RootState } from "src/store/store";
 
 const initialState: UserExt = {
   id: Principal.fromText('aaaaa-aa'),
+  bio: [],
+  favorites: [],
+  name: [],
   likes: [],
   entries: [],
   following: [],
   followers: [],
 }
-
-// interface likeOperate {
-//   entryId: bigint, 
-//   like: boolean
-// }
 
 export const userExtSlice = createSlice({
   name: 'userExt',
