@@ -38,6 +38,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
 			id = store.id;
 			creator = store.creator;
             title = store.title;
+            cover = store.cover;
 			content = content;
 			createAt = store.createAt;
             likes = [];

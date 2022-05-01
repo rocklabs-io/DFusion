@@ -34,6 +34,7 @@ module {
 		id: Nat;
 		creator: Principal;
         title: Text;
+        cover: ?Text;
 		content: Text;
 		createAt: Time.Time;
 		var likes: TrieSet.Set<Principal>;
@@ -45,6 +46,7 @@ module {
         id: Nat;
 		creator: Principal;
         title: Text;
+        cover: ?Text;
 		content: Memory.Position;
 		createAt: Time.Time;
 		var deleted: Bool;
@@ -54,6 +56,7 @@ module {
 		id: Nat;
 		creator: Principal;
         title: Text;
+        cover: ?Text;
 		content: Text;
 		createAt: Time.Time;
 		likes: [Principal];
@@ -65,6 +68,7 @@ module {
 		id: Nat;
 		creator: Principal;
         title: Text;
+        cover: ?Text;
 		contentDigest: Text;
 		createAt: Time.Time;
 		likes: [Principal];
@@ -73,6 +77,7 @@ module {
 
     public type Config = {
         var titleLimit: Nat;
+        var coverLimit: Nat;
 		var contentLimit: Nat;
 		var bucketLimit: Nat;
         var nameLimit: Nat;
@@ -81,6 +86,7 @@ module {
 
     public type SetConfigRequest = {
         titleLimit: ?Nat;
+        coverLimit: ?Nat;
         contentLimit: ?Nat;
         bucketLimit: ?Nat;
         nameLimit: ?Nat;
@@ -90,6 +96,12 @@ module {
     public type SetUserRequest = {
         name: ?Text;
         bio: ?Text;
+    };
+
+    public type CreateEntryRequest = {
+        title: Text;
+        content: Text;
+        cover: ?Text;
     };
 
     public func userToExt(user: User) : UserExt {
@@ -110,6 +122,7 @@ module {
 			id = entry.id;
 			creator = entry.creator;
             title = entry.title;
+            cover = entry.cover;
 			content = entry.content;
 			createAt = entry.createAt;
 			likes = TrieSet.toArray(entry.likes);
@@ -123,6 +136,7 @@ module {
             id = entry.id;
             creator = entry.creator;
             title = entry.title;
+            cover = entry.cover;
             content = position;
             createAt = entry.createAt;
             var deleted = entry.deleted;
@@ -134,6 +148,7 @@ module {
             id = entry.id;
             creator = entry.creator;
             title = entry.title;
+            cover = entry.cover;
             content = position;
             createAt = entry.createAt;
             var deleted = entry.deleted;
@@ -145,6 +160,7 @@ module {
             id = entry.id;
             creator = entry.creator;
             title = entry.title;
+            cover = entry.cover;
             content = substr(entry.content, 64);
             createAt = entry.createAt;
             var likes = entry.likes;
@@ -158,6 +174,7 @@ module {
 			id = entry.id;
 			creator = entry.creator;
             title = entry.title;
+            cover = entry.cover;
 			contentDigest = entry.content;
 			createAt = entry.createAt;
 			likes = TrieSet.toArray(entry.likes);

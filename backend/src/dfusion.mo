@@ -38,6 +38,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type Config = Types.Config;
 	type SetConfigRequest = Types.SetConfigRequest;
 	type SetUserRequest = Types.SetUserRequest;
+	type CreateEntryRequest = Types.CreateEntryRequest;
 
 	private let owner: Principal = owner_;
 
@@ -60,6 +61,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 
 	private stable let config: Config  = {
 		var titleLimit = 256;
+		var coverLimit = 256;
 		var contentLimit = 2 * 1024 * 1024;
 		var bucketLimit = 4 * 1024 * 1024 * 1024;
 		var nameLimit = 32;
@@ -79,12 +81,13 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		}
 	};
 
-	private func _newEntry(creator: Principal, title: Text, content : Text) : Entry {
+	private func _newEntry(creator: Principal, title: Text, content : Text, cover: ?Text) : Entry {
 		let id = id_count;
 		let entry = {
 			id = id;
 			creator = creator;
 			title = title;
+			cover = cover;
 			content = content;
 			createAt = Time.now();
 			var likes = TrieSet.empty<Principal>();
@@ -154,20 +157,28 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	};
 
 	// create an article entry of user msg.caller
-	public shared(msg) func createEntry(title: Text, content: Text): async Result.Result<Nat, Text> {
+	public shared(msg) func createEntry(request: CreateEntryRequest): async Result.Result<Nat, Text> {
 		if (creating) {
 			return #err("Creating bucket");
 		};
-		let caller = msg.caller;
-		let user = userRegister(caller);
-		if (Text.size(title) > config.titleLimit) {
+		if (Text.size(request.title) > config.titleLimit) {
 			return #err("Title length over limit");
 		};
-		if (Text.size(content) > config.contentLimit) {
+		if (Text.size(request.content) > config.contentLimit) {
 			return #err("Content length over limit");
 		};
-		let content_length = Text.encodeUtf8(content).size();
-		let entry = _newEntry(caller, title, content);
+		switch (request.cover) {
+			case (null) {};
+			case (?c) {
+				if (Text.size(c) > config.coverLimit) {
+					return #err("Cover length over limit");
+				};
+			};
+		};
+		let caller = msg.caller;
+		let user = userRegister(caller);
+		let content_length = Text.encodeUtf8(request.content).size();
+		let entry = _newEntry(caller, request.title, request.content, request.cover);
 		let bucket_principal = if (table.size() == 0) {
 			await createBucket(entry.id)
 		} else if (consume[table.size() -1] + content_length >= config.contentLimit) {
@@ -305,6 +316,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 					id = entry.id;
 					creator = entry.creator;
 					title = entry.title;
+					cover = entry.cover;
 					content = e.content;
 					createAt = entry.createAt;
 					likes = TrieSet.toArray(entry.likes);
@@ -338,6 +350,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	public shared(msg) func setLimit(setConfigRequest: SetConfigRequest) : async Bool {
 		assert(_checkAuth(msg.caller));
 		config.titleLimit := Option.get(setConfigRequest.titleLimit, config.titleLimit);
+		config.coverLimit := Option.get(setConfigRequest.coverLimit, config.coverLimit);
 		config.contentLimit := Option.get(setConfigRequest.contentLimit, config.contentLimit);
 		config.bucketLimit := Option.get(setConfigRequest.bucketLimit, config.bucketLimit);
 		config.nameLimit := Option.get(setConfigRequest.nameLimit, config.nameLimit);
