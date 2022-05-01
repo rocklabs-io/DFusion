@@ -16,6 +16,7 @@ module {
 		var followers: TrieSet.Set<Principal>;
 		var following: TrieSet.Set<Principal>;
         var likes: TrieSet.Set<Nat>;
+        var favorites: TrieSet.Set<Nat>;
     };
 
     public type UserExt = {
@@ -26,6 +27,7 @@ module {
 		followers: [Principal];
 		following: [Principal];
         likes: [Nat];
+        favorites: [Nat];
     };
 
     public type Entry = {
@@ -35,6 +37,7 @@ module {
 		content: Text;
 		createAt: Time.Time;
 		var likes: TrieSet.Set<Principal>;
+        var favorites: TrieSet.Set<Principal>;
 		var deleted: Bool;
 	};
 
@@ -54,6 +57,7 @@ module {
 		content: Text;
 		createAt: Time.Time;
 		likes: [Principal];
+        favorites: [Principal];
 		deleted : Bool;
 	};
 
@@ -97,6 +101,7 @@ module {
 			followers = TrieSet.toArray(user.followers);
 			following = TrieSet.toArray(user.following);
             likes = TrieSet.toArray(user.likes);
+            favorites = TrieSet.toArray(user.favorites);
 		}
 	};
 
@@ -108,6 +113,7 @@ module {
 			content = entry.content;
 			createAt = entry.createAt;
 			likes = TrieSet.toArray(entry.likes);
+            favorites = TrieSet.toArray(entry.favorites);
 			deleted = entry.deleted;
 		}
 	};
@@ -142,6 +148,7 @@ module {
             content = substr(entry.content, 64);
             createAt = entry.createAt;
             var likes = entry.likes;
+            var favorites = entry.favorites;
             var deleted = entry.deleted;
         }
     };
@@ -154,6 +161,7 @@ module {
 			contentDigest = entry.content;
 			createAt = entry.createAt;
 			likes = TrieSet.toArray(entry.likes);
+            favorites = TrieSet.toArray(entry.favorites);
 			deleted = entry.deleted;
 		}
     };

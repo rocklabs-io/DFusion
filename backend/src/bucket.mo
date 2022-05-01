@@ -41,6 +41,7 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
 			content = content;
 			createAt = store.createAt;
             likes = [];
+            favorites = [];
 			deleted = store.deleted;
 		}
     };
@@ -57,6 +58,8 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
         #ok(entry_store.id)
 	};
 
+    // favorites and likes would be empty
+    // get real favorites and likes in dfusion canister
     public query func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {        
         let entry_store = switch (entry_index.get(entryId)) {
             case (null) {

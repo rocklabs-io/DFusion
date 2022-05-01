@@ -75,6 +75,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			var followers = TrieSet.empty<Principal>();
 			var following = TrieSet.empty<Principal>();
 			var likes = TrieSet.empty<Nat>();
+			var favorites = TrieSet.empty<Nat>();
 		}
 	};
 
@@ -87,6 +88,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			content = content;
 			createAt = Time.now();
 			var likes = TrieSet.empty<Principal>();
+			var favorites = TrieSet.empty<Principal>();
 			var deleted = false;
 		};
 		id_count += 1;
@@ -192,7 +194,7 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	};
 
 	// msg.caller like an article,  or unlike an article if called twice
-	// turn true if like, otherwise unlike
+	// return true if like, otherwise unlike
 	public shared(msg) func like(entryId: Nat): async Result.Result<Bool, Text> {
 		let caller = msg.caller;
 		let entry = switch(entries.get(entryId)) {
@@ -203,13 +205,40 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 				e
 			};
 		};
+		let user = userRegister(caller);
 		if (TrieSet.mem(entry.likes, caller, Principal.hash(caller),  Principal.equal)) {
 			// already liked this article, unlike
 			entry.likes :=  TrieSet.delete(entry.likes, caller, Principal.hash(caller), Principal.equal);
+			user.likes := TrieSet.delete(user.likes, entryId, Hash.hash(entryId), Nat.equal);
 			#ok(false)
 		} else {
 			// like this article
 			entry.likes :=  TrieSet.put(entry.likes, caller, Principal.hash(caller), Principal.equal);
+			user.likes :=  TrieSet.put(user.likes, entryId, Hash.hash(entryId), Nat.equal);
+			#ok(true)
+		};
+	};
+
+	// collect the article into favorites
+	// return true if favor, otherwise unfavor
+	public shared(msg) func favor(entryId: Nat): async Result.Result<Bool, Text> {
+		let caller = msg.caller;
+		let entry = switch(entries.get(entryId)) {
+			case (null) { 
+				return #err("entry not exist"); 
+			};
+			case (?e) {
+				e
+			};
+		};
+		let user = userRegister(caller);
+		if (TrieSet.mem(entry.favorites, caller, Principal.hash(caller),  Principal.equal)) {
+			entry.favorites :=  TrieSet.delete(entry.favorites, caller, Principal.hash(caller), Principal.equal);
+			user.favorites := TrieSet.delete(user.favorites, entryId, Hash.hash(entryId), Nat.equal);
+			#ok(false)
+		} else {
+			entry.favorites :=  TrieSet.put(entry.favorites, caller, Principal.hash(caller), Principal.equal);
+			user.favorites :=  TrieSet.put(user.favorites, entryId, Hash.hash(entryId), Nat.equal);
 			#ok(true)
 		};
 	};
@@ -256,16 +285,34 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	};
 
 	public func getEntry(entryId: Nat) : async Result.Result<EntryExt, Text> {
-		switch(entries.get(entryId)) {
+		let entry = switch(entries.get(entryId)) {
 			case (null) { 
 				return #err("entry not exist"); 
 			};
-			case (?e) {};
+			case (?e) {
+				e
+			};
 		};
 		let bucket_principal = getBucket(entryId);
 		let bucket: Bucket.Bucket = actor(Principal.toText(bucket_principal));
 		let res = await bucket.getEntry(entryId);
-		res
+		switch (res) {
+			case (#err(err_info)) {
+				return #err(err_info);
+			};
+			case (#ok(e)) {
+				return #ok({
+					id = entry.id;
+					creator = entry.creator;
+					title = entry.title;
+					content = e.content;
+					createAt = entry.createAt;
+					likes = TrieSet.toArray(entry.likes);
+					favorites = TrieSet.toArray(entry.favorites);
+					deleted = entry.deleted;
+				});
+			};
+		};
 	};
 
 	// only administrator can delete an entry
@@ -307,13 +354,35 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 				u
 			};
 		};
-		let user_entries = user.entries;
 		Array.mapFilter(
 			TrieSet.toArray(user.entries), 
 			func (e: Nat): ?EntryDigest {
 				Option.map(entries.get(e), Types.entryToDigest)
 			}
 		)
+	};
+
+	public query func getUserFavorites(id: Principal): async [EntryDigest] {
+		let user = switch (allUsers.get(id)) {
+			case (null) { 
+				return []; 
+			};
+			case (?u) {
+				u
+			};
+		};
+		
+		Array.mapFilter(
+			Array.sort(
+				TrieSet.toArray(user.likes),
+				func (a: Nat, b: Nat): Order.Order {
+					Nat.compare(a, b)
+				}
+			),
+			func (e: Nat): ?EntryDigest {
+				Option.map(entries.get(e), Types.entryToDigest)
+			}
+		)	
 	};
 
 	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigest] {
