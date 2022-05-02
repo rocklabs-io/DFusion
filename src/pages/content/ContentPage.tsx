@@ -83,8 +83,8 @@ export const ContentPage: React.FC = () => {
             {title}
           </Text>
           <br />
-          <Stack direction='column'>
-            <Box width="full">
+          <Stack direction='column' paddingBottom='80px'>
+            <Box width="full" >
               <Stack direction='row' align="center">
                 <Circle cursor='pointer'
                   onClick={() => { navigate('/profile/' + creator) }}>

@@ -6,6 +6,8 @@ import { Identity, useDfusionActor } from "src/canisters/actor";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
+import Editor from "rich-markdown-editor";
+import { light as lightTheme } from "../edit/styles/theme";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
@@ -225,7 +227,7 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
       maxW={620}
       margin='20px 0'
       borderRadius={20}>
-      <Text fontWeight='bold' fontSize={36} > {entry.title} </Text>
+      <Text fontWeight='bold' fontSize={36} lineHeight='40px'> {entry.title} </Text>
       <Badge textTransform='lowercase'
         borderRadius='10px'
         fontSize={14}
@@ -237,9 +239,10 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
         {/* {shortPrincipal(principalId, 5, 3)} */}
         {getTimeString(entry.createAt)}
       </Badge>
-      <Text fontWeight='medium' fontSize={16} opacity={0.87}>
+      {/* <Text fontWeight='medium' fontSize={16} opacity={0.87}>
         {entry.contentDigest}
-      </Text>
+      </Text> */}
+      <Editor theme={lightTheme} readOnly value={entry.contentDigest.replace('\n', '')} />
       {entry.cover?.length > 0
         &&
         <Image marginTop='20px'
