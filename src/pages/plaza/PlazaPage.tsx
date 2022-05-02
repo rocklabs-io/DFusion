@@ -128,11 +128,11 @@ export const PlazaPage: React.FC = () => {
       console.log('res: ', res);
       var articles: any = []
       if (res.length > 0) {
-        for (var i = res.length - 1; i >= 0; i--) {
+        for (var i = 0; i < res.length; i++) {
           // if (res[i].deleted) {
           //   continue;
           // }
-          articles.push(<PlazaDigest entry={res[i]} key={i} />)// <EntryElement article={res[i]} key={i} />)
+          articles.push(<PlazaDigest entry={res[i]} key={i} />)
         }
       }
       if (!mounted) {
@@ -190,6 +190,7 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
       boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
       maxW={620}
       margin='20px 0'
+      cursor='pointer'
       onClick={()=> {navigate('/entry/'+Number(entry.id).toString())}}
       borderRadius={20}>
       <Text fontWeight='bold' fontSize={36} lineHeight='40px' > {entry.title.replaceAll('#', '')} </Text>
