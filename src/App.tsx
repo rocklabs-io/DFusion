@@ -52,21 +52,23 @@ const App = () => {
     styles: {
       global: {
         h1: {
-          fontSize: '80px',
-          lineHeight: '90px',
+          fontSize: '48px',
           fontWeight: 'bolder',
+          margin: '10px'
         },
         h2: {
-          fontSize: '60px',
-          lineHeight: '67px'
+          fontSize: '36px',
+          margin: '10px'
         },
         h3: {
-          fontSize: '40px',
-          lineHeight: '45px'
+          fontSize: '3xl',
         },
         h4: {
-          fontSize: '30px'
+          fontSize: '2xl',
         },
+        p: {
+          fontSize: '1xl'
+        }
       }
     }
   })

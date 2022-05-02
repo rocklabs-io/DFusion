@@ -5,7 +5,7 @@ import Editor from "rich-markdown-editor";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast, Button, Box } from "@chakra-ui/react";
+import { useToast, Button, Box, Input, Textarea } from "@chakra-ui/react";
 // import { NFTStorage } from "nft.storage";
 const { NFTStorage } = require('nft.storage')
 
@@ -67,10 +67,28 @@ export const EditPage: React.FC = () => {
   return (
     <>
       <div className={styles.pageContent}>
+        <Textarea placeholder="Give me a title!" 
+        height='max-content'
+        padding='none'
+        border='0'
+        paddingInline='0'
+        fontWeight='medium'
+        fontSize='6xl'
+        onInput={(e)=>{
+          
+        }}
+        onChange={(e)=>{
+          e.target.style.height = ""
+          e.target.style.height = e.target.scrollHeight.toString()+'px'
+        }}
+        _focus={{
+          border: 'none',
+        }}
+        ></Textarea>
         <Editor
           theme={lightTheme}
           onChange={(value) => onChange(value())}
-          placeholder={'\# Title \n Hello creator! Write something here.'}
+          placeholder={'Hello creator! Write something here.'}
           onImageUploadStart={()=>{
             toast({
               title: 'start upload',
