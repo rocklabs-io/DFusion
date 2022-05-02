@@ -23,7 +23,8 @@ export const SettingPage: React.FC = () => {
   return <>
     <Flex width='100%'
       flexDirection='column'
-      margin='40px auto'
+      margin='0 auto'
+      paddingTop='88px'
       maxW='480px'>
       <Flex width='100%'
         padding='20px'
