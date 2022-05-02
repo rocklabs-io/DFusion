@@ -190,8 +190,8 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
       boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
       maxW={620}
       margin='20px 0'
+      onClick={()=> {navigate('/entry/'+Number(entry.id).toString())}}
       borderRadius={20}>
-
       <Text fontWeight='bold' fontSize={36} lineHeight='40px' > {entry.title.replaceAll('#', '')} </Text>
       <Flex margin='10px 0' alignItems='center'>
         <Circle size='24px' cursor='pointer' onClick={() => {
