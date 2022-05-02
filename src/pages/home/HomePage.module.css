@@ -3,11 +3,6 @@
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  min-height: 90vh;
-  background-image: url("/public/dfusion-bg.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
 }
 
 h1 {

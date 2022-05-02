@@ -4,9 +4,14 @@
   height: 92%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3%;
   min-height: 90vh;
+  padding-top: 88px;
   font-size: 25;
+}
+
+.editor h1{
+  margin-top: '0%';
+  top: '0%'
 }
 
 svg {

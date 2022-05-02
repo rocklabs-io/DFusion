@@ -54,14 +54,16 @@ export const SettingPage: React.FC = () => {
                 width='fit-content'>
                 {shortPrincipal(principalId, 5, 3)}
               </Badge>
-              <Text opacity='0.4' fontSize='14px' lineHeight='16px'>
-                <span style={{ fontWeight: 'bold', opacity: '1.5' }}>{'1123'}</span> Following &nbsp;
-                <span style={{ fontWeight: 'bold', opacity: '1.5' }}>{'1123'}</span> Follower
+              <Text opacity='0.8' fontSize='14px' fontWeight='bold' lineHeight='16px'>
+                {following.length}&nbsp;
+                <span style={{ fontWeight: 'normal', opacity: '0.6' }}>Following</span>&nbsp;
+                {followers.length}&nbsp;
+                <span style={{ fontWeight: 'normal', opacity: '0.6' }}>Follower</span>
               </Text>
             </Flex>
           </Flex>
           <Flex height='32px' alignItems='center'>
-            <a href={"https:" + reverseName + ".host"}>
+            <a href={"https://" + reverseName + ".host"}>
               <Circle size='30px'
                 border='1.5px solid #2663FF'>
                 <IoMdLink color="#2663FF" size='18px' />
@@ -86,38 +88,41 @@ export const SettingPage: React.FC = () => {
       <EditField name='Bio'
         placeholder={bio.length > 0 ? bio[0] : 'Not Set'} />
       <br />
-      <Flex bgColor='white'
-        borderRadius='20px'
-        direction='column'
-        width='100%'
-        padding='20px'
-        boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'>
-        <Flex flexGrow={1}
-          alignItems='center'
-          justifyContent='space-between'
-          marginBottom='10px'
-        >
-          <Text fontSize={16}
-            fontWeight='medium'>
-            ICNS Shortlink
-          </Text>
-          <Switch defaultChecked isDisabled colorScheme='regular' />
+      {
+        reverseName &&
+        <Flex bgColor='white'
+          borderRadius='20px'
+          direction='column'
+          width='100%'
+          padding='20px'
+          boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'>
+          <Flex flexGrow={1}
+            alignItems='center'
+            justifyContent='space-between'
+            marginBottom='10px'
+          >
+            <Text fontSize={16}
+              fontWeight='medium'>
+              ICNS Shortlink
+            </Text>
+            <Switch defaultChecked isDisabled colorScheme='regular' />
+          </Flex>
+          <Flex alignItems='center'>
+            <a href={"https://" + reverseName + ".host"}>
+              <Circle size='30px'
+                marginRight='10px'
+                border='1.5px solid #2663FF'
+              >
+                <IoMdLink color="#2663FF" size='18px' />
+              </Circle>
+            </a>
+            <Input bgColor='#EDF2F7'
+              disabled
+              defaultValue={reverseName + '.host'}
+              borderRadius='10px' />
+          </Flex>
         </Flex>
-        <Flex alignItems='center'>
-          <a href={"https:" + reverseName + ".host"}>
-            <Circle size='30px'
-              marginRight='10px'
-              border='1.5px solid #2663FF'
-            >
-              <IoMdLink color="#2663FF" size='18px' />
-            </Circle>
-          </a>
-          <Input bgColor='#EDF2F7'
-            disabled
-            defaultValue={reverseName + '.host'}
-            borderRadius='10px' />
-        </Flex>
-      </Flex>
+      }
     </Flex>
   </>
 }
@@ -192,7 +197,7 @@ export const EditField: React.FC<IEdit> = ({ name, ...props }) => {
     <Input bgColor='#EDF2F7'
       disabled={!edit}
       value={input}
-      onChange={(e)=>{
+      onChange={(e) => {
         setInput(e.target.value)
       }}
       placeholder={props.placeholder}

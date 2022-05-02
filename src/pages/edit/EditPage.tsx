@@ -10,8 +10,9 @@ import { useToast, Button, Box, Input, Textarea } from "@chakra-ui/react";
 const { NFTStorage } = require('nft.storage')
 
 export const EditPage: React.FC = () => {
-  var text = "";
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
   let navigate = useNavigate()
   const toast = useToast()
   const dfusionActor = useDfusionActor(Identity.caller)
@@ -28,15 +29,15 @@ export const EditPage: React.FC = () => {
   }
 
   const handleSubmit = async () => {
-    console.log(text)
     setLoading(true);
-    let titleEnd = text.indexOf('\n');
-    let title = text.slice(0, titleEnd);
-    let content = text.slice(titleEnd + 1);
+    // let titleEnd = text.indexOf('\n');
+    // let title = text.slice(0, titleEnd);
+    // let content = text.slice(titleEnd + 1);
+    const coverLink = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g.exec(content)?.at(1)
     dfusionActor?.createEntry({
-      title, 
-      content, 
-      cover: []
+      title: title, 
+      content: content, 
+      cover: coverLink ? [coverLink] : []
     }).then((result)=>{
       if (!result || 'err' in result) {
         toast({
@@ -61,25 +62,31 @@ export const EditPage: React.FC = () => {
   }
 
   const onChange = async (txt: string) => {
-    text = txt;
+    setContent(txt)
   }
 
   return (
     <>
       <div className={styles.pageContent}>
         <Textarea placeholder="Give me a title!" 
-        height='max-content'
-        padding='none'
+        // height='fit-content'
+        rows={1}
+        height='70px'
         border='0'
         paddingInline='0'
         fontWeight='medium'
-        fontSize='6xl'
-        onInput={(e)=>{
-          
+        fontSize='4xl'
+        resize='none'
+        overflow='hidden'
+        value={title}
+        onReset={(e)=>{
+          e.currentTarget.style.height = ""
+          e.currentTarget.style.height = (e.currentTarget.scrollHeight+5).toString()+'px'
         }}
         onChange={(e)=>{
           e.target.style.height = ""
-          e.target.style.height = e.target.scrollHeight.toString()+'px'
+          e.target.style.height = (e.target.scrollHeight).toString()+'px'
+          setTitle(e.target.value)
         }}
         _focus={{
           border: 'none',
@@ -87,6 +94,8 @@ export const EditPage: React.FC = () => {
         ></Textarea>
         <Editor
           theme={lightTheme}
+          className={styles.editor}
+          value={content}
           onChange={(value) => onChange(value())}
           placeholder={'Hello creator! Write something here.'}
           onImageUploadStart={()=>{

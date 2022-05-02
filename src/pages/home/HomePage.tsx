@@ -33,18 +33,38 @@ export const HomePage: React.FC = () => {
     // navigate('/plaza')
   }
 
-  return (<>
+  return (<Flex width='100%'
+    flexDirection='column'
+    height='100vh'
+    backgroundImage="/dfusion-bg.png"
+    backgroundRepeat='no-repeat'
+    backgroundSize='cover'
+    backgroundPosition='center center'>
     <Flex className={styles["page-content"]}
-      flexDirection='column'
-      height='calc(100vh - 104px)'
-      justifyContent='center'
-      alignItems='center'>
-      <Flex height='60%'
+      paddingTop='60px'
+      height='calc(100vh - 44px)'>
+      <Flex flexDir='column'
+        flex='1'
+        alignItems='center'
+        justifyContent='space-around'>
+        <Box>
+          <Box marginLeft='50px'
+            boxSize='88px'
+            backdropFilter='blur(40px)'/>
+          <Box boxSize='50px'
+            backdropFilter='blur(40px)' />
+        </Box>
+        <Box boxSize='120px'
+          backdropFilter='blur(40px)'
+        ></Box>
+      </Flex>
+      <Flex flex={1}
         width='100%'
         maxWidth='690px'
         flexDir='column'
+        margin='0 auto'
         alignItems='center'
-        justifyContent='space-between' >
+        justifyContent='space-around' >
         <Image src="./dfusion244.svg" />
         <Box width='100%'>
           <Box width='fit-content'
@@ -74,7 +94,26 @@ export const HomePage: React.FC = () => {
           fontSize='20px'
           borderRadius='30px'
           onClick={() =>
-            navigate('/edit')}> Explore </Button>
+            navigate('/plaza')}> Explore </Button>
+      </Flex>
+      <Flex flexDir='column'
+        flex='1'
+        alignItems='center'
+        justifyContent='space-around'>
+        <Box>
+          <Box marginLeft='80px'
+            boxSize='50px'
+            backdropFilter='blur(40px)' />
+          <Box boxSize='80px'
+            backdropFilter='blur(40px)' />
+        </Box>
+        <Box boxSize='120px'
+          backdropFilter='blur(40px)'
+        ></Box>
+        <Box boxSize='50px'
+          marginLeft='120px'
+          backdropFilter='blur(40px)'
+        ></Box>
       </Flex>
     </Flex>
     <Flex width='100%'
@@ -97,6 +136,6 @@ export const HomePage: React.FC = () => {
         &nbsp;Rocklabs
       </Flex>
     </Flex>
-  </>
+  </Flex>
   );
 }

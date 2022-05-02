@@ -52,22 +52,26 @@ const App = () => {
     styles: {
       global: {
         h1: {
-          fontSize: '48px',
+          fontSize: '36px',
+          lineHeight: '38px',
           fontWeight: 'bolder',
-          margin: '10px'
         },
         h2: {
-          fontSize: '36px',
+          fontSize: '26px',
+          lineHeight: '28px',
           margin: '10px'
         },
         h3: {
-          fontSize: '3xl',
+          fontSize: '20px',
+          lineHeight: '22px',
         },
         h4: {
-          fontSize: '2xl',
+          fontSize: '18px',
+          lineHeight: '20px',
         },
         p: {
-          fontSize: '1xl'
+          fontSize: '16px',
+          lineHeight: '24px',
         }
       }
     }
@@ -79,9 +83,9 @@ const App = () => {
         <ReduxProvider store={store} >
           <BrowserRouter>
             <Header />
-            <div style={{ width: "100%", height: "60px" }}></div>
+            {/* <div style={{ width: "100%", height: "60px" }}></div> */}
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<HomePage/>} />
               <Route path="/edit" element={<EditPage />} />
               <Route path="/plaza" element={<PlazaPage />} />
               <Route path="/profile/:pid" element={<ProfilePage />} />

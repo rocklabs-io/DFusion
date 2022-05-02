@@ -109,8 +109,9 @@ export const ProfilePage: React.FC = () => {
   }
 
   return <Flex width='100%'
+    paddingTop='88px'
     maxW={940}
-    margin='40px auto'>
+    margin='0 auto'>
     <Flex flex='1' maxW={620} margin='0 20px' flexDir='column'>
       <Text fontWeight='bold' lineHeight='28px' fontSize={24} > Posts </Text>
       {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
@@ -121,7 +122,7 @@ export const ProfilePage: React.FC = () => {
           height='240px'
           borderRadius={20}
           boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
-          >
+        >
           <Text fontSize='2xl'>
             🥱 No Posts Yet
           </Text>
@@ -151,7 +152,7 @@ export const ProfilePage: React.FC = () => {
                 name={profileId}
                 variant="marble" />
               <Flex height='32px' alignItems='center'>
-                <a href={"https:" + reverseName + ".host"}>
+                <a href={"https://" + reverseName + ".host"}>
                   <Circle size='30px'
                     border='1.5px solid #2663FF'>
                     <IoMdLink color="#2663FF" size='18px' />
@@ -228,7 +229,7 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
         borderRadius='10px'
         fontSize={14}
         fontWeight='regular'
-        marginBottom='20px'
+        margin='10px 0'
         padding='0 10px'
         opacity={0.6}
         width='fit-content'>
@@ -238,12 +239,14 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
       <Text fontWeight='medium' fontSize={16} opacity={0.87}>
         {entry.contentDigest}
       </Text>
-      {entry.cover?.length > 0 &&
+      {entry.cover?.length > 0
+        &&
         <Image marginTop='20px'
           maxH={160}
           fit='cover'
           borderRadius={10}
-          src={entry.cover[0]} />}
+          src={entry.cover[0]} />
+      }
       <hr style={{ margin: '20px 0' }} />
       <Button color='regular.500'
         onClick={() => { navigate('/entry/' + entry.id) }}

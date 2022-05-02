@@ -1,8 +1,9 @@
 .pageContent {
-  width: 60%;
-  height: 85%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  max-width: 800px;
+  height: 100%;
+  margin: 0 auto ;
+  padding-top: 88px;
   min-height: 90vh;
 }
 
