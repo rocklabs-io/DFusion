@@ -29,7 +29,7 @@ export const EditPage: React.FC = () => {
   }
 
   const handleSubmit = async () => {
-    // setLoading(true);
+    setLoading(true);
     // let titleEnd = text.indexOf('\n');
     // let title = text.slice(0, titleEnd);
     // let content = text.slice(titleEnd + 1);
