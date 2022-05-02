@@ -78,6 +78,7 @@ export const ContentPage: React.FC = () => {
           <Text
             fontSize='4xl'
             fontWeight='bold'
+            lineHeight='48px'
             textAlign='left'>
             {title}
           </Text>

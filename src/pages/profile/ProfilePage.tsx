@@ -220,6 +220,7 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
     <Flex flexDir='column'
       bgColor='white'
       padding='20px'
+      width='100%'
       boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
       maxW={620}
       margin='20px 0'
