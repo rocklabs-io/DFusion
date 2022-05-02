@@ -18,7 +18,6 @@ declare global {
 global.Buffer = global.Buffer || require('buffer').Buffer;
 
 const App = () => {
-
   const theme = extendTheme({
     components: {
       Button: {
@@ -83,6 +82,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/edit" element={<EditPage />} />
               <Route path="/plaza" element={<PlazaPage />} />
+              <Route path="/profile/:pid" element={<ProfilePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/entry/:id" element={<ContentPage />} />

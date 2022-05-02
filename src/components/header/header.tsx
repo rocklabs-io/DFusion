@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useMatch, useNavigate, useParams } from "react-router";
+import React from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
 import styles from './header.module.css';
 import { ConnectButton } from "../connectButton";
 import { useUserExtInit } from "../userExt/use-userExt-init";
@@ -8,6 +8,8 @@ import { IoCompassOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io"
 import Avatar from "boring-avatars";
 import { usePlugStore } from "src/store";
+import { useUserExtStore } from "src/store/features/userExt";
+import { shortPrincipal } from "src/canisters/utils";
 declare let window: any;
 
 export const Header: React.FC = () => {
@@ -18,6 +20,7 @@ export const Header: React.FC = () => {
   // init all user info, valid after connect plug
   useUserExtInit()
   const { principalId, reverseName } = usePlugStore()
+  const { name } = useUserExtStore()
 
   return (
     <div className={styles.header}>
@@ -56,28 +59,11 @@ export const Header: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'space-around'
         }}>
-          {/* <ConnectButton /> */}
-          <Flex >
-            <Flex flexDirection='column'
-              textAlign='right'
-              marginRight='12px'>
-              <Text fontWeight='bold'
-                fontSize={16}
-                lineHeight='19px'
-                cursor='pointer'
-                onClick={() => { navigate('/profile') }}>
-                Username
-              </Text>
-              <Text>{reverseName}</Text>
-            </Flex>
-            <Circle cursor='pointer'
-              onClick={() => { navigate('/profile') }}>
-              <Avatar name={principalId} />
-            </Circle>
-          </Flex>
+          {/* {typeof (principalId) !== 'undefined'
+            && principalId !== '' ? */}
+            <ConnectButton />
         </div>
       </div>
-
     </div>
   )
 }

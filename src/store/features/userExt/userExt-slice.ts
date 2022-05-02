@@ -29,8 +29,25 @@ export const userExtSlice = createSlice({
         value => value !== action.payload
       )
     },
+    setAll: (state, action: PayloadAction<UserExt>) => {
+      return {...action.payload}
+    },
+    setFollow: (state, action: PayloadAction<Principal>) => {
+      state.following.push(action.payload)
+    },
+    setUnfollow: (state, action: PayloadAction<Principal>) => {
+      state.following = state.following.filter(
+        value => value !== action.payload
+      )
+    },
     setEntries: (state, action: PayloadAction<Array<bigint>>) => {
       state.likes = action.payload;
+    },
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload === '' ? [] : [action.payload];
+    },
+    setBio: (state, action: PayloadAction<string>) => {
+      state.bio = action.payload === '' ? [] : [action.payload];
     }
   }
 })

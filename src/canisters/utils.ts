@@ -21,8 +21,8 @@ import {
   };
 
 export const getTimeString = (t: bigint) => {
-    var d = new Date(Number(t/BigInt(1000000)));
-    return d.toLocaleString('en-US', { timeZone: 'UTC' });
+    var d = new Date(Math.floor(Number(t)/1000000));
+    return d.toLocaleString(); //'en-US', { timeZone: 'UTC' }
 }
 
 const suffix = '.icp'

@@ -158,7 +158,7 @@ export const PlazaPage: React.FC = () => {
         backgroundPosition: 'center center'
       }}>
       <br />
-      <Image src='./wifilogo75.svg' padding='10px' />
+      {/* <Image src='./wifilogo75.svg' padding='10px' /> */}
       <Box padding="1" >
         <Text fontSize='2xl' fontWeight='bold' >Spread the idea of Web3.</Text>
       </Box>
