@@ -20,8 +20,11 @@ export const useUserExtInit = () => {
     if (principalId && isConnected) {
       dfusionActor?.getUser(Principal.fromText(principalId)).then(res => {
         if (res.length > 0) {
-          res[0]?.likes && dispatch(userExtAction.setAllLikes(res[0]?.likes))
-          res[0]?.entries && dispatch(userExtAction.setEntries(res[0].entries))
+          console.log(res)
+          res[0] && dispatch(userExtAction.setAll(res[0]))
+          // res[0]?.likes && dispatch(userExtAction.setAllLikes(res[0]?.likes))
+          // res[0]?.entries && dispatch(userExtAction.setEntries(res[0].entries))
+          // res[0]?.following && dispatch(userExtAction.setEntries(res[0].entries))
         }
       })
     }

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Heading, Text, Box, Tag, Image, Skeleton, useToast, Spinner } from "@chakra-ui/react";
+import { Stack, Heading, Text, Box, Tag, Image, Skeleton, useToast, Spinner, Badge, Circle } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../canisters/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { EntryDigestExt } from "src/canisters/model/dfusiondid";
+import { EntryDigest } from "src/canisters/model/dfusiondid";
 import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";
+import { Digest } from "../profile";
 
 // element
-const EntryElement = ({ article }: { article: EntryDigestExt }) => {
+const EntryElement = ({ article }: { article: EntryDigest }) => {
   var index = Number(article.id)
   let navigate = useNavigate()
   // procss article props
@@ -20,10 +21,10 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const [liking, setLiking] = useState(false);
-  
+
   // state: if this passage is liked by the user
   const [isLiked, setIsLiked] = useState(false);
-  
+
   // all liked entries id
   const { likes } = useUserExtStore();
 
@@ -91,23 +92,23 @@ const EntryElement = ({ article }: { article: EntryDigestExt }) => {
           <Tag>{time}</Tag>
           <Tag>
             {
-              liking 
-              ? 
-              <Spinner size='xs' color="grey" />
-              :
-              <Text color=
-                {
-                  isLiked ?
-                    "red" : "grey.300"
-                }
-                cursor='pointer'
-                onClick={handleLike}>
-                &hearts;
-              </Text>
+              liking
+                ?
+                <Spinner size='xs' color="grey" />
+                :
+                <Text color=
+                  {
+                    isLiked ?
+                      "red" : "grey.300"
+                  }
+                  cursor='pointer'
+                  onClick={handleLike}>
+                  &hearts;
+                </Text>
             }
             &nbsp;
             <Text color='grey'>
-              {(Number(article.likesNum) + Number(isLiked)).toString()}
+              {(Number(article.likes.length) + Number(isLiked)).toString()}
             </Text>
           </Tag>
         </Flex>
@@ -127,11 +128,11 @@ export const PlazaPage: React.FC = () => {
       console.log('res: ', res);
       var articles: any = []
       if (res.length > 0) {
-        for (var i = res.length - 1; i >= 0; i--) {
+        for (var i = 0; i < res.length; i++) {
           // if (res[i].deleted) {
           //   continue;
           // }
-          articles.push(<EntryElement article={res[i]} key={i} />)
+          articles.push(<PlazaDigest entry={res[i]} key={i} />)
         }
       }
       if (!mounted) {
@@ -147,9 +148,10 @@ export const PlazaPage: React.FC = () => {
     <Flex flexDir='column'
       alignItems='center'
       width='100%'
-      maxWidth='632px'
+      maxWidth='800px'
       height='85%'
-      margin='auto'
+      margin='0 auto'
+      padding='88px'
       minHeight='90vh'
       style={{
         backgroundImage: `url("./homebg.jpg")`,
@@ -158,19 +160,80 @@ export const PlazaPage: React.FC = () => {
         backgroundPosition: 'center center'
       }}>
       <br />
-      <Image src='./wifilogo75.svg' padding='10px' />
+      {/* <Image src='./wifilogo75.svg' padding='10px' /> */}
       <Box padding="1" >
         <Text fontSize='2xl' fontWeight='bold' >Spread the idea of Web3.</Text>
       </Box>
       {articleList.length <= 0 ?
         <>
-          <Skeleton isLoaded={false} width='100%' height='150px' />
           <br />
-          <Skeleton isLoaded={false} width='100%' height='150px' />
+          <Skeleton isLoaded={false} borderRadius={10} width='100%' height='150px' />
           <br />
-          <Skeleton isLoaded={false} width='100%' height='150px' />
+          <Skeleton isLoaded={false} borderRadius={10} width='100%' height='150px' />
+          <br />
+          <Skeleton isLoaded={false} borderRadius={10} width='100%' height='150px' />
         </>
         : articleList}
     </Flex>
   )
+}
+
+
+export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
+  const navigate = useNavigate()
+
+  return <>
+    <Flex flexDir='column'
+      bgColor='white'
+      padding='20px'
+      width='100%'
+      boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
+      maxW={620}
+      margin='20px 0'
+      cursor='pointer'
+      onClick={()=> {navigate('/entry/'+Number(entry.id).toString())}}
+      borderRadius={20}>
+      <Text fontWeight='bold' fontSize={36} lineHeight='40px' > {entry.title.replaceAll('#', '')} </Text>
+      <Flex margin='10px 0' alignItems='center'>
+        <Circle size='24px' cursor='pointer' onClick={() => {
+          navigate('/profile/' + entry.creator.toText())
+        }}>
+          <Avatar name={entry.creator.toText()} />
+        </Circle> &nbsp;&nbsp;
+        <Badge textTransform='lowercase'
+          borderRadius='10px'
+          fontSize={14}
+          fontWeight='regular'
+          padding='0 10px'
+          opacity={0.6}
+          height='fit-content'
+          width='fit-content'>
+          {shortPrincipal(entry.creator.toText(), 5, 3)}
+        </Badge>
+        &nbsp;&nbsp;
+        <Badge textTransform='lowercase'
+          borderRadius='10px'
+          fontSize={14}
+          fontWeight='regular'
+          padding='0 10px'
+          opacity={0.6}
+          height='fit-content'
+          width='fit-content'>
+          {/* {shortPrincipal(principalId, 5, 3)} */}
+          {getTimeString(entry.createAt)}
+        </Badge>
+      </Flex>
+      <Text fontWeight='medium' fontSize={16} opacity={0.87}>
+        {entry.contentDigest.replaceAll('#', '').replaceAll('\\', '')}
+      </Text>
+      {entry.cover?.length > 0
+        &&
+        <Image marginTop='20px'
+          maxH={160}
+          fit='cover'
+          borderRadius={10}
+          src={entry.cover[0]} />
+      }
+    </Flex>
+  </>
 }
