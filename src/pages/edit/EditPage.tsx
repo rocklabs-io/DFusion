@@ -25,11 +25,11 @@ export const EditPage: React.FC = () => {
     const { car } = await NFTStorage.encodeBlob(img)
     const cid = await client.storeCar(car)
     console.log(cid)
-    return 'https://nftstorage.link/ipfs/'+cid
+    return 'https://nftstorage.link/ipfs/' + cid
   }
 
   const handleSubmit = async () => {
-    setLoading(true);
+    // setLoading(true);
     // let titleEnd = text.indexOf('\n');
     // let title = text.slice(0, titleEnd);
     // let content = text.slice(titleEnd + 1);
@@ -68,43 +68,42 @@ export const EditPage: React.FC = () => {
   return (
     <>
       <div className={styles.pageContent}>
-        <Textarea placeholder="Give me a title!" 
-        // height='fit-content'
-        rows={1}
-        height='70px'
-        border='0'
-        paddingInline='0'
-        fontWeight='medium'
-        fontSize='4xl'
-        resize='none'
-        overflow='hidden'
-        value={title}
-        onReset={(e)=>{
-          e.currentTarget.style.height = ""
-          e.currentTarget.style.height = (e.currentTarget.scrollHeight+5).toString()+'px'
-        }}
-        onChange={(e)=>{
-          e.target.style.height = ""
-          e.target.style.height = (e.target.scrollHeight).toString()+'px'
-          setTitle(e.target.value)
-        }}
-        _focus={{
-          border: 'none',
-        }}
+        <Textarea placeholder="Give me a title!"
+          // height='fit-content'
+          rows={1}
+          height='70px'
+          border='0'
+          paddingInline='0'
+          fontWeight='medium'
+          fontSize='4xl'
+          resize='none'
+          overflow='hidden'
+          value={title}
+          onReset={(e) => {
+            e.currentTarget.style.height = ""
+            e.currentTarget.style.height = (e.currentTarget.scrollHeight + 5).toString() + 'px'
+          }}
+          onChange={(e) => {
+            e.target.style.height = ""
+            e.target.style.height = (e.target.scrollHeight).toString() + 'px'
+            setTitle(e.target.value)
+          }}
+          _focus={{
+            border: 'none',
+          }}
         ></Textarea>
         <Editor
           theme={lightTheme}
           className={styles.editor}
-          value={content}
           onChange={(value) => onChange(value())}
           placeholder={'Hello creator! Write something here.'}
-          onImageUploadStart={()=>{
+          onImageUploadStart={() => {
             toast({
               title: 'start upload',
               duration: 3000,
             })
           }}
-          onImageUploadStop={()=>{
+          onImageUploadStop={() => {
             toast({
               title: 'upload stoped',
               duration: 3000,
@@ -112,7 +111,7 @@ export const EditPage: React.FC = () => {
           }}
           uploadImage={async file => {
             return uploadCar(file)
-          }}/>
+          }} />
         <Box className={styles.buttonBox}>
           <Button onClick={handleSubmit}
             colorScheme='regular'
