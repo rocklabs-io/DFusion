@@ -1,6 +1,7 @@
 
 .pageContent {
-  width: 60%;
+  width: 100%;
+  max-width: 800px;
   height: 92%;
   margin-left: auto;
   margin-right: auto;
