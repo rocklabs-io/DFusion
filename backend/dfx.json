@@ -1,10 +1,10 @@
 {
   "canisters": {
     "dfusion": {
-      "main": "src/dfusion.mo"
+      "main": "src/dfusion/dfusion.mo"
     },
     "bucket": {
-      "main": "src/bucket.mo"
+      "main": "src/dfusion/bucket.mo"
     }
   },
   "defaults": {
