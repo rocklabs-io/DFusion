@@ -5,6 +5,9 @@
     },
     "bucket": {
       "main": "src/dfusion/bucket.mo"
+    },
+    "nft": {
+      "main": "src/ic-nft/motoko/src/main.mo"
     }
   },
   "defaults": {

@@ -14,6 +14,7 @@ import Cycle "mo:base/ExperimentalCycles";
 import Debug "mo:base/Debug";
 import Error "mo:base/Error";
 import Hash "mo:base/Hash";
+import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
@@ -28,8 +29,10 @@ import Trie "mo:base/Trie";
 import TrieMap "mo:base/TrieMap";
 import TrieSet "mo:base/TrieSet";
 import Types "./types";
+import ICNFT "../ic-nft/motoko/src/main";
+import NFTypes "../ic-nft/motoko/src/types";
 
-shared(init_msg) actor class DFusion(owner_: Principal) = this {
+shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this {
 	type Entry = Types.Entry;
 	type EntryExt = Types.EntryExt;
 	type EntryDigest = Types.EntryDigest;
@@ -40,7 +43,18 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	type SetUserRequest = Types.SetUserRequest;
 	type CreateEntryRequest = Types.CreateEntryRequest;
 
+	public type MintResult = {
+        #Ok: (Nat, Nat);
+        #Err: Errors;
+    };
+	public type Errors = {
+        #Unauthorized;
+        #TokenNotExist;
+        #InvalidOperator;
+    };
+
 	private let owner: Principal = owner_;
+	private let nft_canister: ICNFT.NFToken = actor(Principal.toText(nft_));
 
 	private stable var authEntries : [(Principal, Bool)] = [(owner, true)];
 	private let auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
@@ -49,6 +63,10 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 	private stable var id_count = 0;
 	private stable var entryEntries : [(Nat, Entry)] = [];
 	private let entries = TrieMap.fromEntries<Nat, Entry>(entryEntries.vals(), Nat.equal, Hash.hash);
+	
+	private stable var nftEntries: [(Nat, Int)] = [];
+	private let nftMaps = TrieMap.fromEntries<Nat, Int>(nftEntries.vals(), Nat.equal, Hash.hash);
+	
 	// ignore performance issue of Array.append it would be called few times
 	private stable var index: [Nat] = [];
 	private stable var consume: [Nat] = [];
@@ -203,6 +221,44 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 		entries.put(ret, Types.digestEntry(entry, config.digestLimit));
 		user.entries := TrieSet.put(user.entries, ret, Hash.hash(ret), Nat.equal);
 		#ok(ret)
+	};
+
+	public shared(msg) func mintNFT(entryId: Nat): async Result.Result<Nat, Text> {
+		switch (nftMaps.get(entryId)) {
+			case (?n) {
+				return #err("Entry has been minted");
+			};
+			case (null) {};
+		};
+		let caller = msg.caller;
+		let entry = switch(entries.get(entryId)) {
+			case (null) { 
+				return #err("entry not exist"); 
+			};
+			case (?e) {
+				e
+			};
+		};
+		if (caller != entry.creator) {
+			return #err("Unauthorized!");
+		};
+		let tokenMetadata: NFTypes.TokenMetadata = {
+			filetype = "text"; 
+			location = #Web("https://dfusion.io/entry/" # Nat.toText(entryId));
+			attributes = [];
+		};
+		nftMaps.put(entryId, -1);
+		let res: MintResult = await nft_canister.mint(caller, ?tokenMetadata);
+		switch (res) {
+			case (#Ok((id, _))) {
+				nftMaps.put(entryId, id);
+				return #ok(id);
+			};
+			case (#Err(e)) {
+				nftMaps.delete(entryId);
+				return #err("Error in minting nft: " # debug_show(e));
+			};
+		}
 	};
 
 	// msg.caller like an article,  or unlike an article if called twice
@@ -501,11 +557,13 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
     	userEntries := Iter.toArray(allUsers.entries());
 		authEntries := Iter.toArray(auths.entries());
 		entryEntries := Iter.toArray(entries.entries());
+		nftEntries := Iter.toArray(nftMaps.entries());
   	};
 
 	system func postupgrade() {
 		userEntries := [];
 		authEntries := [];
 		entryEntries := [];
+		nftEntries := [];
 	};
 }
