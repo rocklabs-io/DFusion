@@ -370,7 +370,12 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			};
 		};
 		Array.mapFilter(
-			TrieSet.toArray(user.entries), 
+			Array.sort(
+				TrieSet.toArray(user.entries), 
+				func (a: Nat, b: Nat): Order.Order {
+					Nat.compare(b, a)
+				}
+			),
 			func (e: Nat): ?EntryDigest {
 				Option.map(entries.get(e), Types.entryToDigest)
 			}
@@ -391,13 +396,44 @@ shared(init_msg) actor class DFusion(owner_: Principal) = this {
 			Array.sort(
 				TrieSet.toArray(user.likes),
 				func (a: Nat, b: Nat): Order.Order {
-					Nat.compare(a, b)
+					Nat.compare(b, a)
 				}
 			),
 			func (e: Nat): ?EntryDigest {
 				Option.map(entries.get(e), Types.entryToDigest)
 			}
 		)	
+	};
+
+	public query func getUserFollowingEntries(id: Principal): async [EntryDigest] {
+		let user = switch (allUsers.get(id)) {
+			case (null) { 
+				return []; 
+			};
+			case (?u) {
+				u
+			};
+		};
+		Array.mapFilter(
+			Array.mapFilter(
+				TrieSet.toArray(user.following),
+				func (p: Principal): ?Nat {
+					Option.chain<User, Nat>(allUsers.get(p), func (u: User): ?Nat {
+						let arr = TrieSet.toArray(u.entries);
+						if (arr.size() == 0) {
+							return null;
+						};
+						?Array.foldLeft<Nat, Nat>(
+							arr, 0,
+							Nat.max
+						)
+					})
+				}
+			),
+			func (e: Nat): ?EntryDigest {
+				Option.map(entries.get(e), Types.entryToDigest)
+			}
+		)
 	};
 
 	public query func getEntries(first: Nat32, skip: Nat32): async [EntryDigest] {
