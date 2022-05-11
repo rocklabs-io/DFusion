@@ -1,13 +1,10 @@
+html,
 body {
   margin: 0;
   height: 100%;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-html {
-  height: 100%;
 }
 
 #root{
