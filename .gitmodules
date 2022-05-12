@@ -1,0 +1,3 @@
+[submodule "backend/src/ic-nft"]
+	path = backend/src/ic-nft
+	url = git@github.com:rocklabs-io/ic-nft.git

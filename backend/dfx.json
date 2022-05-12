@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "dfusion": {
+      "main": "src/dfusion/dfusion.mo"
+    },
+    "bucket": {
+      "main": "src/dfusion/bucket.mo"
+    },
+    "nft": {
+      "main": "src/ic-nft/motoko/src/main.mo"
+    }
+  },
+  "defaults": {
+    "build": {
+        "args": "",
+        "packtool": ""
+    }
+  },
+  "dfx": "0.9.2",
+  "networks": {
+      "local": {
+          "bind": "127.0.0.1:8000",
+          "type": "ephemeral"
+      }
+  },
+  "version": 1
+}
