@@ -8,6 +8,9 @@
     },
     "nft": {
       "main": "src/ic-nft/motoko/src/main.mo"
+    },
+    "notification": {
+      "main": "src/dfusion/notify.mo"
     }
   },
   "defaults": {

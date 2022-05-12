@@ -198,4 +198,16 @@ module {
         });
         res
     };
+
+    public type SubscribeRequest = {
+        subscribee: Principal;
+    };
+
+    public type NotifyRequest = {
+        author: Principal;
+        authorName: Text;
+        id: Nat;
+        title: Text;
+        contentDigest: Text;
+    };
 }
