@@ -118,7 +118,7 @@ export const ProfilePage: React.FC = () => {
       <Text fontWeight='bold' lineHeight='28px' fontSize={24} > Posts </Text>
       {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
       {!loading && (entriesArray.length > 0 ?
-        entriesArray :
+        entriesArray.reverse() :
         <Center margin='20px 0'
           width='620px'
           height='240px'
@@ -180,7 +180,7 @@ export const ProfilePage: React.FC = () => {
               lineHeight='28px'
               marginBottom='4px'
               fontWeight='bold'>
-              {userExt?.at(0)?.name?.at(0) ?? 'Unnamed'}
+              {(userExt.length > 0 && userExt[0].name.length > 0 && userExt[0].name[0]) ?? 'Unnamed'}
             </Text>
             <Badge textTransform='lowercase'
               borderRadius='10px'
@@ -200,7 +200,7 @@ export const ProfilePage: React.FC = () => {
           </Flex>
         </Flex>
         <Text fontSize={14} opacity='0.6'>
-          {userExt?.at(0)?.bio?.at(0) ?? 'No biography'}
+          {(userExt.length > 0 && userExt[0].bio.length > 0 && userExt[0].bio[0]) ?? 'No biography'}
         </Text>
       </Flex>
       <Button
