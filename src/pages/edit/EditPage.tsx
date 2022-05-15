@@ -33,11 +33,12 @@ export const EditPage: React.FC = () => {
     // let titleEnd = text.indexOf('\n');
     // let title = text.slice(0, titleEnd);
     // let content = text.slice(titleEnd + 1);
-    const coverLink = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g.exec(content)?.at(1)
+    const coverLink = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g.exec(content)
+    // coverLink?.length
     dfusionActor?.createEntry({
       title: title, 
       content: content, 
-      cover: coverLink ? [coverLink] : []
+      cover: (coverLink?.length as number) > 1 ? [coverLink![1]] : []
     }).then((result)=>{
       if (!result || 'err' in result) {
         toast({

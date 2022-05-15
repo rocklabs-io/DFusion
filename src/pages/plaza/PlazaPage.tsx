@@ -182,6 +182,15 @@ export const PlazaPage: React.FC = () => {
 export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   const navigate = useNavigate()
 
+  const [liking, setLiking] = useState(false);
+
+  // state: if this passage is liked by the user
+  const [isLiked, setIsLiked] = useState(false);
+
+  // all liked entries id
+  const { likes } = useUserExtStore();
+
+
   return <>
     <Flex flexDir='column'
       bgColor='white'
