@@ -28,17 +28,17 @@ type SetConfigRequest =
 type Result_3 = 
  variant {
    err: text;
-   ok: nat;
+   ok: EntryExt;
  };
 type Result_2 = 
  variant {
    err: text;
-   ok: EntryExt;
+   ok: bool;
  };
 type Result_1 = 
  variant {
    err: text;
-   ok: bool;
+   ok: nat;
  };
 type Result = 
  variant {
@@ -73,17 +73,19 @@ type DFusion =
  service {
    addAuth: (principal) -> (bool);
    addControllerToBucket: (principal, vec principal) -> () oneway;
-   createEntry: (CreateEntryRequest) -> (Result_3);
-   favor: (nat) -> (Result_1);
+   createEntry: (CreateEntryRequest) -> (Result_1);
+   favor: (nat) -> (Result_2);
    follow: (principal) -> (bool);
    getBucketInfo: () -> (vec nat, vec nat, vec principal) query;
    getBucketStableSize: (principal) -> (nat64);
    getEntries: (nat32, nat32) -> (vec EntryDigest) query;
-   getEntry: (nat) -> (Result_2);
+   getEntry: (nat) -> (Result_3);
    getUser: (principal) -> (opt UserExt) query;
    getUserEntries: (principal) -> (vec EntryDigest) query;
    getUserFavorites: (principal) -> (vec EntryDigest) query;
-   like: (nat) -> (Result_1);
+   getUserFollowingEntries: (principal) -> (vec EntryDigest) query;
+   like: (nat) -> (Result_2);
+   mintNFT: (nat) -> (Result_1);
    removeAuth: (principal) -> (bool);
    setLimit: (SetConfigRequest) -> (bool);
    setUserInfo: (SetUserRequest) -> (Result);
@@ -94,4 +96,4 @@ type CreateEntryRequest =
    cover: opt text;
    title: text;
  };
-service : (principal) -> DFusion
+service : (principal, principal) -> DFusion
