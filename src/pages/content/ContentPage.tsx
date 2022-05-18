@@ -59,9 +59,7 @@ export const ContentPage: React.FC = () => {
           console.log(res)
           setICNSName(res)
         })
-      } catch (err) {
-
-      }
+      } catch (err) {}
     }
   }, [creator])
 

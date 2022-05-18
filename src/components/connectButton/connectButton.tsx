@@ -120,14 +120,15 @@ export const ConnectButton = () => {
           margin='10px 0'
           icon={<MdChildCare color='black' opacity={0.6} size={24} />}
           borderRadius={10}
-        >Following</MenuItem>
+          onClick={() => {
+            navigate('/following/'+principalId)
+          }}>Following</MenuItem>
         <MenuItem
           margin='10px 0'
           icon={<MdPersonOutline color='black' opacity={0.6} size={24} />}
           borderRadius={10}
           onClick={() => {
             navigate('/profile')
-
           }}>My profile</MenuItem>
         <MenuItem
           borderRadius={10}

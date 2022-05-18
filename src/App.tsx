@@ -5,7 +5,7 @@ import { HomePage } from './pages/home/HomePage';
 import { EditPage } from './pages/edit';
 import { PlazaPage } from './pages/plaza';
 import { SettingPage } from './pages/setting';
-import { ProfilePage } from './pages/profile';
+import { FollowerPage, FollowingPage, ProfilePage } from './pages/profile';
 import { ContentPage } from './pages/content';
 import { store } from 'src/store';
 import { Header } from './components/header';
@@ -89,6 +89,8 @@ const App = () => {
               <Route path="/edit" element={<EditPage />} />
               <Route path="/plaza" element={<PlazaPage />} />
               <Route path="/profile/:pid" element={<ProfilePage />} />
+              <Route path="/follower/:pid" element={<FollowerPage />} />
+              <Route path="/following/:pid" element={<FollowingPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/entry/:id" element={<ContentPage />} />
