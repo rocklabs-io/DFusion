@@ -59,6 +59,18 @@ export const EntriesColumn = () => {
     })
   }, [dfusionActor])
 
+  const LoadingSkeletons = [160, 200, 220, 180].map((item, index) => <Skeleton borderRadius={10} width='100%' height={item.toString() + 'px'} key={index} />)
+
+  const EmptyBlock = () => <Center width='100%'
+    height='240px'
+    borderRadius={20}
+    boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
+  >
+    <Text fontSize='2xl'>
+      🥱 No Posts Here
+    </Text>
+  </Center>
+
   return (
     <Flex flexDir='column'
       alignItems='center'
@@ -82,20 +94,20 @@ export const EntriesColumn = () => {
           <TabPanel padding='4px' marginTop='20px'>
             <ResponsiveMasonry columnsCountBreakPoints={{ 700: 1, 750: 2 }}>
               <Masonry gutter='20px'>
-                {loading && <LoadingSkeletons />}
                 {!loading && followingList.length <= 0 ?
                   <EmptyBlock />
                   : followingList}
+                {loading && LoadingSkeletons}
               </Masonry>
             </ResponsiveMasonry>
           </TabPanel>
           <TabPanel padding='4px' marginTop='20px'>
             <ResponsiveMasonry columnsCountBreakPoints={{ 700: 1, 750: 2 }}>
               <Masonry gutter='20px'>
-                {loading && <LoadingSkeletons />}
                 {!loading && articleList.length <= 0 ?
                   <EmptyBlock />
                   : articleList}
+                {loading && LoadingSkeletons}
               </Masonry>
             </ResponsiveMasonry>
           </TabPanel>
@@ -104,24 +116,3 @@ export const EntriesColumn = () => {
     </Flex>
   )
 }
-
-
-const LoadingSkeletons = () => <>
-  <br />
-  <Skeleton isLoaded={false} borderRadius={10} width='100%' height='160px' />
-  <br />
-  <Skeleton isLoaded={false} borderRadius={10} width='100%' height='160px' />
-  <br />
-  <Skeleton isLoaded={false} borderRadius={10} width='100%' height='160px' />
-</>
-
-const EmptyBlock = () => <Center margin='20px 0'
-  width='620px'
-  height='240px'
-  borderRadius={20}
-  boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
->
-  <Text fontSize='2xl'>
-    🥱 No Posts Yet
-  </Text>
-</Center>
