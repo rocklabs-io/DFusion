@@ -9,7 +9,6 @@ import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { RiRocket2Fill, RiRocket2Line } from "react-icons/ri";
-import { Principal } from "@dfinity/principal";
 
 export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   const navigate = useNavigate()
@@ -66,7 +65,7 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
       width='100%'
       height='fit-content'
       boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
-      maxW={458}
+      // maxW={458}
       cursor='pointer'
       onClick={(e) => {
         navigate('/entry/' + Number(entry.id).toString())
