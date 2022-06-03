@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "src/index",
+    "src/inverted_index"
+]
+
+[profile.release]
+lto = true
+opt-level = "s"

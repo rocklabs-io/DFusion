@@ -1,0 +1,4 @@
+service : {
+  add : (nat64, text, text) -> ();
+  search : (text) -> (vec nat64) query;
+}
