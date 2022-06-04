@@ -1,6 +1,6 @@
 use std::collections::Bound::{Included, Excluded, Unbounded};
 use std::collections::BTreeMap;
-use std::hash::Hasher;
+use ic_cdk::export::candid::{CandidType, Deserialize};
 
 use itertools::Itertools;
 
@@ -10,7 +10,7 @@ use util::*;
 
 /// A basic implementation of an `Index`, the inverted index is a data structure that maps
 /// from words to postings.
-#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd, CandidType, Deserialize)]
 pub struct InvertedIndex {
     // Maps terms to their postings
     index: BTreeMap<String, PostingsMap>,
@@ -30,8 +30,8 @@ impl InvertedIndex {
     /// Insertings a document involves tokenizing the document's content
     /// and inserting each token into the index, pointing to the document and its position in the
     /// document.
-    pub fn index(&mut self, id: usize, content: String) {
-        let doc = Document::new(id, content.clone());
+    pub fn index(&mut self, id: usize, title: String, content: String) {
+        let doc = Document::new(id, title, content.clone());
         let previous_version = self.docs.insert(doc.id, doc.clone());
         assert!(previous_version.is_none());
         // if let Some(previous_version) = previous_version {

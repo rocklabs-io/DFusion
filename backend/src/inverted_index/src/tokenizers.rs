@@ -3,6 +3,7 @@
 use std::io;
 
 use util::char_utf8::decode_utf8;
+use ic_cdk::export::candid::{CandidType, Deserialize};
 
 /// A token represents a single atomic unit of information present in a document.
 #[derive(Clone, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
@@ -30,7 +31,7 @@ impl Token {
 }
 
 /// Information about the position of a single term within a document
-#[derive(Copy, Clone, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Hash, Eq, Ord, PartialEq, PartialOrd, CandidType, Deserialize)]
 pub struct Position {
     /// Pair of byte indexes into the document at the beginning (inclusive) and end (exclusive) of 
     /// the term.

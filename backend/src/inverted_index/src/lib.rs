@@ -69,6 +69,7 @@
 
 extern crate itertools;
 extern crate core;
+extern crate ic_cdk;
 
 /// Contains utility methods used in the rest of the crate.
 pub mod util;

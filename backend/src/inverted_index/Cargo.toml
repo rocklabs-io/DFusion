@@ -8,3 +8,6 @@ license = "MIT"
 
 [dependencies]
 itertools = "*"
+ic-cdk = "0.5.1"
+candid = "0.7.14"
+serde = "1.0"
