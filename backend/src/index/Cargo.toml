@@ -1,0 +1,13 @@
+[package]
+name = "index"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+candid = "0.7.4"
+ic-cdk = "0.5.1"
+ic-cdk-macros = "0.5.1"
+serde = { version = "1.0.137", features = ["derive"]}
+inverted_index = { path="../inverted_index" }
