@@ -75,12 +75,11 @@ export const FollowingPage: React.FC = () => {
           }
           // modify followers list of target
           if (userExt.length > 0) {
+            var pfollowers = [...userExt[0].followers]
             if (res) {
-              var pfollowers = [...userExt[0].followers]
               pfollowers.push(Principal.fromText(principalId as string))
               setUserExt([{ ...userExt[0], followers: pfollowers }])
             } else {
-              var pfollowers = [...userExt[0].followers]
               pfollowers = pfollowers.filter(
                 value => value !== (Principal.fromText(principalId as string))
               )
