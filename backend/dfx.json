@@ -8,6 +8,18 @@
     },
     "nft": {
       "main": "src/ic-nft/motoko/src/main.mo"
+    },
+    "notification": {
+      "main": "src/dfusion/notify.mo"
+    },
+    "index": {
+      "type": "custom",
+      "candid": "src/index/index.did",
+      "wasm": "target/wasm32-unknown-unknown/release/index_opt.wasm",
+      "build": [
+        "cargo build --target wasm32-unknown-unknown --package index --release",
+        "ic-cdk-optimizer target/wasm32-unknown-unknown/release/index.wasm -o target/wasm32-unknown-unknown/release/index_opt.wasm"
+      ]
     }
   },
   "defaults": {

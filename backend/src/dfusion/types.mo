@@ -198,4 +198,20 @@ module {
         });
         res
     };
+
+    public type SubscribeRequest = {
+        subscribee: Principal;
+    };
+
+    public type NotifyRequest = {
+        author: Principal;
+        authorName: Text;
+        id: Nat;
+        title: Text;
+        contentDigest: Text;
+    };
+
+    public type InvertedIndex = actor {
+        add: shared(id: Nat64, title: Text, content: Text) -> async ();
+    }
 }

@@ -18,6 +18,7 @@ import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
+import Nat64 "mo:base/Nat64";
 import Option "mo:base/Option";
 import Order "mo:base/Order";
 import Prelude "mo:base/Prelude";
@@ -31,8 +32,14 @@ import TrieSet "mo:base/TrieSet";
 import Types "./types";
 import ICNFT "../ic-nft/motoko/src/main";
 import NFTypes "../ic-nft/motoko/src/types";
+import Notify "./notify";
 
-shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this {
+shared(init_msg) actor class DFusion(
+	owner_: Principal, 
+	nft_: Principal, 
+	notification_: Principal,
+	index_: Principal
+	) = this {
 	type Entry = Types.Entry;
 	type EntryExt = Types.EntryExt;
 	type EntryDigest = Types.EntryDigest;
@@ -55,6 +62,8 @@ shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this 
 
 	private let owner: Principal = owner_;
 	private let nft_canister: ICNFT.NFToken = actor(Principal.toText(nft_));
+	private let notification: Notify.Notification = actor(Principal.toText(notification_));
+	private let inverted_index: Types.InvertedIndex = actor(Principal.toText(index_));
 
 	private stable var authEntries : [(Principal, Bool)] = [(owner, true)];
 	private let auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
@@ -218,8 +227,22 @@ shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this 
 			};
 		};
 
-		entries.put(ret, Types.digestEntry(entry, config.digestLimit));
+		let entryDigest = Types.digestEntry(entry, config.digestLimit);
+		entries.put(ret, entryDigest);
 		user.entries := TrieSet.put(user.entries, ret, Hash.hash(ret), Nat.equal);
+
+		ignore notification.notify({
+			author = caller;
+			authorName = Option.get(user.name, Principal.toText(caller));
+			id = ret;
+			title = entryDigest.title;
+			contentDigest = entryDigest.content;
+		});
+		ignore inverted_index.add(
+			Nat64.fromNat(ret),
+			request.title,
+			request.content
+		);
 		#ok(ret)
 	};
 
@@ -337,7 +360,11 @@ shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this 
 				if (Text.size(name) > config.nameLimit) {
 					return #err("name length must less than " # Nat.toText(config.nameLimit));
 				};
-				user.name := ?name;
+				if (Text.size(name) == 0) {
+					user.name := null;
+				} else {
+					user.name := ?name;
+				};
 			};
 		};
 		switch(info.bio) {
@@ -346,7 +373,11 @@ shared(init_msg) actor class DFusion(owner_: Principal, nft_: Principal) = this 
 				if (Text.size(bio) > config.bioLimit) {
 					return #err("bio length must less than " # Nat.toText(config.bioLimit));
 				};
-				user.bio := ?bio;
+				if (Text.size(bio) == 0) {
+					user.bio := null;
+				} else {
+					user.bio := ?bio;
+				};
 			};
 		};
 		#ok()
