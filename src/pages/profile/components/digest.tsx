@@ -1,16 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Flex, Text, Image, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
-import { EntryDigest, UserExt } from "../../../canisters/model/dfusiondid"
-import { getTimeString, shortPrincipal } from "src/canisters/utils";
-import { Identity, useDfusionActor } from "src/canisters/actor";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { Principal } from "@dfinity/principal";
-import Avatar from "boring-avatars";
-import Editor from "rich-markdown-editor";
-import { light as lightTheme } from "../../edit/styles/theme";
-import { userExtAction, useUserExtStore } from "src/store/features/userExt";
-import { useAppDispatch, usePlugStore } from "src/store";
-import { IoMdLink } from "react-icons/io";
+import { Badge, Button, Flex, Text, Image } from "@chakra-ui/react"
+import { EntryDigest } from "../../../canisters/model/dfusiondid"
+import { getTimeString } from "src/utils/utils";
+import { useNavigate } from "react-router-dom";
+import { parseMD } from "src/utils/utils";
 
 export const Digest = ({ entry }: { entry: EntryDigest }) => {
   const navigate = useNavigate()
@@ -38,10 +30,10 @@ export const Digest = ({ entry }: { entry: EntryDigest }) => {
         {/* {shortPrincipal(principalId, 5, 3)} */}
         {getTimeString(entry.createAt)}
       </Badge>
-      {/* <Text fontWeight='medium' fontSize={16} opacity={0.87}>
-        {entry.contentDigest}
-      </Text> */}
-      <Editor theme={lightTheme} readOnly value={entry.contentDigest.replace('\n', '')} />
+      <Text fontWeight='medium' fontSize={16} opacity={0.87}>
+        {parseMD(entry.contentDigest)}
+      </Text>
+      {/* <Editor theme={lightTheme} readOnly value={entry.contentDigest.replace('\n', '')} /> */}
       {entry.cover?.length > 0
         &&
         <Image marginTop='20px'

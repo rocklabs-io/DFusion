@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Flex, Text, Image, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
-import { EntryDigest, UserExt } from "../../../canisters/model/dfusiondid"
-import { getTimeString, shortPrincipal } from "src/canisters/utils";
+import { useEffect, useState } from "react";
+import { Badge, Button, Flex, Text, Circle, useToast } from "@chakra-ui/react"
+import { UserExt } from "../../../canisters/model/dfusiondid"
+import { shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
-import Editor from "rich-markdown-editor";
-import { light as lightTheme } from "../../edit/styles/theme";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
@@ -18,8 +15,8 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
   const dfusionActor = useDfusionActor(Identity.caller ?? undefined);
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
   const [ICNSReverseName, setICNSReverseName] = useState('')
-  const { principalId, reverseName } = usePlugStore()
-  const { followers, following } = useUserExtStore()
+  const { principalId } = usePlugStore()
+  const { following } = useUserExtStore()
   const [followed, setFollowed] = useState(false)
   const dispatch = useAppDispatch()
   const controller = new ICNSReverseController()
@@ -35,7 +32,7 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
   }, [dfusionActor])
 
   useEffect(() => {
-    setFollowed(following.some(e => e.toString() === pid.toString()))
+    setFollowed(following.some((e: any)=> e.toString() === pid.toString()))
   }, [following, pid])
 
   useEffect(() => {

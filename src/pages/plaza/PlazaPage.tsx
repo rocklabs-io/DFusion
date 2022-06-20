@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Heading, Text, Box, Tag, Image, Skeleton, useToast, Spinner, Badge, Circle, Center } from "@chakra-ui/react";
+import { Stack, Heading, Text, Box, Tag, useToast, Spinner } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
-import { getTimeString, shortPrincipal } from "../../canisters/utils";
+import { getTimeString, shortPrincipal } from "../../utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
 import { EntryDigest } from "src/canisters/model/dfusiondid";
 import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";
-import { Digest } from "../profile/components";
 import { Banner, EntriesColumn } from "./components";
 
 export const PlazaPage: React.FC = () => {

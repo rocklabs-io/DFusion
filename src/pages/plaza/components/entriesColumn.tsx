@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Text, Box, Tag, Image, Skeleton, useToast, Spinner, Badge, Circle, Tabs, TabList, TabPanels, Tab, TabPanel, Center, Grid } from "@chakra-ui/react";
-import { Identity, useDfusionActor } from "src/canisters/actor";
+import { useEffect, useState } from "react";
+import { Text, Skeleton, Tabs, TabList, TabPanels, Tab, TabPanel, Center } from "@chakra-ui/react";
+import { useDfusionActor } from "src/canisters/actor";
 import { Flex } from "@chakra-ui/react";
-import { userExtAction, useUserExtStore } from "src/store/features/userExt";
-import { useAppDispatch, usePlugStore } from "src/store";
+import { useUserExtStore } from "src/store/features/userExt";
+import { usePlugStore } from "src/store";
 import { Principal } from "@dfinity/principal";
 import { PlazaDigest } from "./plazaDigest";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -23,7 +23,7 @@ export const EntriesColumn = () => {
       var articles: any = []
       if (res.length > 0) {
         for (var i = 0; i < res.length; i++) {
-          articles.push(<PlazaDigest entry={res[i]} key={i} />)
+          articles.push(<PlazaDigest entry={res[i]} key={Number(res[i].id)} />)
         }
       }
       if (!mounted) {
@@ -45,7 +45,7 @@ export const EntriesColumn = () => {
         for (var i = 0; i < res.length; i++) {
           articles.push(<PlazaDigest
             entry={res[i]}
-            key={i} />)
+            key={Number(res[i].id)} />)
         }
       }
       if (!mounted) {

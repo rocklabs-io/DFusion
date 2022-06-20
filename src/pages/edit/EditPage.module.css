@@ -2,11 +2,9 @@
 .pageContent {
   width: 100%;
   max-width: 800px;
-  height: 92%;
-  margin-left: auto;
-  margin-right: auto;
-  min-height: 90vh;
-  padding-top: 88px;
+  margin: 0 auto;
+  min-height: fit-content;
+  padding: 100px 0;
   font-size: 25;
 }
 

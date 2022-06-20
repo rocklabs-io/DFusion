@@ -2,7 +2,7 @@ import { Badge, Button, Circle, Flex, Input, InputProps, Switch, Text, useToast 
 import { useAppDispatch, usePlugStore } from "src/store"
 import React, { useEffect, useState } from "react"
 import Avatar from "boring-avatars"
-import { shortPrincipal } from "src/canisters/utils"
+import { shortPrincipal } from "src/utils/utils"
 import { IoMdLink } from "react-icons/io"
 import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"

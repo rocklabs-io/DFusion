@@ -1,11 +1,10 @@
-import { addIcpSuffix, shortPrincipal } from "src/canisters/utils";
+import { shortPrincipal } from "src/utils/utils";
 import { useMemo } from "react"
-import { GoTriangleDown } from 'react-icons/go'
 import { MdChildCare, MdFavoriteBorder, MdLogout, MdOutlineSettings, MdPersonOutline } from 'react-icons/md'
 import { useAppDispatch, usePlugStore, plugActions, FeatureState, } from "src/store";
 import { ENV } from "src/config/env"
 import { disconnect, requestConnect, usePlugInit } from 'src/components/plug';
-import { Button, Flex, Icon, Menu, MenuButton, MenuItem, MenuList, useClipboard, useToast, Text, Circle } from "@chakra-ui/react";
+import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, useClipboard, useToast, Text, Circle } from "@chakra-ui/react";
 import { useUserExtStore } from "src/store/features/userExt";
 import { useNavigate } from "react-router-dom";
 import Avatar from "boring-avatars";

@@ -3,14 +3,12 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import styles from './header.module.css';
 import { ConnectButton } from "../connectButton";
 import { useUserExtInit } from "../userExt/use-userExt-init";
-import { Circle, Flex, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io"
-import Avatar from "boring-avatars";
 import { usePlugStore } from "src/store";
 import { useUserExtStore } from "src/store/features/userExt";
-import { shortPrincipal } from "src/canisters/utils";
-declare let window: any;
+// declare let window: any;
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();

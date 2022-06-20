@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Flex, Text, Image, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
+import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
 import { EntryDigest, UserExt } from "../../canisters/model/dfusiondid"
-import { getTimeString, shortPrincipal } from "src/canisters/utils";
+import { shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
-import Editor from "rich-markdown-editor";
-import { light as lightTheme } from "../edit/styles/theme";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
@@ -20,7 +18,7 @@ export const ProfilePage: React.FC = () => {
   const [valid, setValid] = useState(false)
   const [entries, setEntries] = useState<Array<EntryDigest>>([])
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
-  const { name, bio, following } = useUserExtStore()
+  const { following } = useUserExtStore()
   const { reverseName, principalId } = usePlugStore()
   const [loading, setLoading] = useState(false)
   const [followLoading, setFollowLoading] = useState(false)
@@ -172,7 +170,7 @@ export const ProfilePage: React.FC = () => {
                     handleFollow()
                   }}
                 >
-                  {following.some(e => e.toString() === profileId) ?
+                  {following.some((e: any) => e.toString() === profileId) ?
                     'Unfollow' : 'Follow'}
                 </Button>
               </Flex>

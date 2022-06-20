@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
 import { UserExt } from "../../canisters/model/dfusiondid"
-import { shortPrincipal } from "src/canisters/utils";
+import { shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
@@ -16,9 +16,9 @@ export const FollowerPage: React.FC = () => {
   const dfusionActor = useDfusionActor(Identity.caller ?? undefined);
   const { pid } = useParams()
   const [valid, setValid] = useState(false)
-  const [followers, setFollowers] = useState<Array<Principal>>([])
+  // const [followers, setFollowers] = useState<Array<Principal>>([])
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
-  const { name, bio, following } = useUserExtStore()
+  const { following } = useUserExtStore()
   const { reverseName, principalId } = usePlugStore()
   const [loading, setLoading] = useState(false)
   const [followLoading, setFollowLoading] = useState(false)
@@ -163,7 +163,7 @@ export const FollowerPage: React.FC = () => {
                     handleFollow()
                   }}
                 >
-                  {following.some(e => e.toString() === profileId) ?
+                  {following.some((e: any) => e.toString() === profileId) ?
                     'Unfollow' : 'Follow'}
                 </Button>
               </Flex>
