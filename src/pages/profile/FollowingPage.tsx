@@ -3,7 +3,7 @@ import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center } from "@
 import { UserExt } from "../../canisters/model/dfusiondid"
 import { shortPrincipal } from "src/canisters/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
@@ -16,9 +16,9 @@ export const FollowingPage: React.FC = () => {
   const dfusionActor = useDfusionActor(Identity.caller ?? undefined);
   const { pid } = useParams()
   const [valid, setValid] = useState(false)
-  const [followers, setFollowers] = useState<Array<Principal>>([])
+  // const [followers, setFollowers] = useState<Array<Principal>>([])
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
-  const { name, bio, following } = useUserExtStore()
+  const {following } = useUserExtStore()
   const { reverseName, principalId } = usePlugStore()
   const [loading, setLoading] = useState(false)
   const [followLoading, setFollowLoading] = useState(false)

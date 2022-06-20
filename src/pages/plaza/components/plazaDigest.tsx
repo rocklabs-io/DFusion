@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, Box, Tag, Image, Skeleton, useToast, Spinner, Badge, Circle, Center } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Text, Box, Image, useToast, Spinner, Badge, Circle, Center } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../../canisters/utils";
@@ -7,7 +7,7 @@ import { Identity, useDfusionActor } from "src/canisters/actor";
 import { EntryDigest } from "src/canisters/model/dfusiondid";
 import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
-import { useAppDispatch, usePlugStore } from "src/store";
+import { useAppDispatch } from "src/store";
 import { RiRocket2Fill, RiRocket2Line } from "react-icons/ri";
 
 export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {

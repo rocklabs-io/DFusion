@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./HomePage.module.css";
-import { Button, Stack, Box, Flex, Text } from "@chakra-ui/react";
+import { Button, Box, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import "@fontsource/roboto/300.css"
