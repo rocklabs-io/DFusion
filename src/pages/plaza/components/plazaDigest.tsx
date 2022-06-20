@@ -15,6 +15,7 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   const dfusionActor = useDfusionActor(Identity.caller ?? undefined);
   const toast = useToast()
   const dispatch = useAppDispatch()
+  const [name, setName] = useState('')
 
   const [liking, setLiking] = useState(false);
   // state: if this passage is liked by the user
@@ -26,6 +27,14 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   useEffect(() => {
     setIsLiked(likes.includes(entry.id));
   }, [likes])
+
+  useEffect(() => {
+    dfusionActor && dfusionActor.getUser(entry.creator).then((e) => {
+      if (e.length > 0 && e[0]?.name && e[0]?.name.length > 0) {
+        setName(e[0]?.name[0] as string)
+      }
+    })
+  }, [dfusionActor])
 
   const handleLike = () => {
     setLiking(true);
@@ -77,6 +86,7 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
         }}>
           <Avatar name={entry.creator.toText()} variant='marble' />
         </Circle> &nbsp;&nbsp;
+        <Text fontSize={16}>{name}</Text> &nbsp;&nbsp;
         <Badge textTransform='lowercase'
           borderRadius='10px'
           fontSize={14}
@@ -159,5 +169,5 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
         </Flex>
       </Flex>
     </Flex>
-    </Box>
+  </Box>
 }
