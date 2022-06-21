@@ -17,16 +17,17 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   const dispatch = useAppDispatch()
   const [name, setName] = useState('')
 
+  // like operated state, dislike -1 , liked +1 
+  const [opLike, setOpLike] = useState(0)
+  // is like being processed
   const [liking, setLiking] = useState(false);
-  // state: if this passage is liked by the user
-  const [isLiked, setIsLiked] = useState(false);
   // all liked entries id
   const { likes } = useUserExtStore();
 
   // update state from the store
-  useEffect(() => {
-    setIsLiked(likes.includes(entry.id));
-  }, [likes])
+  // useEffect(() => {
+  //   setIsLiked(likes.includes(entry.id));
+  // }, [likes])
 
   useEffect(() => {
     dfusionActor && dfusionActor.getUser(entry.creator).then((e) => {
@@ -37,36 +38,42 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
   }, [dfusionActor])
 
   const handleLike = () => {
-    setLiking(true);
-    dfusionActor?.like(entry.id).then(res => {
-      if ('ok' in res) {
-        toast({
-          status: 'success',
-          title: 'Success!',
-          description: (res.ok ? 'Liked' : 'Unliked') + ' successfully',
-          duration: 3000
-        })
-        res.ok ?
-          dispatch(userExtAction.setLike(
-            entry.id
-          )) :
-          dispatch(userExtAction.setUnlike(
-            entry.id
-          ))
-      } else {
-        toast({
-          status: 'error',
-          title: 'Failed',
-          description: 'Operation failed: ' + res.err,
-          duration: 3000
-        })
-      }
-    }).finally(() => {
-      setLiking(false)
-    })
+    if (!liking) {
+      setLiking(true);
+      dfusionActor?.like(entry.id).then(res => {
+        if ('ok' in res) {
+          toast({
+            status: 'success',
+            title: 'Success!',
+            description: (res.ok ? 'Liked' : 'Unliked') + ' successfully',
+            duration: 3000
+          })
+          if (res.ok) {
+            setOpLike(opLike + 1)
+            dispatch(userExtAction.setLike(
+              entry.id
+            ))
+          } else {
+            setOpLike(opLike - 1)
+            dispatch(userExtAction.setUnlike(
+              entry.id
+            ))
+          }
+        } else {
+          toast({
+            status: 'error',
+            title: 'Failed',
+            description: 'Operation failed: ' + res.err,
+            duration: 3000
+          })
+        }
+      }).finally(() => {
+        setLiking(false)
+      })
+    }
   }
 
-  return <a href={'/entry/' + Number(entry.id).toString()} target="_blank" rel="noopener noreferrer">
+  return (//<a href={} target="_blank" rel="noopener noreferrer">
     <Box className="mitem">
       <Flex className="mcontent"
         flexDir='column'
@@ -75,11 +82,11 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
         width='100%'
         height='fit-content'
         boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
-        // maxW={458}
-        cursor='pointer'
         borderRadius={20}>
         <Flex marginBottom='10px' alignItems='center'>
-          <Circle size='24px' cursor='pointer' onClick={() => {
+          <Circle size='24px' cursor='pointer' 
+            onClick={(e) => {
+            e.stopPropagation()
             navigate('/profile/' + entry.creator.toText())
           }}>
             <Avatar name={entry.creator.toText()} variant='marble' />
@@ -92,12 +99,21 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
             padding='0 10px'
             opacity={0.6}
             height='fit-content'
-            width='fit-content'>
+            width='fit-content'
+            cursor='pointer'
+            onClick={()=>{
+              navigator.clipboard.writeText(entry.creator.toText())
+            }} >
             {shortPrincipal(entry.creator.toText(), 5, 3)}
           </Badge>
         </Flex>
         <Box width='100%'
           height='fit-content'
+          cursor='pointer'
+          minH='20px'
+          onClick={() => {
+            window.open('/entry/' + Number(entry.id).toString(), '_blank')
+          }}
         >
           <Text fontWeight='bold'
             fontSize={24}
@@ -141,7 +157,7 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
                 <Spinner size='xs' color="grey" />
                 :
                 (
-                  isLiked
+                  likes.includes(entry.id)
                     ?
                     <RiRocket2Fill size={20}
                       cursor='pointer'
@@ -162,11 +178,11 @@ export const PlazaDigest = ({ entry }: { entry: EntryDigest }) => {
             }
             &nbsp;
             <Text color='grey'>
-              {(Number(entry.likes.length) + Number(isLiked)).toString()}
+              {Number(entry.likes.length) + opLike}
             </Text>
           </Flex>
         </Flex>
       </Flex>
-    </Box>
-  </a>
+    </Box>)
+  // </a>
 }

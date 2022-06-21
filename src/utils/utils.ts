@@ -64,8 +64,8 @@ export const parseMD = (raw: string) => {
 		.replace(/\[(.*?)\]\((.*?)\)/gim, "$1") // url
     .replace(/\[(.*?)\]\((.*?)/gim, "") // half ~
     .replace(/\[(.*?)/gim, "") //~
+		.replace(/\\\n/gim, "") // remove newline
 		.replace(/\n/gim, "") // remove newline
     .replace(/\s(\S*)$/gim, " ..." ) // remove remains
-
 	return htmlText.trim()
 }
