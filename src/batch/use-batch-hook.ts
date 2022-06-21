@@ -44,11 +44,13 @@ export const useBatchHook = <Model>({
       const onFail = transaction.onFail;
       transaction.onFail = async (err: any, prevRes: any) => {
         if (onFail) await onFail(err, prevRes);
-        console.log(err.toString())
+        console.log('err', err.toString())
         handleError(err);
       };
       newBatch.push(transaction);
     });
+
+    console.log(newBatch)
 
     return newBatch;
   }, [transactions, handleRetry]);
@@ -58,14 +60,16 @@ export const useBatchHook = <Model>({
       state !== Batch.DefaultHookState.Idle &&
       state !== Batch.DefaultHookState.Error
     ) {
-      if(state !== Batch.DefaultHookState.Done)
+      console.log('state', state)
+      if (state !== Batch.DefaultHookState.Done)
         return Promise.reject('Transaction is processing');
     }
     setState(states[0]);
     try {
       return await batch.execute();
     } catch (error: any) {
-      if (error.message === 'The transactions was rejected.') {
+      // console.log('err:', error.message)
+      if (error.message.includes(' rejected')) {
         setState(Batch.DefaultHookState.Error);
       }
       throw error;
