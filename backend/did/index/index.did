@@ -1,0 +1,5 @@
+type SearchResult = record { id : nat; title : text; score : float32 };
+service : (principal) -> {
+  add : (nat64, text, text) -> ();
+  search : (text) -> (vec SearchResult) query;
+}
