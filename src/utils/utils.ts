@@ -1,4 +1,4 @@
-import { idlFactory } from "../canisters/model/dfusion.did";
+import { idlFactory } from "../canisters/idl/dfusion.did";
 import {
     Actor,
     HttpAgent,

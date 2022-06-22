@@ -1,5 +1,5 @@
 import { Transaction } from "@psychedelic/plug-inpage-provider/dist/src/Provider/interfaces"
-import { idlFactory } from "src/canisters/model/dfusion.did"
+import { idlFactory } from "src/canisters/idl/dfusion.did"
 import { ENV } from "src/config/env"
 
 // Not implemented

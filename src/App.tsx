@@ -11,6 +11,7 @@ import { store } from 'src/store';
 import { Header } from './components/header';
 import "@fontsource/roboto"
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { SearchPage } from './pages/search';
 
 declare global {
   interface Window { ic: any; }
@@ -94,6 +95,7 @@ const App = () => {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/entry/:id" element={<ContentPage />} />
+              <Route path="/search/:qtext" element={<SearchPage />} />
             </Routes>
           </BrowserRouter>
         </ReduxProvider>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
-import { EntryDigest, UserExt } from "../../canisters/model/dfusiondid"
+import { EntryDigest, UserExt } from "../../canisters/model/dfusion.did"
 import { shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
 import { useNavigate, useParams } from "react-router-dom";

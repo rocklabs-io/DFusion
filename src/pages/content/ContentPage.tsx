@@ -8,7 +8,7 @@ import Avatar from "boring-avatars";
 import styles from "./ContentPage.module.css"
 import { useDfusionActor } from "src/canisters/actor";
 import { Principal } from "@dfinity/principal";
-import { UserExt } from "src/canisters/model/dfusiondid";
+import { UserExt } from "src/canisters/model/dfusion.did";
 import { useNavigate } from "react-router-dom";
 import { ICNSReverseController } from "@psychedelic/icns-js";
 

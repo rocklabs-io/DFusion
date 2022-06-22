@@ -1,6 +1,6 @@
 import { Principal } from "@dfinity/principal";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserExt } from "src/canisters/model/dfusiondid";
+import { UserExt } from "src/canisters/model/dfusion.did";
 import { RootState } from "src/store/store";
 
 const initialState: UserExt = {

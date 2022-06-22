@@ -4,7 +4,7 @@ import Avatar from "boring-avatars";
 import { useNavigate } from "react-router-dom";
 import { getTimeString, shortPrincipal } from "../../utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { EntryDigest } from "src/canisters/model/dfusiondid";
+import { EntryDigest } from "src/canisters/model/dfusion.did";
 import { Flex } from "@chakra-ui/react";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";

@@ -1,11 +1,11 @@
 import { IDL } from '@dfinity/candid';
 import {
   DFusion,
-} from 'src/canisters/model/dfusiondid';
+} from 'src/canisters/model/dfusion.did';
+import { _SERVICE as Index } from '../model/index.did';
 
 export type AppActors = DFusion
-  
-
+  | Index
 
 export interface ActorRepository {
   createActor: <T extends AppActors>(

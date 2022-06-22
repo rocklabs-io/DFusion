@@ -1,6 +1,6 @@
 import { ENV } from 'src/config/env';
-import { idlFactory } from 'src/canisters/model/dfusion.did.js';
-import { DFusion } from 'src/canisters/model/dfusiondid';
+import { idlFactory } from 'src/canisters/idl/dfusion.did.js';
+import { DFusion } from 'src/canisters/model/dfusion.did';
 import { useActor, Identity } from '.';
 
 export const useDfusionActor = (identity?: Identity) => {

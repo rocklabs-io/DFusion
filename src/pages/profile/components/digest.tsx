@@ -1,5 +1,5 @@
 import { Badge, Button, Flex, Text, Image } from "@chakra-ui/react"
-import { EntryDigest } from "../../../canisters/model/dfusiondid"
+import { EntryDigest } from "../../../canisters/model/dfusion.did"
 import { getTimeString } from "src/utils/utils";
 import { useNavigate } from "react-router-dom";
 import { parseMD } from "src/utils/utils";

@@ -8,7 +8,7 @@ import { IoCompassOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io"
 import { usePlugStore } from "src/store";
 import { useUserExtStore } from "src/store/features/userExt";
-import { SearchBar } from "../seacrch";
+import { SearchBar } from "../seacrchInput";
 // declare let window: any;
 
 export const Header: React.FC = () => {

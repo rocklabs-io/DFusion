@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Badge, Button, Flex, Text, Circle, useToast } from "@chakra-ui/react"
-import { UserExt } from "../../../canisters/model/dfusiondid"
+import { UserExt } from "../../../canisters/model/dfusion.did"
 import { shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
 import { Principal } from "@dfinity/principal";

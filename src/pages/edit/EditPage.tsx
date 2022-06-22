@@ -8,7 +8,7 @@ import { Identity, useDfusionActor } from "src/canisters/actor";
 import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center } from "@chakra-ui/react";
 import { useBatchHook, useCreateEntryBatch } from "src/batch";
 import { Batch } from "src/batch/model";
-import { Result_1 } from "src/canisters/model/dfusiondid";
+import { Result_1 } from "src/canisters/model/dfusion.did";
 import RichMarkdownEditor from "rich-markdown-editor";
 // import { NFTStorage } from "nft.storage";
 const { NFTStorage } = require('nft.storage')
@@ -89,17 +89,18 @@ export const EditPage: React.FC = () => {
         fontSize='25'>
         <Flex alignItems='center'
           width='100%'
-          justifyContent='space-between'>
-          <Button colorScheme='regular'
+          justifyContent='flex-end'>
+          {/* <Button colorScheme='regular'
             variant='outline'>
             Upload banner
-          </Button>
+          </Button> */}
           <Flex alignItems='center'
             border='1px solid #6993FF'
             borderRadius={12}>
-            <Badge variant='solid' borderRadius={12}
+            <Badge variant='solid' 
+              borderRadius={12}
               m='0 8px' pr='2' fontSize={14}
-              colorScheme='regular'>
+              colorScheme={nft ? 'regular' : 'gray'} >
               <i>NFT</i></Badge>
             <Switch size='md'
               mr='10px'
@@ -121,13 +122,13 @@ export const EditPage: React.FC = () => {
               Publish </Button>
           </Flex>
         </Flex>
-        <Center borderRadius={10}
+        {/* <Center borderRadius={10}
           bgColor='gray.200' h='49px'
           margin='20px 0'
           color='gray.400'
           fontSize={14}><i>
             You have not add a banner picture now
-          </i></Center>
+          </i></Center> */}
         <Textarea placeholder="Give me a title!"
           rows={1}
           height='70px'

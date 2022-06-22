@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { CreateTransaction, TypeCreateEntry } from '../model';
-import { idlFactory } from '../../canisters/model/dfusion.did'
+import { idlFactory } from '../../canisters/idl/dfusion.did'
 import { ENV } from 'src/config/env';
-import { Result_1 } from 'src/canisters/model/dfusiondid';
+import { Result_1 } from 'src/canisters/model/dfusion.did';
 import { useNavigate } from 'react-router-dom';
 
 export const useCreateEntryTransactionMemo: 

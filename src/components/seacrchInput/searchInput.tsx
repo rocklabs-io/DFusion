@@ -11,12 +11,20 @@ export const SearchBar = () => {
 
   const navigate = useNavigate()
   const [text, setText] = useState('')
+  const handleSearch = () => {
+    if (text) navigate('/search/'+text)
+  }
 
-  return <InputGroup >
+  return <InputGroup mr='16px'>
     <InputLeftElement children={
       <Icon as={MdSearch} ml='2' boxSize='24px' color='gray.300' />
     } />
-    <Input borderRadius={20} onChange={(e) => {
+    <Input borderRadius={20}
+    onKeyDown={(e)=>{
+      if (e.key === 'Enter')
+        handleSearch()
+    }}
+    onChange={(e) => {
       setText(e.target.value)
     }} />
     <InputRightElement width='4.5rem'>
@@ -29,9 +37,7 @@ export const SearchBar = () => {
         borderRadius='0 16px 16px 0'
         borderLeft='1px solid #E5E5E5'
         disabled={!text}
-        onClick={() => {
-          navigate('/search/q='+text)
-        }}
+        onClick={handleSearch}
       >Search</Button>
     </InputRightElement>
   </InputGroup>

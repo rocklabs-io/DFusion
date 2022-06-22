@@ -3,6 +3,10 @@ export const ENV = {
   canisterIds: {
     dfusion: process.env.DFUSION_CANISTER_ID || 
     'br67l-yiaaa-aaaai-qkjra-cai',
+    index: process.env.INDEX_CANISTER_ID || 
+    "dsgd3-3yaaa-aaaai-qmuua-cai",
+    nft: process.env.NFT_CANISTER_ID ||
+    "wrciq-pqaaa-aaaai-qleya-cai", 
     reverse_registrar: process.env.REVERSE_TRGISTRAR_CANISTER_ID || 
     'etiyd-ciaaa-aaaan-qabbq-cai',
   },
