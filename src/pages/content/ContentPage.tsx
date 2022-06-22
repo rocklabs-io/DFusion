@@ -1,8 +1,8 @@
 import { Box, Circle, Spinner, Stack, Tag } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Editor from "rich-markdown-editor";
-import { shortPrincipal } from "../../canisters/utils";
-import { getTimeString } from "../../canisters/utils";
+import { shortPrincipal } from "../../utils/utils";
+import { getTimeString } from "../../utils/utils";
 import { Text } from "@chakra-ui/react";
 import Avatar from "boring-avatars";
 import styles from "./ContentPage.module.css"
@@ -59,9 +59,7 @@ export const ContentPage: React.FC = () => {
           console.log(res)
           setICNSName(res)
         })
-      } catch (err) {
-
-      }
+      } catch (err) {}
     }
   }, [creator])
 

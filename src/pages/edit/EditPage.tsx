@@ -1,11 +1,15 @@
-import React from "react";
+import React, { createRef, useMemo, useRef } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Editor from "rich-markdown-editor";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast, Button, Box, Input, Textarea } from "@chakra-ui/react";
+import { useToast, Button, Box, Input, Textarea, Flex } from "@chakra-ui/react";
+import { useBatchHook, useCreateEntryBatch } from "src/batch";
+import { Batch } from "src/batch/model";
+import { Result_1 } from "src/canisters/model/dfusiondid";
+import RichMarkdownEditor from "rich-markdown-editor";
 // import { NFTStorage } from "nft.storage";
 const { NFTStorage } = require('nft.storage')
 
@@ -28,18 +32,14 @@ export const EditPage: React.FC = () => {
     return 'https://nftstorage.link/ipfs/' + cid
   }
 
+  const [batch] = useCreateEntryBatch({
+    title: title,
+    content: content
+  })
+
   const handleSubmit = async () => {
     setLoading(true);
-    // let titleEnd = text.indexOf('\n');
-    // let title = text.slice(0, titleEnd);
-    // let content = text.slice(titleEnd + 1);
-    const coverLink = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g.exec(content)
-    // coverLink?.length
-    dfusionActor?.createEntry({
-      title: title, 
-      content: content, 
-      cover: (coverLink?.length as number) > 1 ? [coverLink![1]] : []
-    }).then((result)=>{
+    batch.execute().then((result: Result_1) => {
       if (!result || 'err' in result) {
         toast({
           title: "Fail",
@@ -57,8 +57,15 @@ export const EditPage: React.FC = () => {
         })
         navigate('/entry/' + result.ok?.toString());
       }
-    }).finally(()=>{
+    }).finally(() => {
       setLoading(false)
+    }).catch(err => {
+      toast({
+        title: "Caught error",
+        description: '' + err ?? 'unknown reason.',
+        status: "error",
+        duration: 3000
+      })
     })
   }
 
@@ -66,11 +73,18 @@ export const EditPage: React.FC = () => {
     setContent(txt)
   }
 
+  const edit = useRef<RichMarkdownEditor>(null)
+
   return (
     <>
-      <div className={styles.pageContent}>
+      <Flex width='100%'
+        flexDir='column'
+        maxWidth='800px'
+        margin='0 auto'
+        minHeight='100%'
+        padding='100px 0'
+        fontSize='25'>
         <Textarea placeholder="Give me a title!"
-          // height='fit-content'
           rows={1}
           height='70px'
           border='0'
@@ -84,6 +98,12 @@ export const EditPage: React.FC = () => {
             e.currentTarget.style.height = ""
             e.currentTarget.style.height = (e.currentTarget.scrollHeight + 5).toString() + 'px'
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter"){
+              e.preventDefault()
+              edit.current && edit.current.focusAtStart()
+            }
+          }}
           onChange={(e) => {
             e.target.style.height = ""
             e.target.style.height = (e.target.scrollHeight).toString() + 'px'
@@ -94,6 +114,7 @@ export const EditPage: React.FC = () => {
           }}
         ></Textarea>
         <Editor
+          ref={edit as any}
           theme={lightTheme}
           className={styles.editor}
           onChange={(value) => onChange(value())}
@@ -113,12 +134,14 @@ export const EditPage: React.FC = () => {
           uploadImage={async file => {
             return uploadCar(file)
           }} />
-        <Box className={styles.buttonBox}>
+        <Flex mt='20px'
+          alignItems='flex-end'
+          flexGrow={1} >
           <Button onClick={handleSubmit}
             colorScheme='regular'
             isLoading={loading}
             disabled={loading}> Publish </Button>
-        </Box>
-      </div>
+        </Flex>
+      </Flex>
     </>)
 }
