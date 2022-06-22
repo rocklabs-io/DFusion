@@ -539,6 +539,19 @@ shared(init_msg) actor class DFusion(
 		buf.toArray()
 	};
 
+	public query func isNFT(entries: [Nat]) : async [Bool] {
+		Array.map(entries, func (entry: Nat) : Bool {
+			switch (nftMaps.get(entry)) {
+				case (?e) {
+					e >= 0
+				};
+				case (null) {
+					false
+				};
+			}
+		})
+	};
+
 	// get user
 	public query func getUser(id: Principal): async ?UserExt {
 		Option.map(allUsers.get(id), Types.userToExt)
