@@ -77,6 +77,19 @@ shared(init_msg) actor class Bucket(registry_: Principal) {
         ExperimentalStableMemory.size()
     };
 
+    public query func getMemoryInfo(): async (Nat64, Nat64) {
+        stable_memory.toStable()
+    };
+
+    public shared(msg) func reset() {
+        let caller = msg.caller;
+        if (_authorized(caller) == false) {
+            Debug.trap("Unauthorized");
+        };
+        stable_offset := 0;
+        stable_capacity := 0;
+    };
+
     system func preupgrade() {
         let res: (Nat64, Nat64) = stable_memory.toStable();
         stable_offset := res.0;

@@ -66,15 +66,15 @@ shared(init_msg) actor class DFusion(
 	private let inverted_index: Types.InvertedIndex = actor(Principal.toText(index_));
 
 	private stable var authEntries : [(Principal, Bool)] = [(owner, true)];
-	private let auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
+	private var auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
 
 	// incremental id 
 	private stable var id_count = 0;
 	private stable var entryEntries : [(Nat, Entry)] = [];
-	private let entries = TrieMap.fromEntries<Nat, Entry>(entryEntries.vals(), Nat.equal, Hash.hash);
+	private var entries = TrieMap.fromEntries<Nat, Entry>(entryEntries.vals(), Nat.equal, Hash.hash);
 	
 	private stable var nftEntries: [(Nat, Int)] = [];
-	private let nftMaps = TrieMap.fromEntries<Nat, Int>(nftEntries.vals(), Nat.equal, Hash.hash);
+	private var nftMaps = TrieMap.fromEntries<Nat, Int>(nftEntries.vals(), Nat.equal, Hash.hash);
 	
 	// ignore performance issue of Array.append it would be called few times
 	private stable var index: [Nat] = [];
@@ -82,7 +82,7 @@ shared(init_msg) actor class DFusion(
 	private stable var table: [Principal] = [];
 
 	private stable var userEntries : [(Principal, User)] = [];
-	private let allUsers = TrieMap.fromEntries<Principal, User>(userEntries.vals(), Principal.equal, Principal.hash);
+	private var allUsers = TrieMap.fromEntries<Principal, User>(userEntries.vals(), Principal.equal, Principal.hash);
 
 	private var creating: Bool = false;
 
@@ -189,8 +189,14 @@ shared(init_msg) actor class DFusion(
 		if (creating) {
 			return #err("Creating bucket");
 		};
+		if (Text.size(request.title) == 0) {
+			return #err("Title can not be empty");
+		};
 		if (Text.size(request.title) > config.titleLimit) {
 			return #err("Title length over limit");
+		};
+		if (Text.size(request.content) == 0) {
+			return #err("Content can not be empty");
 		};
 		if (Text.size(request.content) > config.contentLimit) {
 			return #err("Content length over limit");
@@ -595,6 +601,19 @@ shared(init_msg) actor class DFusion(
 				freezing_threshold = null;
 			};
 		});
+	};
+
+	public shared(msg) func reset() {
+		assert(_checkAuth(msg.caller));
+		id_count := 0;
+		allUsers := TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
+		entries := TrieMap.TrieMap<Nat, Entry>(Nat.equal, Hash.hash);
+		nftMaps := TrieMap.TrieMap<Nat, Int>(Nat.equal, Hash.hash);
+		index := [0];
+		consume := [0];
+		table := [table[0]];
+		let bucket: Bucket.Bucket = actor(Principal.toText(table[0]));
+		bucket.reset();
 	};
 
 	system func preupgrade() {
