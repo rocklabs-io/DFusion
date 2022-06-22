@@ -1,0 +1,28 @@
+type SubscribeRequest = record {subscribee: principal;};
+type Result = 
+ variant {
+   err: text;
+   ok: bool;
+ };
+type NotifyRequest = 
+ record {
+   author: principal;
+   authorName: text;
+   contentDigest: text;
+   id: nat;
+   title: text;
+ };
+type Notification = 
+ service {
+   getSubscribees: (principal) -> (vec principal) query;
+   getSubscribers: (principal) -> (vec principal) query;
+   isSubscribed: (principal, principal) -> (bool) query;
+   notify: (NotifyRequest) -> (MessitySendResult);
+   subscribe: (SubscribeRequest) -> (Result);
+ };
+type MessitySendResult = 
+ variant {
+   err: text;
+   ok;
+ };
+service : (principal) -> Notification

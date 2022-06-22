@@ -84,6 +84,7 @@ type DFusion =
    getUserEntries: (principal) -> (vec EntryDigest) query;
    getUserFavorites: (principal) -> (vec EntryDigest) query;
    getUserFollowingEntries: (principal) -> (vec EntryDigest) query;
+   isNFT: (vec nat) -> (vec bool) query;
    like: (nat) -> (Result_2);
    mintNFT: (nat) -> (Result_1);
    removeAuth: (principal) -> (bool);
@@ -96,4 +97,4 @@ type CreateEntryRequest =
    cover: opt text;
    title: text;
  };
-service : (principal, principal) -> DFusion
+service : (principal, principal, principal, principal) -> DFusion
