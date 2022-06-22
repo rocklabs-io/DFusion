@@ -37,7 +37,7 @@ const App = () => {
       regular: {
         100: '#ECF1FF',
         200: '#ECF1FF',
-        300: '#ECF1FF',
+        300: '#2663FF',
         400: '#2663FF', // solid
         500: '#2663FF', // solid
         600: '#1C4FE8', // outline 

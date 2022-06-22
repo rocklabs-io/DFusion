@@ -3,6 +3,7 @@ import { CreateTransaction, TypeCreateEntry } from '../model';
 import { idlFactory } from '../../canisters/model/dfusion.did'
 import { ENV } from 'src/config/env';
 import { Result_1 } from 'src/canisters/model/dfusiondid';
+import { useNavigate } from 'react-router-dom';
 
 export const useCreateEntryTransactionMemo: 
 CreateTransaction<TypeCreateEntry> = (
@@ -21,7 +22,8 @@ CreateTransaction<TypeCreateEntry> = (
       methodName: 'createEntry',
       onSuccess: async (res: Result_1) => {
         if ('err' in res) throw new Error(JSON.stringify(res.err));
-        if (onSuccess) onSuccess(res);
+        if (onSuccess) onSuccess(res)
+        return res // for next trans's arg.
       },
       onFail,
       args: [{

@@ -37,7 +37,6 @@ export const useBatchHook = <Model>({
         } else {
           setState(Batch.DefaultHookState.Done);
         }
-
         return txSuccessResponse;
       };
 
@@ -49,8 +48,6 @@ export const useBatchHook = <Model>({
       };
       newBatch.push(transaction);
     });
-
-    console.log(newBatch)
 
     return newBatch;
   }, [transactions, handleRetry]);

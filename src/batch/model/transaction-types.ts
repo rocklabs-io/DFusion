@@ -4,4 +4,5 @@ export type TypeCreateEntry = {
   title: string;
   content: string;
   cover?: string;
+  mint?: boolean;
 }
