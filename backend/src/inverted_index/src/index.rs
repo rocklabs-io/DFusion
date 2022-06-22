@@ -31,7 +31,7 @@ impl InvertedIndex {
     /// and inserting each token into the index, pointing to the document and its position in the
     /// document.
     pub fn index(&mut self, id: usize, title: String, content: String) {
-        let doc = Document::new(id, title, content.clone());
+        let doc = Document::new(id, title.clone(), content.clone());
         let previous_version = self.docs.insert(doc.id, doc.clone());
         assert!(previous_version.is_none());
         // if let Some(previous_version) = previous_version {
@@ -50,7 +50,7 @@ impl InvertedIndex {
         //     }
         // }
 
-        let analyzed = lowercase_ngrams(content).into_iter().map(Result::unwrap);
+        let analyzed = lowercase_ngrams(format!("{} {}", title, content)).into_iter().map(Result::unwrap);
 
         for Token { token, position } in analyzed {
             self.index

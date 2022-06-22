@@ -58,9 +58,9 @@ fn pre_upgrade() {
         index.replace(InvertedIndex::new())
     });
     let registry = REGISTRY.with(|r| {
-        r.replace(Principal::management_canister());
+        r.replace(Principal::management_canister())
     });
-    ic_cdk::storage::stable_save((inverted_index, registry, )).expect("pre upgrade error");
+    ic_cdk::storage::stable_save::<(InvertedIndex, Principal, )>((inverted_index, registry, )).expect("pre upgrade error");
 }
 
 #[post_upgrade]
