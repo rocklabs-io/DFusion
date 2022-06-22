@@ -4,8 +4,8 @@ export const idlFactory = ({ IDL }) => {
     'content' : IDL.Text,
     'cover' : IDL.Opt(IDL.Text),
   });
-  const Result_3 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
-  const Result_1 = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Bool, 'err' : IDL.Text });
   const Time = IDL.Int;
   const EntryDigest = IDL.Record({
     'id' : IDL.Nat,
@@ -29,7 +29,7 @@ export const idlFactory = ({ IDL }) => {
     'cover' : IDL.Opt(IDL.Text),
     'likes' : IDL.Vec(IDL.Principal),
   });
-  const Result_2 = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
+  const Result_3 = IDL.Variant({ 'ok' : EntryExt, 'err' : IDL.Text });
   const UserExt = IDL.Record({
     'id' : IDL.Principal,
     'bio' : IDL.Opt(IDL.Text),
@@ -61,8 +61,8 @@ export const idlFactory = ({ IDL }) => {
         [],
         ['oneway'],
       ),
-    'createEntry' : IDL.Func([CreateEntryRequest], [Result_3], []),
-    'favor' : IDL.Func([IDL.Nat], [Result_1], []),
+    'createEntry' : IDL.Func([CreateEntryRequest], [Result_1], []),
+    'favor' : IDL.Func([IDL.Nat], [Result_2], []),
     'follow' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getBucketInfo' : IDL.Func(
         [],
@@ -75,7 +75,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(EntryDigest)],
         ['query'],
       ),
-    'getEntry' : IDL.Func([IDL.Nat], [Result_2], []),
+    'getEntry' : IDL.Func([IDL.Nat], [Result_3], []),
     'getUser' : IDL.Func([IDL.Principal], [IDL.Opt(UserExt)], ['query']),
     'getUserEntries' : IDL.Func(
         [IDL.Principal],
@@ -87,11 +87,21 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(EntryDigest)],
         ['query'],
       ),
-    'like' : IDL.Func([IDL.Nat], [Result_1], []),
+    'getUserFollowingEntries' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(EntryDigest)],
+        ['query'],
+      ),
+    'isNFT' : IDL.Func([IDL.Vec(IDL.Nat)], [IDL.Vec(IDL.Bool)], ['query']),
+    'like' : IDL.Func([IDL.Nat], [Result_2], []),
+    'mintNFT' : IDL.Func([IDL.Nat], [Result_1], []),
     'removeAuth' : IDL.Func([IDL.Principal], [IDL.Bool], []),
+    'reset' : IDL.Func([], [], ['oneway']),
     'setLimit' : IDL.Func([SetConfigRequest], [IDL.Bool], []),
     'setUserInfo' : IDL.Func([SetUserRequest], [Result], []),
   });
   return DFusion;
 };
-export const init = ({ IDL }) => { return [IDL.Principal]; };
+export const init = ({ IDL }) => {
+  return [IDL.Principal, IDL.Principal, IDL.Principal, IDL.Principal];
+};
