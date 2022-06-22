@@ -50,14 +50,21 @@ export const EditPage: React.FC = () => {
           duration: 3000
         })
       } else if ('ok' in result!) {
-        toast({
-          title: "Success",
-          description: 'Entry was published successfully.',
-          status: "success",
-          duration: 3000
-        })
         if (!nft) {
-          navigate('/entry/'+result.ok.toString())
+          toast({
+            title: "Success",
+            description: 'Entry has been published successfully.',
+            status: "success",
+            duration: 3000
+          })
+          navigate('/entry/' + result.ok.toString())
+        } else {
+          toast({
+            title: "Success",
+            description: 'Entry has been published and minted successfully.',
+            status: "success",
+            duration: 3000
+          })
         }
       }
     }).finally(() => {
@@ -97,7 +104,7 @@ export const EditPage: React.FC = () => {
           <Flex alignItems='center'
             border='1px solid #6993FF'
             borderRadius={12}>
-            <Badge variant='solid' 
+            <Badge variant='solid'
               borderRadius={12}
               m='0 8px' pr='2' fontSize={14}
               colorScheme={nft ? 'regular' : 'gray'} >
@@ -115,7 +122,7 @@ export const EditPage: React.FC = () => {
               borderRadius={10}
               colorScheme='regular'
               loadingText={
-                createEntrybatch.state+'...'
+                createEntrybatch.state + '...'
               }
               isLoading={loading}
               disabled={loading || !title}>

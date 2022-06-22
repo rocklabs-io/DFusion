@@ -21,12 +21,12 @@ export const useCreateEntryBatch = (props: TypeCreateEntry) => {
 
     transactions = {
       ...transactions,
-      createEntry: createTx
+      Creating: createTx
     };
     if(props.mint){
       transactions = {
         ...transactions, 
-        mintNFT: mintTx,
+        Minting: mintTx,
       }
     }
     return transactions;

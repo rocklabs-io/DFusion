@@ -65,6 +65,7 @@ export const ConnectButton = () => {
       <Flex >
         <Flex flexDirection='column'
           textAlign='right'
+          minWidth='90px'
           marginRight='12px'>
           <Text fontWeight='bold'
             fontSize={16}
@@ -157,7 +158,7 @@ export const ConnectButton = () => {
         clickConnect()
       }}>
       {isLoading ?
-        "Loading" : "Connect"}
+        "Loading..." : "Connect"}
     </Button>
   }</>
 }

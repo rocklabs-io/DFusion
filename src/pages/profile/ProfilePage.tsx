@@ -9,7 +9,7 @@ import Avatar from "boring-avatars";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
-import { Digest } from "./components/digest";
+import { ProfileDigest } from "./components/digest";
 
 export const ProfilePage: React.FC = () => {
 
@@ -61,7 +61,7 @@ export const ProfilePage: React.FC = () => {
   }, [dfusionActor, profileId])
 
   const entriesArray = useMemo(() => entries.map((item, index) =>
-    <Digest entry={item} key={index} />
+    <ProfileDigest entry={item} key={index} />
   ), [entries])
 
   const handleFollow = () => {

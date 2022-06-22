@@ -5,4 +5,5 @@ export type TypeCreateEntry = {
   content: string;
   cover?: string;
   mint?: boolean;
+  entryId?: bigint;
 }
