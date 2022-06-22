@@ -23,9 +23,11 @@ export interface DFusion {
   'getUserEntries' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
   'getUserFavorites' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
   'getUserFollowingEntries' : (arg_0: Principal) => Promise<Array<EntryDigest>>,
+  'isNFT' : (arg_0: Array<bigint>) => Promise<Array<boolean>>,
   'like' : (arg_0: bigint) => Promise<Result_2>,
   'mintNFT' : (arg_0: bigint) => Promise<Result_1>,
   'removeAuth' : (arg_0: Principal) => Promise<boolean>,
+  'reset' : () => Promise<undefined>,
   'setLimit' : (arg_0: SetConfigRequest) => Promise<boolean>,
   'setUserInfo' : (arg_0: SetUserRequest) => Promise<Result>,
 }

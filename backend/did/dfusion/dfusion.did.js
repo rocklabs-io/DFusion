@@ -92,12 +92,16 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(EntryDigest)],
         ['query'],
       ),
+    'isNFT' : IDL.Func([IDL.Vec(IDL.Nat)], [IDL.Vec(IDL.Bool)], ['query']),
     'like' : IDL.Func([IDL.Nat], [Result_2], []),
     'mintNFT' : IDL.Func([IDL.Nat], [Result_1], []),
     'removeAuth' : IDL.Func([IDL.Principal], [IDL.Bool], []),
+    'reset' : IDL.Func([], [], ['oneway']),
     'setLimit' : IDL.Func([SetConfigRequest], [IDL.Bool], []),
     'setUserInfo' : IDL.Func([SetUserRequest], [Result], []),
   });
   return DFusion;
 };
-export const init = ({ IDL }) => { return [IDL.Principal, IDL.Principal]; };
+export const init = ({ IDL }) => {
+  return [IDL.Principal, IDL.Principal, IDL.Principal, IDL.Principal];
+};
