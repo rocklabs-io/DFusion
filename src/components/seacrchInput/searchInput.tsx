@@ -15,7 +15,7 @@ export const SearchBar = () => {
     if (text) navigate('/search/'+text)
   }
 
-  return <InputGroup mr='16px'>
+  return <InputGroup mr='4px'>
     <InputLeftElement children={
       <Icon as={MdSearch} ml='2' boxSize='24px' color='gray.300' />
     } />

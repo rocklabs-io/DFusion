@@ -65,10 +65,10 @@ export const ConnectButton = () => {
       <Flex >
         <Flex flexDirection='column'
           textAlign='right'
-          minWidth='90px'
+          minWidth='150px'
           marginRight='12px'>
           <Text fontWeight='bold'
-            fontSize={16}
+            fontSize={14} //name.length > 0 ? Math.floor(200 / Number(name[0])) 
             lineHeight='19px'
             cursor='pointer'
             onClick={() => { navigate('/profile/' + principalId) }}>
@@ -94,8 +94,8 @@ export const ConnectButton = () => {
           _hover={{
             boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)'
           }}
-          // rightIcon={<Icon color='white' as={GoTriangleDown} />}
-          >
+        // rightIcon={<Icon color='white' as={GoTriangleDown} />}
+        >
           {/* {reverseName ? (reverseName.length > 14 ?
           shortPrincipal(addIcpSuffix(reverseName! as string) as string, 4, 8) : addIcpSuffix(reverseName! as string)) : shortPrincipal(principalId)} */}
           <Avatar name={principalId} />
@@ -110,7 +110,7 @@ export const ConnectButton = () => {
         borderRadius='20px'
         border='none'
         boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
-        >
+      >
         <MenuItem
           margin='10px 0'
           icon={<MdFavoriteBorder color='black' opacity={0.6} size={24} />}
@@ -121,7 +121,7 @@ export const ConnectButton = () => {
           icon={<MdChildCare color='black' opacity={0.6} size={24} />}
           borderRadius={10}
           onClick={() => {
-            navigate('/following/'+principalId)
+            navigate('/following/' + principalId)
           }}>Following</MenuItem>
         <MenuItem
           margin='10px 0'

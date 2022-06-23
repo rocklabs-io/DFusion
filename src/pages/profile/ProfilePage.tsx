@@ -10,6 +10,7 @@ import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
 import { ProfileDigest } from "./components/digest";
+import { ICNSResolverController, ICNSReverseController } from "@psychedelic/icns-js";
 
 export const ProfilePage: React.FC = () => {
 
@@ -19,7 +20,7 @@ export const ProfilePage: React.FC = () => {
   const [entries, setEntries] = useState<Array<EntryDigest>>([])
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
   const { following } = useUserExtStore()
-  const { reverseName, principalId } = usePlugStore()
+  const { principalId } = usePlugStore()
   const [loading, setLoading] = useState(false)
   const [followLoading, setFollowLoading] = useState(false)
   const toast = useToast()
@@ -59,6 +60,36 @@ export const ProfilePage: React.FC = () => {
       setValid(false)
     }
   }, [dfusionActor, profileId])
+
+  const [icnsName, setIcnsName] = useState('')
+  const [icnsHost, setIcnsHost] = useState('')
+
+  const reverseController = new ICNSReverseController()
+  const resolverController = new ICNSResolverController()
+
+  useEffect(() => {
+    if (reverseController && profileId) {
+      reverseController.getReverseName(Principal.fromText(profileId)).then((res) => {
+        res && setIcnsName(res)
+      }).catch((err)=>{
+        console.log('No reversename')
+      })
+    }
+  }, [reverseController, profileId])
+
+  useEffect(() => {
+    if (resolverController && icnsName) {
+      resolverController.getHost(icnsName).then((res) => {
+        if (typeof (res) === 'string') {
+          setIcnsHost(res)
+        }
+      }).catch((err) => {
+        console.log('No host found for this name: ', err)
+      })
+    }
+  }, [resolverController, icnsName])
+
+
 
   const entriesArray = useMemo(() => entries.map((item, index) =>
     <ProfileDigest entry={item} key={index} />
@@ -153,12 +184,16 @@ export const ProfilePage: React.FC = () => {
                 name={profileId}
                 variant="marble" />
               <Flex height='32px' alignItems='center'>
-                <a href={"https://" + reverseName + ".host"}>
-                  <Circle size='30px'
-                    border='1.5px solid #2663FF'>
-                    <IoMdLink color="#2663FF" size='18px' />
-                  </Circle>
-                </a>&nbsp;&nbsp;
+                {
+                  icnsHost ?
+                    <a href={"https://" + icnsName + ".host"}>
+                      <Circle size='30px'
+                        border='1.5px solid #2663FF'>
+                        <IoMdLink color="#2663FF" size='18px' />
+                      </Circle>
+                    </a> : ''
+                }
+                &nbsp;
                 <Button
                   fontWeight='medium'
                   colorScheme='regular'
