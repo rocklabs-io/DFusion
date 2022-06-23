@@ -3,9 +3,11 @@ import {
   DFusion,
 } from 'src/canisters/model/dfusion.did';
 import { _SERVICE as Index } from '../model/index.did';
+import { _SERVICE as Notify } from '../model/notification.did';
 
 export type AppActors = DFusion
   | Index
+  | Notify
 
 export interface ActorRepository {
   createActor: <T extends AppActors>(

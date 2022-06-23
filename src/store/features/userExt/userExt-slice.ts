@@ -1,9 +1,17 @@
 import { Principal } from "@dfinity/principal";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserExt } from "src/canisters/model/dfusion.did";
+import { FeatureState } from "src/store/models";
 import { RootState } from "src/store/store";
 
-const initialState: UserExt = {
+
+interface TypeUserExt extends UserExt {
+  subscribees?: string[];
+  subscribeesState?: FeatureState;
+  userExtState?: FeatureState;
+}
+
+const initialState: TypeUserExt = {
   id: Principal.fromText('aaaaa-aa'),
   bio: [],
   favorites: [],
@@ -12,6 +20,9 @@ const initialState: UserExt = {
   entries: [],
   following: [],
   followers: [],
+  subscribees: [],
+  subscribeesState: FeatureState.NotStarted,
+  userExtState: FeatureState.NotStarted,
 }
 
 export const userExtSlice = createSlice({
@@ -29,8 +40,8 @@ export const userExtSlice = createSlice({
         value => value !== action.payload
       )
     },
-    setAll: (state, action: PayloadAction<UserExt>) => {
-      return {...action.payload}
+    setAll: (state, action: PayloadAction<TypeUserExt>) => {
+      state = {...state, ...action.payload}
     },
     setFollow: (state, action: PayloadAction<Principal>) => {
       state.following.push(action.payload)
@@ -48,6 +59,15 @@ export const userExtSlice = createSlice({
     },
     setBio: (state, action: PayloadAction<string>) => {
       state.bio = action.payload === '' ? [] : [action.payload];
+    },
+    setSubscribees: (state, action: PayloadAction<Array<string>>) => {
+      state.subscribees = action.payload;
+    }, 
+    setUserExtState: (state, action: PayloadAction<FeatureState>) => {
+      state.userExtState = action.payload;
+    },
+    setSubscribeesState: (state, action: PayloadAction<FeatureState>) => {
+      state.subscribeesState = action.payload;
     }
   }
 })

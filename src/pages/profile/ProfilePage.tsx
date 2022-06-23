@@ -7,10 +7,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import Avatar from "boring-avatars";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
-import { useAppDispatch, usePlugStore } from "src/store";
+import { FeatureState, useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
 import { ProfileDigest } from "./components/digest";
 import { ICNSResolverController, ICNSReverseController } from "@psychedelic/icns-js";
+import { useNotifyActor } from "src/canisters/actor/use-notify-actor";
 
 export const ProfilePage: React.FC = () => {
 
@@ -19,42 +20,70 @@ export const ProfilePage: React.FC = () => {
   const [valid, setValid] = useState(false)
   const [entries, setEntries] = useState<Array<EntryDigest>>([])
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
-  const { following } = useUserExtStore()
+  const { following,
+    subscribees,
+    userExtState,
+    subscribeesState } = useUserExtStore()
   const { principalId } = usePlugStore()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [followLoading, setFollowLoading] = useState(false)
   const toast = useToast()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [profileId, setProfileId] = useState('')
 
-  useEffect(() => {
-    pid ?
-      setProfileId(pid) :
-      principalId ?
-        setProfileId(principalId) :
-        setProfileId('')
-  }, [pid])
-
+  /**
+   * check pid 
+   */
   useEffect(() => {
     try {
-      setLoading(true)
-      dfusionActor && dfusionActor.getUserEntries(Principal.fromText(profileId as string)).then((res: Array<EntryDigest>) => {
-        if (res.length !== entries.length) {
-          setEntries(res)
-        }
-      }).finally(() => {
-        setLoading(false)
-      })
+      pid ?
+        (
+          Principal.fromText(pid)
+          && setProfileId(pid)
+        ) :
+        principalId ?
+          setProfileId(principalId) :
+          setProfileId('')
+    } catch (error) {
+      setValid(false)
+    }
+  }, [pid])
+
+  useEffect(()=>{
+    if (!valid)
+      toastError(false, 'Invalid User Profile Url')
+  }, [valid])
+
+  /**
+   * get all entries
+   */
+  useEffect(() => {
+    try {
+      profileId && dfusionActor &&
+        dfusionActor.getUserEntries(Principal.fromText(profileId as string)).then((res: Array<EntryDigest>) => {
+          if (res.length !== entries.length) {
+            setEntries(res)
+          }
+        }).finally(() => {
+          setLoading(false)
+        })
     } catch {
       setValid(false)
     }
   }, [dfusionActor, profileId])
 
+  /**
+   * get all info 
+   */
   useEffect(() => {
     try {
       dfusionActor && dfusionActor.getUser(Principal.fromText(profileId as string)).then((res: any) => {
-        setUserExt(res)
+        if (res.length > 0) {
+          setUserExt(res)
+        } else {
+          setValid(false)
+        }
       })
     } catch {
       setValid(false)
@@ -71,7 +100,7 @@ export const ProfilePage: React.FC = () => {
     if (reverseController && profileId) {
       reverseController.getReverseName(Principal.fromText(profileId)).then((res) => {
         res && setIcnsName(res)
-      }).catch((err)=>{
+      }).catch((err) => {
         console.log('No reversename')
       })
     }
@@ -138,6 +167,43 @@ export const ProfilePage: React.FC = () => {
           setFollowLoading(false)
         })
     }
+  }
+
+  const [subscribing, setSubsrcibing] = useState(false)
+  const notifyActor = useNotifyActor(Identity.caller)
+
+  const handleSubscribe = () => {
+    if (notifyActor) {
+      setSubsrcibing(true)
+      notifyActor.subscribe({
+        "subscribee": Principal.fromText(profileId)
+      }).then(res => {
+        if ('ok' in res) {
+          toastError(true, 'You have '
+            + res.ok ? '' : 'un'
+          + 'subscribed successfully!')
+          dispatch(userExtAction.setSubscribees(
+            res.ok ?
+              (subscribees as string[]).concat([profileId]) :
+              (subscribees as string[]).filter(item => item !== profileId)
+          ))
+          setSubsrcibing(false)
+        } else {
+          toastError(false, res.err.toString())
+        }
+      }).catch((err) => {
+        toastError(false, err.toString())
+      })
+    }
+  }
+
+  const toastError = (status: boolean, txt: string) => {
+    toast({
+      title: status ? 'Success' : 'Failed',
+      description: txt,
+      duration: 3000,
+      status: status ? 'success' : 'error',
+    })
   }
 
   return <Flex width='100%'
@@ -237,11 +303,32 @@ export const ProfilePage: React.FC = () => {
           {(userExt.length > 0 && userExt[0].bio.length > 0 && userExt[0].bio[0]) ?? 'No biography'}
         </Text>
       </Flex>
-      <Button
-        colorScheme='regular'
-        onClick={() => {
-          navigate('/setting')
-        }}> Profile settings </Button>
+
+      <Skeleton width='100%'
+        borderRadius={16}
+        isLoaded={!loading && subscribeesState === FeatureState.Idle}>
+        {
+          profileId === principalId ?
+            <Button colorScheme='regular'
+              onClick={() => {
+                navigate('/setting')
+              }}> Profile settings
+            </Button> :
+            <Button variant='outline'
+              colorScheme='regular'
+              width='100%'
+              isLoading={subscribing}
+              disabled={loading || subscribing}
+              onClick={() => {
+                handleSubscribe()
+              }} >
+              {subscribees?.includes(profileId) ?
+                "Unsubscribe" :
+                "Subscribe by DBOX"
+              }</Button>
+        }
+      </Skeleton>
+
     </Flex>
 
   </Flex>
