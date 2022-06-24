@@ -116,7 +116,7 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
           {userExt[0]?.name[0] ?? 'Unnamed'}
         </Text>
         <Flex height='32px' alignItems='center'>
-          {ICNSReverseName && <a href={"https://" + ICNSReverseName + ".host"}>
+          {ICNSReverseName && <a href={"https://" + ICNSReverseName + ".xyz"}>
             <Circle size='30px'
               border='1.5px solid #2663FF'>
               <IoMdLink color="#2663FF" size='18px' />

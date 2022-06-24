@@ -64,7 +64,7 @@ export const SettingPage: React.FC = () => {
             </Flex>
           </Flex>
           <Flex height='32px' alignItems='center'>
-            <a href={"https://" + reverseName + ".host"}>
+            <a href={"https://" + reverseName + ".xyz"}>
               <Circle size='30px'
                 border='1.5px solid #2663FF'>
                 <IoMdLink color="#2663FF" size='18px' />
@@ -109,7 +109,7 @@ export const SettingPage: React.FC = () => {
             <Switch defaultChecked isDisabled colorScheme='regular' />
           </Flex>
           <Flex alignItems='center'>
-            <a href={"https://" + reverseName + ".host"}>
+            <a href={"https://" + reverseName + ".xyz"}>
               <Circle size='30px'
                 marginRight='10px'
                 border='1.5px solid #2663FF'
@@ -119,7 +119,7 @@ export const SettingPage: React.FC = () => {
             </a>
             <Input bgColor='#EDF2F7'
               disabled
-              defaultValue={reverseName + '.host'}
+              defaultValue={reverseName + '.xyz'}
               borderRadius='10px' />
           </Flex>
         </Flex>
