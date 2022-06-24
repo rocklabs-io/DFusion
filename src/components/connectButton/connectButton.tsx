@@ -115,6 +115,9 @@ export const ConnectButton = () => {
           margin='10px 0'
           icon={<MdFavoriteBorder color='black' opacity={0.6} size={24} />}
           borderRadius={10}
+          onClick={() => {
+            navigate('/favorites')
+          }}
         >Favorites</MenuItem>
         <MenuItem
           margin='10px 0'

@@ -146,7 +146,7 @@ export const FollowerPage: React.FC = () => {
                 name={profileId}
                 variant="marble" />
               <Flex height='32px' alignItems='center'>
-                <a href={"https://" + reverseName + ".host"}>
+                <a href={"https://" + reverseName + ".xyz"}>
                   <Circle size='30px'
                     border='1.5px solid #2663FF'>
                     <IoMdLink color="#2663FF" size='18px' />

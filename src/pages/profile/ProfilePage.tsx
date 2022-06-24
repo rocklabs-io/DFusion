@@ -252,7 +252,7 @@ export const ProfilePage: React.FC = () => {
               <Flex height='32px' alignItems='center'>
                 {
                   icnsHost ?
-                    <a href={"https://" + icnsName + ".host"}>
+                    <a href={"https://" + icnsName + ".xyz"}>
                       <Circle size='30px'
                         border='1.5px solid #2663FF'>
                         <IoMdLink color="#2663FF" size='18px' />

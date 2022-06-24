@@ -12,6 +12,7 @@ import { Header } from './components/header';
 import "@fontsource/roboto"
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { SearchPage } from './pages/search';
+import { FavoritesPage } from './pages/favorites';
 
 declare global {
   interface Window { ic: any; }
@@ -93,6 +94,7 @@ const App = () => {
               <Route path="/follower/:pid" element={<FollowerPage />} />
               <Route path="/following/:pid" element={<FollowingPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/entry/:id" element={<ContentPage />} />
               <Route path="/search/:qtext" element={<SearchPage />} />
