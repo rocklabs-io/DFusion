@@ -32,7 +32,7 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
   }, [dfusionActor])
 
   useEffect(() => {
-    setFollowed(following.some((e: any)=> e.toString() === pid.toString()))
+    setFollowed(following.some((e: any) => e.toString() === pid.toString()))
   }, [following, pid])
 
   useEffect(() => {
@@ -96,6 +96,9 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
     margin='10px 0'
     borderRadius={20}>
     <Circle cursor='pointer'
+      onClick={()=>{
+        window.open('/profile/'+pid.toString(), '_blank')
+      }}
       boxShadow='1px 1px 10px rgba(0, 0, 0, 0.2)'>
       <Avatar size={80}
         name={pid.toString()}
@@ -120,6 +123,7 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
             </Circle>
           </a>}
           &nbsp;&nbsp;
+
           <Button
             fontWeight='medium'
             colorScheme='regular'
@@ -142,8 +146,11 @@ export const UserBar = ({ pid }: { pid: Principal }) => {
             onClick={() => {
               handleFollow()
             }}>
-            {followed ? (hover ? 'Unfollow' : 'Following') : 'Follow'}
+            {followed
+              ? (hover ? 'Unfollow' : 'Following')
+              : 'Follow'}
           </Button>
+
         </Flex>
       </Flex>
       <Badge textTransform='lowercase'

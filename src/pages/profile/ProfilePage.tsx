@@ -51,8 +51,8 @@ export const ProfilePage: React.FC = () => {
   }, [pid])
 
   useEffect(()=>{
-    if (!valid)
-      toastError(false, 'Invalid User Profile Url')
+    if (!valid){}
+      // toastError(false, 'Invalid User Profile Url')
   }, [valid])
 
   /**

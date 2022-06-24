@@ -41,7 +41,7 @@ export const userExtSlice = createSlice({
       )
     },
     setAll: (state, action: PayloadAction<TypeUserExt>) => {
-      state = {...state, ...action.payload}
+      return {...state, ...action.payload}
     },
     setFollow: (state, action: PayloadAction<Principal>) => {
       state.following.push(action.payload)

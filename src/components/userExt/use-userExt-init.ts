@@ -22,11 +22,12 @@ export const useUserExtInit = () => {
   useEffect(() => {
     if (principalId
       && isConnected
-      && userExtState !== FeatureState.NotStarted) {
+      && userExtState === FeatureState.NotStarted) {
       dispatch(userExtAction.setUserExtState(FeatureState.Loading))
       dfusionActor?.getUser(Principal.fromText(principalId))
         .then(res => {
           if (res.length > 0) {
+            console.log(res)
             res[0] && dispatch(userExtAction.setAll(res[0]))
             dispatch(userExtAction.setUserExtState(FeatureState.Idle))
           }
