@@ -3,9 +3,6 @@
     "dfusion": {
       "main": "src/dfusion/dfusion.mo"
     },
-    "bucket": {
-      "main": "src/dfusion/bucket.mo"
-    },
     "nft": {
       "main": "src/ic-nft/motoko/src/main.mo"
     },
@@ -20,6 +17,23 @@
         "cargo build --target wasm32-unknown-unknown --package index --release",
         "ic-cdk-optimizer target/wasm32-unknown-unknown/release/index.wasm -o target/wasm32-unknown-unknown/release/index_opt.wasm"
       ]
+    },
+    "dfusion_test": {
+      "main": "src/dfusion/dfusion.mo"
+    },
+    "bucket_test": {
+      "main": "src/dfusion/bucket.mo"
+    },
+    "nft_test": {
+      "main": "src/ic-nft/motoko/src/main.mo"
+    },
+    "notification_test": {
+      "main": "src/dfusion/notify.mo"
+    },
+    "index_test": {
+      "type": "custom",
+      "candid": "src/index/index.did",
+      "wasm": "target/wasm32-unknown-unknown/release/index_opt.wasm"
     }
   },
   "defaults": {
