@@ -1,2 +1,0 @@
-type Result = variant { Ok; Err : text };
-service : () -> { add : (nat64, text, text) -> (Result) }

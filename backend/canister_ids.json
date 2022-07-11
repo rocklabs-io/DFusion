@@ -1,17 +1,29 @@
 {
-  "bucket": {
+  "bucket_test": {
     "ic": "bw7z7-vqaaa-aaaai-qkjrq-cai"
   },
   "dfusion": {
+    "ic": "itxs3-oiaaa-aaaai-qniua-cai"
+  },
+  "dfusion_test": {
     "ic": "br67l-yiaaa-aaaai-qkjra-cai"
   },
   "index": {
+    "ic": "i5v7t-vyaaa-aaaai-qniva-cai"
+  },
+  "index_test": {
     "ic": "dsgd3-3yaaa-aaaai-qmuua-cai"
   },
   "nft": {
+    "ic": "i2uzh-yaaaa-aaaai-qnivq-cai"
+  },
+  "nft_test": {
     "ic": "wrciq-pqaaa-aaaai-qleya-cai"
   },
   "notification": {
+    "ic": "iuwup-dqaaa-aaaai-qniuq-cai"
+  },
+  "notification_test": {
     "ic": "c2k5h-zqaaa-aaaai-qlm6q-cai"
   }
 }
