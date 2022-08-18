@@ -11,7 +11,6 @@ import { Principal } from "@dfinity/principal";
 import { UserExt } from "src/canisters/model/dfusion.did";
 import { useNavigate } from "react-router-dom";
 import { ICNSReverseController } from "@psychedelic/icns-js";
-const {Helmet} = require("react-helmet"); 
 
 export const ContentPage: React.FC = () => {
   // @ts-ignore
@@ -96,14 +95,6 @@ export const ContentPage: React.FC = () => {
                 <Tag>{createTime}</Tag>
               </Stack>
             </Box>
-            <Helmet>
-              {title && <title>{title}</title> }
-              {title && <meta name="twitter:title" content={title} />}
-              {cover && <meta name="twitter:image" content={cover} />}
-              {/* <meta name="twitter:description" content=""/> */}
-              {title && <meta name="og:title" content={title} />}
-              {cover && <meta name="og:image" content={cover} />}
-            </Helmet>
             <Editor defaultValue="loading" value={content} readOnly={true} />
           </Stack>
         </>

@@ -20,6 +20,7 @@ declare global {
 global.Buffer = global.Buffer || require('buffer').Buffer;
 
 const App = () => {
+
   const theme = extendTheme({
     components: {
       Button: {

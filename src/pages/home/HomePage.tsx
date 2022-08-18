@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import "@fontsource/roboto/300.css"
 import { IoLogoTwitter } from "react-icons/io5";
-const { Helmet } = require('react-helmet')
 
 export const HomePage: React.FC = () => {
 
@@ -41,12 +40,6 @@ export const HomePage: React.FC = () => {
     backgroundRepeat='no-repeat'
     backgroundSize='cover'
     backgroundPosition='center center'>
-    <Helmet>
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="og:title" content="DFusion" />
-      <meta name="twitter:description" content="Spread the idea of Web3." />
-      <meta name="og:image" content="https://nftstorage.link/ipfs/bafkreifqysuqzzip2gvmbnaflpufsur74twjm2muotf7ojxnnbzdyrinpu" />
-    </Helmet>
     <Flex className={styles["page-content"]}
       paddingTop='60px'
       height='calc(100vh - 44px)'>
