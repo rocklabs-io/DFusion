@@ -22,6 +22,7 @@ export const ContentPage: React.FC = () => {
   const [createTime, setTime] = useState<string>("");
   const [creatorExt, setCreatorExt] = useState<UserExt | undefined>(undefined)
   const [ICNSName, setICNSName] = useState('')
+  const [cover, setCover] = useState('')
   const dfusionActor = useDfusionActor(undefined)
   const icnsActor = new ICNSReverseController()
   const navigate = useNavigate()
@@ -38,6 +39,7 @@ export const ContentPage: React.FC = () => {
         setTime(getTimeString(entry.createAt))
         setTitle(entry.title ? entry.title.replace('#', "") : "Untitled")
         setContent(entry.content ? entry.content : "No content.")
+        setCover(entry.cover?.length > 0 ? entry.cover[0] as string : '')
       } else {
         setContent("Error")
       }

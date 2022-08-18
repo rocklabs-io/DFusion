@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
         <Box>
           <Box marginLeft='50px'
             boxSize='88px'
-            backdropFilter='blur(40px)'/>
+            backdropFilter='blur(40px)' />
           <Box boxSize='50px'
             backdropFilter='blur(40px)' />
         </Box>
@@ -126,14 +126,18 @@ export const HomePage: React.FC = () => {
       backdropFilter='blur(40px)'>
       <Flex alignItems='center'
         cursor='pointer'>
-        <IoLogoTwitter fill='rgba(0, 0, 0, 0.1)' size='24px' />
-        &nbsp;Twitter
+        <a href="https://twitter.com/rocklabs_io" target="_blank" rel="noopener noreferrer">
+          <IoLogoTwitter fill='rgba(0, 0, 0, 0.1)' size='24px' />
+          &nbsp;Twitter
+        </a>
       </Flex>
       <Flex alignItems='center'
         cursor='pointer'>
-        <Box height='20px' margin='0 10px' borderLeft='1px solid #CCCCCC' />
-        <Image src='rocklabs-icon.svg'></Image>
-        &nbsp;Rocklabs
+        <a href="https://rocklabs.io" target="_blank" rel="noopener noreferrer">
+          <Box height='20px' margin='0 10px' borderLeft='1px solid #CCCCCC' />
+          <Image src='rocklabs-icon.svg'></Image>
+          &nbsp;Rocklabs
+        </a>
       </Flex>
     </Flex>
   </Flex>
