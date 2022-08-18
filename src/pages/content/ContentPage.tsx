@@ -11,6 +11,7 @@ import { Principal } from "@dfinity/principal";
 import { UserExt } from "src/canisters/model/dfusion.did";
 import { useNavigate } from "react-router-dom";
 import { ICNSReverseController } from "@psychedelic/icns-js";
+const {Helmet} = require("react-helmet"); 
 
 export const ContentPage: React.FC = () => {
   // @ts-ignore
@@ -22,6 +23,7 @@ export const ContentPage: React.FC = () => {
   const [createTime, setTime] = useState<string>("");
   const [creatorExt, setCreatorExt] = useState<UserExt | undefined>(undefined)
   const [ICNSName, setICNSName] = useState('')
+  const [cover, setCover] = useState('')
   const dfusionActor = useDfusionActor(undefined)
   const icnsActor = new ICNSReverseController()
   const navigate = useNavigate()
@@ -38,6 +40,7 @@ export const ContentPage: React.FC = () => {
         setTime(getTimeString(entry.createAt))
         setTitle(entry.title ? entry.title.replace('#', "") : "Untitled")
         setContent(entry.content ? entry.content : "No content.")
+        setCover(entry.cover?.length > 0 ? entry.cover[0] as string : '')
       } else {
         setContent("Error")
       }
@@ -93,6 +96,12 @@ export const ContentPage: React.FC = () => {
                 <Tag>{createTime}</Tag>
               </Stack>
             </Box>
+            <Helmet>
+              {title && <title>{title}</title> }
+              {title && <meta name="twitter:title" content={title} />}
+              {cover && <meta name="og:image" content={cover} />}
+              {cover && <meta name="twitter:image" content={cover} />}
+            </Helmet>
             <Editor defaultValue="loading" value={content} readOnly={true} />
           </Stack>
         </>
