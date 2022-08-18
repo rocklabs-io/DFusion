@@ -99,8 +99,10 @@ export const ContentPage: React.FC = () => {
             <Helmet>
               {title && <title>{title}</title> }
               {title && <meta name="twitter:title" content={title} />}
-              {cover && <meta name="og:image" content={cover} />}
               {cover && <meta name="twitter:image" content={cover} />}
+              {/* <meta name="twitter:description" content=""/> */}
+              {title && <meta name="og:title" content={title} />}
+              {cover && <meta name="og:image" content={cover} />}
             </Helmet>
             <Editor defaultValue="loading" value={content} readOnly={true} />
           </Stack>
