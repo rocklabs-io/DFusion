@@ -124,21 +124,22 @@ export const HomePage: React.FC = () => {
       fontSize='14px'
       color='rgba(0, 0, 0, 0.6)'
       backdropFilter='blur(40px)'>
-      <Flex alignItems='center'
-        cursor='pointer'>
-        <a href="https://twitter.com/rocklabs_io" target="_blank" rel="noopener noreferrer">
+      <a href="https://twitter.com/rocklabs_io" target="_blank" rel="noopener noreferrer">
+        <Flex alignItems='center'
+          cursor='pointer'>
           <IoLogoTwitter fill='rgba(0, 0, 0, 0.1)' size='24px' />
           &nbsp;Twitter
-        </a>
-      </Flex>
-      <Flex alignItems='center'
-        cursor='pointer'>
-        <a href="https://rocklabs.io" target="_blank" rel="noopener noreferrer">
+        </Flex>
+      </a>
+      <a href="https://rocklabs.io" target="_blank" rel="noopener noreferrer">
+        <Flex alignItems='center'
+          cursor='pointer'>
           <Box height='20px' margin='0 10px' borderLeft='1px solid #CCCCCC' />
           <Image src='rocklabs-icon.svg'></Image>
           &nbsp;Rocklabs
-        </a>
-      </Flex>
+
+        </Flex>
+      </a>
     </Flex>
   </Flex>
   );
