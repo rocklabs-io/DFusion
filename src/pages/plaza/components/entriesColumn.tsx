@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, Skeleton, Tabs, TabList, TabPanels, Tab, TabPanel, Center } from "@chakra-ui/react";
+import { Text, Skeleton, Tabs, TabList, TabPanels, Tab, TabPanel, Center, toast, useToast } from "@chakra-ui/react";
 import { useDfusionActor } from "src/canisters/actor";
 import { Flex } from "@chakra-ui/react";
 import { useUserExtStore } from "src/store/features/userExt";
@@ -16,6 +16,7 @@ export const EntriesColumn = () => {
   const { following } = useUserExtStore()
   const { principalId } = usePlugStore()
   const [loading, setLoading] = useState(true)
+  const toast = useToast()
 
   // following list 
   useEffect(() => {
@@ -53,7 +54,13 @@ export const EntriesColumn = () => {
         setMounted(true)
       }
     }).catch(error => {
-      console.log('error: ', error)
+      console.error(error)
+      toast({
+        title: 'Fail to fetch data',
+        description: 'Please check the network.',
+        status: 'error',
+        duration: 3000
+      })
     }).finally(() => {
       setLoading(false)
     })
