@@ -83,6 +83,7 @@ export const EntriesColumn = () => {
             color='#9B9B9B'
             _selected={{
               color: 'regular.400',
+              borderBottom: '2px solid blue'
             }}
             _focus={{
               border: 'none'
@@ -91,6 +92,7 @@ export const EntriesColumn = () => {
             color='#9B9B9B'
             _selected={{
               color: 'regular.400',
+              borderBottom: '2px solid blue'
             }}
             _focus={{
               border: 'none'
