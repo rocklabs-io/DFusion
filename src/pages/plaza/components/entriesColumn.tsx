@@ -82,12 +82,18 @@ export const EntriesColumn = () => {
           <Tab fontWeight='bold'
             color='#9B9B9B'
             _selected={{
-              color: 'regular.400'
+              color: 'regular.400',
+            }}
+            _focus={{
+              border: 'none'
             }} >Following</Tab>
           <Tab fontWeight='bold'
             color='#9B9B9B'
             _selected={{
-              color: 'regular.400'
+              color: 'regular.400',
+            }}
+            _focus={{
+              border: 'none'
             }}>Latests</Tab>
         </TabList>
         <TabPanels>
