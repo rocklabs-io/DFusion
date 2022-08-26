@@ -4,9 +4,12 @@ import { UserExt } from "src/canisters/model/dfusion.did";
 import { FeatureState } from "src/store/models";
 import { RootState } from "src/store/store";
 
+interface TypeDraft {[index: string]: {title: string, content: string}}
 
 interface TypeUserExt extends UserExt {
   subscribees?: string[];
+  drafts?: TypeDraft;
+
   subscribeesState?: FeatureState;
   userExtState?: FeatureState;
 }
@@ -21,6 +24,7 @@ const initialState: TypeUserExt = {
   following: [],
   followers: [],
   subscribees: [],
+  drafts: {},
   subscribeesState: FeatureState.NotStarted,
   userExtState: FeatureState.NotStarted,
 }
@@ -29,6 +33,9 @@ export const userExtSlice = createSlice({
   name: 'userExt',
   initialState,
   reducers: {
+    setDrafts: (state, action: PayloadAction<TypeDraft>) => {
+      state.drafts = action.payload
+    },
     setAllLikes: (state, action: PayloadAction<Array<bigint>>) => {
       state.likes = action.payload
     },

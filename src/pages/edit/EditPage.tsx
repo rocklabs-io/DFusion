@@ -1,16 +1,18 @@
-import React, { createRef, useMemo, useRef } from "react";
+import React, { createRef, useEffect, useMemo, useRef } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Editor from "rich-markdown-editor";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center } from "@chakra-ui/react";
+import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center, useEditable } from "@chakra-ui/react";
 import { useBatchHook, useCreateEntryBatch } from "src/batch";
 import { Batch } from "src/batch/model";
 import { Result_1 } from "src/canisters/model/dfusion.did";
 import RichMarkdownEditor from "rich-markdown-editor";
-// import { NFTStorage } from "nft.storage";
+import { userExtAction, useUserExtStore } from "src/store/features/userExt";
+import { useAppDispatch } from "src/store";
+
 const { NFTStorage } = require('nft.storage')
 
 export const EditPage: React.FC = () => {
@@ -20,11 +22,25 @@ export const EditPage: React.FC = () => {
   const [nft, setNft] = useState(false)
   let navigate = useNavigate()
   const toast = useToast()
-  const dfusionActor = useDfusionActor(Identity.caller)
+  const { drafts } = useUserExtStore()
+  let { search } = useLocation();
 
+  const query = new URLSearchParams(search);
+  const dispatch = useAppDispatch()
+  const [onDraft, setOnDraft] = useState(query.get('onDraft'))
+  
   // storage client
   const NFT_STORAGE_TOKEN = `${process.env.REACT_APP_IPFS_TOKEN}`
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
+
+  useEffect(() => {
+    if (onDraft && drafts){
+      setTitle(drafts[onDraft].title)
+      // setContent()
+    }
+  }, [onDraft])
+
+
   const uploadCar = async (img: File) => {
     // // convert image to blob
     const { car } = await NFTStorage.encodeBlob(img)
@@ -83,6 +99,32 @@ export const EditPage: React.FC = () => {
     setContent(txt)
   }
 
+  const handleSaveDraft = () => {
+    // edit existing draft or generate a random string as index
+    const rand = onDraft ?? (Math.random() + 1).toString(36).substring(7)
+    // update it
+    const newDraft = {
+      ...drafts,
+      [rand]: {
+        title: title,
+        content: content
+      }
+    }
+    // change the local state
+    setOnDraft(rand)
+
+    const jsonData = JSON.stringify(newDraft)
+    // get the new draft
+    localStorage.setItem('dfusion_drafts', jsonData)
+    dispatch(userExtAction.setDrafts(newDraft))
+    toast({
+      title: "Success",
+      description: 'You have saved to your local draft: '+rand,
+      status: "success",
+      duration: 3000
+    })
+  }
+
   const edit = useRef<RichMarkdownEditor>(null)
 
   return (
@@ -101,6 +143,15 @@ export const EditPage: React.FC = () => {
             variant='outline'>
             Upload banner
           </Button> */}
+          <Button onClick={handleSaveDraft}
+            width='120px'
+            borderRadius={10}
+            marginRight='12px'
+            colorScheme='regular'
+            variant='outline'
+            isLoading={loading}
+            disabled={loading || !title}>
+            Save Draft </Button>
           <Flex alignItems='center'
             border='1px solid #6993FF'
             borderRadius={12}>
@@ -128,6 +179,7 @@ export const EditPage: React.FC = () => {
               disabled={loading || !title}>
               Publish </Button>
           </Flex>
+
         </Flex>
         {/* <Center borderRadius={10}
           bgColor='gray.200' h='49px'
@@ -170,6 +222,7 @@ export const EditPage: React.FC = () => {
           theme={lightTheme}
           className={styles.editor}
           onChange={(value) => onChange(value())}
+          value={drafts && onDraft ? drafts[onDraft].content : ''}
           placeholder={'Hello creator! Write something here.'}
           onImageUploadStart={() => {
             toast({

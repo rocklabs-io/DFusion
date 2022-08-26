@@ -22,7 +22,6 @@ export const ProfilePage: React.FC = () => {
   const [userExt, setUserExt] = useState<Array<UserExt>>([])
   const { following,
     subscribees,
-    userExtState,
     subscribeesState } = useUserExtStore()
   const { principalId } = usePlugStore()
   const [loading, setLoading] = useState(true)
@@ -48,7 +47,7 @@ export const ProfilePage: React.FC = () => {
     } catch (error) {
       setValid(false)
     }
-  }, [pid])
+  }, [pid, principalId])
 
   useEffect(()=>{
     if (!valid){}
@@ -310,6 +309,7 @@ export const ProfilePage: React.FC = () => {
         {
           profileId === principalId ?
             <Button colorScheme='regular'
+              width='100%'
               onClick={() => {
                 navigate('/setting')
               }}> Profile settings

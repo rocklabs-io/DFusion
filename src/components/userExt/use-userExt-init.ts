@@ -19,6 +19,14 @@ export const useUserExtInit = () => {
 
   const dispatch = useAppDispatch()
 
+  useEffect(()=>{
+    const value = localStorage.getItem("dfusion_drafts")
+    if (typeof value === 'string') {
+        const parse = JSON.parse(value) // ok
+        dispatch(userExtAction.setDrafts(parse))
+    }
+  }, [])
+
   useEffect(() => {
     if (principalId
       && isConnected
