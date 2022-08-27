@@ -4,7 +4,11 @@ import { UserExt } from "src/canisters/model/dfusion.did";
 import { FeatureState } from "src/store/models";
 import { RootState } from "src/store/store";
 
-interface TypeDraft {[index: string]: {title: string, content: string}}
+interface TypeDraft {[index: string]: {
+  title: string, 
+  content: string,
+  time?: number
+}}
 
 interface TypeUserExt extends UserExt {
   subscribees?: string[];
@@ -84,5 +88,3 @@ export const userExtAction = userExtSlice.actions;
 export const selectUserExtState = (state: RootState) => state.userExt;
 
 export default userExtSlice.reducer;
-
-

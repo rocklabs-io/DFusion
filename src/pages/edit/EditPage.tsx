@@ -107,7 +107,8 @@ export const EditPage: React.FC = () => {
       ...drafts,
       [rand]: {
         title: title,
-        content: content
+        content: content,
+        time: new Date().getTime()
       }
     }
     // change the local state
