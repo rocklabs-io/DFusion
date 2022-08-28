@@ -28,13 +28,13 @@ export const EditPage: React.FC = () => {
   const query = new URLSearchParams(search);
   const dispatch = useAppDispatch()
   const [onDraft, setOnDraft] = useState(query.get('onDraft'))
-  
+
   // storage client
   const NFT_STORAGE_TOKEN = `${process.env.REACT_APP_IPFS_TOKEN}`
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
 
   useEffect(() => {
-    if (onDraft && drafts){
+    if (onDraft && drafts) {
       setTitle(drafts[onDraft].title)
       // setContent()
     }
@@ -82,6 +82,12 @@ export const EditPage: React.FC = () => {
             duration: 3000
           })
         }
+        if (onDraft) {
+          var tmp = { ...drafts }
+          delete tmp[onDraft]
+          dispatch(userExtAction.setDrafts(tmp))
+          localStorage.setItem('dfusion_drafts', JSON.stringify(tmp))
+        }
       }
     }).finally(() => {
       setLoading(false)
@@ -120,7 +126,7 @@ export const EditPage: React.FC = () => {
     dispatch(userExtAction.setDrafts(newDraft))
     toast({
       title: "Success",
-      description: 'You have saved to your local draft: '+rand,
+      description: 'You have saved to your local draft: ' + rand,
       status: "success",
       duration: 3000
     })
