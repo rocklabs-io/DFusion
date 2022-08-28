@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center } from "@chakra-ui/react"
+import { Badge, Button, Flex, Text, Circle, useToast, Skeleton, Center, Icon } from "@chakra-ui/react"
 import { UserExt } from "../../canisters/model/dfusion.did"
 import { parseMD, shortPrincipal } from "src/utils/utils";
 import { Identity, useDfusionActor } from "src/canisters/actor";
@@ -10,6 +10,7 @@ import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch, usePlugStore } from "src/store";
 import { IoMdLink } from "react-icons/io";
 import { UserBar } from "./components";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 export const DraftsPage: React.FC = () => {
 
@@ -24,6 +25,7 @@ export const DraftsPage: React.FC = () => {
   const toast = useToast()
   const [profileId, setProfileId] = useState('')
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     pid ?
@@ -64,17 +66,33 @@ export const DraftsPage: React.FC = () => {
           <Text noOfLines={1} fontSize={14}>
             {parseMD(drafts[item].content)}
           </Text>
-          <Badge textTransform='lowercase'
-            borderRadius='10px'
-            fontSize={14}
-            fontWeight='regular'
-            marginTop='8px'
-            padding='0 10px'
-            opacity={0.6}
-            height='fit-content'
-            width='fit-content'>
+          <Flex justifyContent='space-between'
+            alignItems='center'>
+            <Badge textTransform='lowercase'
+              borderRadius='10px'
+              fontSize={14}
+              fontWeight='regular'
+              marginTop='8px'
+              padding='0 10px'
+              opacity={0.6}
+              height='fit-content'
+              width='fit-content'>
               {drafts[item].time ? new Date(drafts[item].time as number).toLocaleString() : 'Unknown'}
             </Badge>
+            <Icon as={MdOutlineDeleteForever} 
+              color='red.400'
+              _hover={{
+                color: 'red.600'
+              }}
+              boxSize='20px'
+              onClick={(e)=>{
+                e.stopPropagation()
+                var tmp = {...drafts}
+                delete tmp[item]
+                dispatch(userExtAction.setDrafts(tmp))
+                localStorage.setItem('dfusion_drafts', JSON.stringify(tmp))
+              }}/>
+          </Flex>
         </Flex>)
   }, [drafts])
 
@@ -83,26 +101,26 @@ export const DraftsPage: React.FC = () => {
     maxW={940}
     margin='0 auto'>
     <Flex flex='1' maxW={620} margin='10px 20px' flexDir='column'>
-    <Text fontWeight='bold' lineHeight='28px' fontSize={24} >
-      Your Drafts
-    </Text>
-    <Text color='red.300'>
-      These drafts are stored locally. <br/>Please do not empty the browser cache and publish the article soon.
-    </Text>
-    {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
-    {!loading && draftsArray && (draftsArray.length > 0 ?
-      draftsArray?.reverse() :
-      <Center margin='20px 0'
-        width='620px'
-        height='240px'
-        borderRadius={20}
-        boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
-      >
-        <Text fontSize='2xl'>
-          🥱 No drafts found yet
-        </Text>
-      </Center>)}
-  </Flex>
+      <Text fontWeight='bold' lineHeight='28px' fontSize={24} >
+        Your Drafts
+      </Text>
+      <Text color='red.300'>
+        These drafts are stored locally. <br />Please do not empty the browser cache and publish the article soon.
+      </Text>
+      {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
+      {!loading && draftsArray && (draftsArray.length > 0 ?
+        draftsArray?.reverse() :
+        <Center margin='20px 0'
+          width='620px'
+          height='240px'
+          borderRadius={20}
+          boxShadow='0 0 10px rgba(0, 0, 0, 0.2)'
+        >
+          <Text fontSize='2xl'>
+            🥱 No drafts found yet
+          </Text>
+        </Center>)}
+    </Flex>
   </Flex >
 }
 
