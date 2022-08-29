@@ -159,9 +159,8 @@ shared(init_msg) actor class Drafts(
         content = newDraft.content;
         time = Time.now();
       };
-      Debug.print("Temp: " # debug_show(draft));
+      drafts := TrieSet.delete(drafts, draft, Hash.hash(draft.id), draftEqual);
       drafts := TrieSet.put(drafts, draft, Hash.hash(draft.id), draftEqual);
-      Debug.print("Drafts: " # debug_show(drafts));
       userDraftsMap.put(caller, drafts);
       #ok(newDraft.id)
     } else {
@@ -179,10 +178,12 @@ shared(init_msg) actor class Drafts(
   };
 
   public shared(msg) func deleteDraft(id: Nat): async Result.Result<Nat, Text>{
+    let caller = msg.caller;
 		var drafts = userRegister(msg.caller);
     let target = createDraft(id);
     if (TrieSet.mem(drafts, target, Hash.hash(id), draftEqual)){
       drafts := TrieSet.delete(drafts, target, Hash.hash(id), draftEqual);
+      userDraftsMap.put(caller, drafts);
       #ok(id)
     } else {
       #err("Draft doesn't exist")
