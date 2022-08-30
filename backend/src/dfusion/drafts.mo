@@ -40,6 +40,12 @@ shared(init_msg) actor class Drafts(
   private stable var authEntries : [(Principal, Bool)] = [(owner, true)];
 	private var auths = TrieMap.fromEntries<Principal, Bool>(authEntries.vals(), Principal.equal, Principal.hash);
 
+  public shared(msg) func reset() {
+		assert(_checkAuth(msg.caller));
+    counter := 0;
+    userDraftsMap := TrieMap.TrieMap<Principal, TrieSet.Set<Draft>>(Principal.equal, Principal.hash);
+  };
+
 	private stable let config: Config = {
     var countLimit = 3;
     var titleLimit = 256;
