@@ -13,8 +13,8 @@ import TrieSet "mo:base/TrieSet";
 import Types "./types";
 
 shared(init_msg) actor class Drafts(
-  owner_: Principal
-) = this{
+    owner_: Principal
+  ) = this{
   public type Draft = {
     id: Nat;
     title: Text;
@@ -47,7 +47,7 @@ shared(init_msg) actor class Drafts(
   };
 
 	private stable let config: Config = {
-    var countLimit = 3;
+    var countLimit = 5;
     var titleLimit = 256;
 		var contentLimit = 2 * 1024 * 1024;
   };
@@ -55,7 +55,7 @@ shared(init_msg) actor class Drafts(
   system func preupgrade() {
     userDraftsArray := Iter.toArray(userDraftsMap.entries());
 		authEntries := Iter.toArray(auths.entries());
-  	};
+  };
 
 	system func postupgrade() {
 		userDraftsArray := [];
@@ -128,16 +128,16 @@ shared(init_msg) actor class Drafts(
   // set user drafts with id
   public shared(msg) func setDraft(newDraft: Draft): async Result.Result<Nat, Text>{
     if(Text.size(newDraft.title) == 0){
-      return #err("Title can not be empty")
+      return #err("Title can not be empty.")
     };
     if(Text.size(newDraft.content) == 0){
-      return #err("Content can not be empty")
+      return #err("Content can not be empty.")
     };
     if (Text.size(newDraft.title) > config.titleLimit) {
-			return #err("Title length over limit");
+			return #err("Title length over limit.");
 		};
 		if (Text.size(newDraft.content) > config.contentLimit) {
-			return #err("Content length over limit");
+			return #err("Content length over limit.");
 		};
 
     let caller = msg.caller;
@@ -145,7 +145,7 @@ shared(init_msg) actor class Drafts(
     if ( newDraft.id == 0 ) {
       // check draft number limit
       if (TrieSet.size(drafts) > config.countLimit) {
-        return #err("Drafts over limit");
+        return #err("Drafts over limit.");
       };
       counter += 1;
       let draft = {
@@ -195,6 +195,4 @@ shared(init_msg) actor class Drafts(
       #err("Draft doesn't exist")
     }
   };
-
-
 }
