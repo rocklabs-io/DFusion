@@ -5,6 +5,7 @@ import { FeatureState } from "src/store/models";
 import { RootState } from "src/store/store";
 
 interface TypeDraft {[index: string]: {
+  id: number,
   title: string, 
   content: string,
   time?: number

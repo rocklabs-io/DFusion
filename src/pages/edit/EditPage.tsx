@@ -12,6 +12,7 @@ import { Result_1 } from "src/canisters/model/dfusion.did";
 import RichMarkdownEditor from "rich-markdown-editor";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
 import { useAppDispatch } from "src/store";
+import { useDraftsActor } from "src/canisters/actor/use-drafts-actor";
 
 const { NFTStorage } = require('nft.storage')
 
@@ -24,21 +25,23 @@ export const EditPage: React.FC = () => {
   const toast = useToast()
   const { drafts } = useUserExtStore()
   let { search } = useLocation();
+  const draftsActor = useDraftsActor(Identity.caller ?? undefined)
 
   const query = new URLSearchParams(search);
   const dispatch = useAppDispatch()
-  const [onDraft, setOnDraft] = useState(query.get('onDraft'))
+  const [onDraft, setOnDraft] = useState(Number(query.get('onDraft')) ?? 0)
 
   // storage client
   const NFT_STORAGE_TOKEN = `${process.env.REACT_APP_IPFS_TOKEN}`
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
 
   useEffect(() => {
+    // only execute in the beginning
     if (onDraft && drafts) {
-      setTitle(drafts[onDraft].title)
-      // setContent()
+      setTitle(drafts[onDraft.toString()]?.title)
+      setContent(drafts[onDraft.toString()]?.content)
     }
-  }, [onDraft])
+  }, [onDraft, drafts])
 
 
   const uploadCar = async (img: File) => {
@@ -66,6 +69,16 @@ export const EditPage: React.FC = () => {
           duration: 3000
         })
       } else if ('ok' in result!) {
+        // delete draft 
+        if (onDraft) {
+          var tmp = { ...drafts }
+          delete tmp[onDraft]
+          dispatch(userExtAction.setDrafts(tmp))
+          localStorage.setItem('dfusion_drafts', JSON.stringify(tmp))
+          draftsActor?.deleteDraft(BigInt(onDraft)).then(()=>{
+            console.log('deleted')
+          })
+        }
         if (!nft) {
           toast({
             title: "Success",
@@ -81,12 +94,6 @@ export const EditPage: React.FC = () => {
             status: "success",
             duration: 3000
           })
-        }
-        if (onDraft) {
-          var tmp = { ...drafts }
-          delete tmp[onDraft]
-          dispatch(userExtAction.setDrafts(tmp))
-          localStorage.setItem('dfusion_drafts', JSON.stringify(tmp))
         }
       }
     }).finally(() => {
@@ -107,28 +114,51 @@ export const EditPage: React.FC = () => {
 
   const handleSaveDraft = () => {
     // edit existing draft or generate a random string as index
-    const rand = onDraft ?? (Math.random() + 1).toString(36).substring(7)
+    // const rand = onDraft ?? 0
+    // (Math.random() + 1).toString(36).substring(7)
     // update it
-    const newDraft = {
-      ...drafts,
-      [rand]: {
-        title: title,
-        content: content,
-        time: new Date().getTime()
-      }
+    setLoading(true);
+    let draft = {
+      id: BigInt(onDraft) ?? BigInt(0),
+      title: title,
+      content: content,
+      time: BigInt(new Date().getTime())
     }
     // change the local state
-    setOnDraft(rand)
-
-    const jsonData = JSON.stringify(newDraft)
-    // get the new draft
-    localStorage.setItem('dfusion_drafts', jsonData)
-    dispatch(userExtAction.setDrafts(newDraft))
-    toast({
-      title: "Success",
-      description: 'You have saved to your local draft: ' + rand,
-      status: "success",
-      duration: 3000
+    draftsActor?.setDraft(draft).then((res)=>{
+      if('ok' in res) {
+        const localDraft = {...draft, 
+          id: Number(res.ok), 
+          time: Number(draft.time) * 1000000}
+        const newDrafts = {
+          ...drafts,
+          [res.ok.toString()]: localDraft
+        }
+        console.log(localDraft.time)
+        const jsonData = JSON.stringify(newDrafts)
+        // get the new draft
+        localStorage.setItem('dfusion_drafts', jsonData)
+        dispatch(userExtAction.setDrafts(newDrafts))
+        setOnDraft(Number(res.ok))
+        toast({
+          title: "Draft saved",
+          description: 'Draft id: ' + res.ok.toString(),
+          status: "success",
+          duration: 3000
+        })
+      } else {
+        toast({
+          title: "Failed to save draft",
+          description: '' + res.err ?? 'unknown reason.',
+          status: "error",
+          duration: 3000
+        })
+      }
+    }).catch((e)=>{
+      console.error(e)
+      setLoading(false)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
@@ -157,8 +187,8 @@ export const EditPage: React.FC = () => {
             colorScheme='regular'
             variant='outline'
             isLoading={loading}
-            disabled={loading || !title}>
-            Save Draft </Button>
+            disabled={loading || !title || !(Object.keys(drafts!)?.length < 5)}>
+            {!(Object.keys(drafts!)?.length < 5) ? 'Draft Limited' : 'Save Draft' }</Button>
           <Flex alignItems='center'
             border='1px solid #6993FF'
             borderRadius={12}>
@@ -229,7 +259,7 @@ export const EditPage: React.FC = () => {
           theme={lightTheme}
           className={styles.editor}
           onChange={(value) => onChange(value())}
-          value={drafts && onDraft ? drafts[onDraft].content : ''}
+          value={drafts && onDraft ? drafts[onDraft]?.content : ''}
           placeholder={'Hello creator! Write something here.'}
           onImageUploadStart={() => {
             toast({
