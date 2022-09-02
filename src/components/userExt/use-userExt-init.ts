@@ -43,7 +43,7 @@ export const useUserExtInit = () => {
         dispatch(userExtAction.setDrafts(parse))
       }
     }
-  }, [principalId])
+  }, [principalId, draftsActor])
 
   useEffect(() => {
     if (principalId

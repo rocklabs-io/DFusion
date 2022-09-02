@@ -59,10 +59,10 @@ export const DraftsPage: React.FC = () => {
         You can archive 5 drafts. <br />
       </Text>
       {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
-      {!loading && drafts && ( Object.keys(drafts).length > 0 ?
-        Object.keys(drafts).reverse().map((item) => 
-        <DraftsBar item = {item} />)
-      :
+      {!loading && drafts && (Object.keys(drafts).length > 0 ?
+        Object.keys(drafts).reverse().map((item) =>
+          <DraftsBar key={item} item={item} />)
+        :
         <Center margin='20px 0'
           width='620px'
           height='240px'
