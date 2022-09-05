@@ -78,7 +78,7 @@ export const DraftsBar = ({ item }: { item: string }) => {
         width='fit-content'>
         {drafts![item].time ? getTimeString(BigInt(drafts![item]?.time as number)) : 'Unknown'}
       </Badge>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Warning</ModalHeader>
