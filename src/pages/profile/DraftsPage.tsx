@@ -23,11 +23,7 @@ export const DraftsPage: React.FC = () => {
   const { drafts } = useUserExtStore()
   const { reverseName, principalId } = usePlugStore()
   const [loading, setLoading] = useState(false)
-  const toast = useToast()
   const [profileId, setProfileId] = useState('')
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const draftsActor = useDraftsActor(Identity.caller)
 
   useEffect(() => {
     pid ?
@@ -58,6 +54,7 @@ export const DraftsPage: React.FC = () => {
       <Text color='grey.300'>
         You can archive 5 drafts. <br />
       </Text>
+      
       {loading && <Skeleton margin='20px 0' width='620px' height='240px' borderRadius={20} />}
       {!loading && drafts && (Object.keys(drafts).length > 0 ?
         Object.keys(drafts).reverse().map((item) =>

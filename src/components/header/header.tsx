@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import styles from './header.module.css';
 import { ConnectButton } from "../connectButton";
 import { useUserExtInit } from "../userExt/use-userExt-init";
-import { Flex } from "@chakra-ui/react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io"
 import { usePlugStore } from "src/store";
@@ -18,8 +18,6 @@ export const Header: React.FC = () => {
 
   // init all user info, valid after connect plug
   useUserExtInit()
-  const { principalId, reverseName } = usePlugStore()
-  const { name } = useUserExtStore()
 
   return (
     <div className={styles.header}>
@@ -47,7 +45,8 @@ export const Header: React.FC = () => {
             margin='0 20px'
             padding='4px'
             cursor='pointer'
-            onClick={() => { 
+            onClick={() => {
+              
               navigate('/edit')
               navigate(0)
             }}>
