@@ -5,7 +5,7 @@ import Editor from "rich-markdown-editor";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center, useEditable, Spinner } from "@chakra-ui/react";
+import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center, Text, useEditable, Spinner, Link } from "@chakra-ui/react";
 import { useBatchHook, useCreateEntryBatch } from "src/batch";
 import { Batch } from "src/batch/model";
 import { Result_1 } from "src/canisters/model/dfusion.did";
@@ -75,7 +75,7 @@ export const EditPage: React.FC = () => {
           delete tmp[onDraft]
           dispatch(userExtAction.setDrafts(tmp))
           localStorage.setItem('dfusion_drafts', JSON.stringify(tmp))
-          draftsActor?.deleteDraft(BigInt(onDraft)).then(()=>{
+          draftsActor?.deleteDraft(BigInt(onDraft)).then(() => {
             console.log('deleted')
           })
         }
@@ -125,11 +125,13 @@ export const EditPage: React.FC = () => {
       time: BigInt(new Date().getTime())
     }
     // change the local state
-    draftsActor?.setDraft(draft).then((res)=>{
-      if('ok' in res) {
-        const localDraft = {...draft, 
-          id: Number(res.ok), 
-          time: Number(draft.time) * 1000000}
+    draftsActor?.setDraft(draft).then((res) => {
+      if ('ok' in res) {
+        const localDraft = {
+          ...draft,
+          id: Number(res.ok),
+          time: Number(draft.time) * 1000000
+        }
         const newDrafts = {
           ...drafts,
           [res.ok.toString()]: localDraft
@@ -154,7 +156,7 @@ export const EditPage: React.FC = () => {
           duration: 3000
         })
       }
-    }).catch((e)=>{
+    }).catch((e) => {
       console.error(e)
       setLoading(false)
     }).finally(() => {
@@ -175,45 +177,55 @@ export const EditPage: React.FC = () => {
         fontSize='25'>
         <Flex alignItems='center'
           width='100%'
-          justifyContent='flex-end'>
-          {/* <Button colorScheme='regular'
-            variant='outline'>
-            Upload banner
-          </Button> */}
-          <Button onClick={handleSaveDraft}
-            width='120px'
-            borderRadius={10}
-            marginRight='12px'
-            colorScheme='regular'
-            variant='outline'
-            isLoading={loading}
-            disabled={loading || !title || !(Object.keys(drafts!)?.length < 5)}>
-            {!(Object.keys(drafts!)?.length < 5) ? 'Draft Limited' : 'Save Draft' }</Button>
-          <Flex alignItems='center'
-            border='1px solid #6993FF'
-            borderRadius={12}>
-            <Badge variant='solid'
+          justifyContent='space-between'>
+          <Flex alignItems='center'>
+            <Badge marginRight='8px'
               borderRadius={12}
-              m='0 8px' pr='2' fontSize={14}
-              colorScheme={nft ? 'regular' : 'gray'} >
-              <i>NFT</i></Badge>
-            <Switch size='md'
-              mr='10px'
-              checked={nft}
-              disabled={loading}
-              onChange={() => {
-                setNft(!nft)
-              }}
-              colorScheme='regular' />
-            <Button onClick={handlePublish}
+              p='2px 8px'>
+              {onDraft ? "Draft Mode" : "Create Mode"}
+            </Badge>
+            <Link fontSize={12}
+              color='#2663FF'
+              href="/drafts"
+            >
+              View All Drafts
+            </Link>
+          </Flex>
+          <Flex>
+            <Button onClick={handleSaveDraft}
               width='120px'
               borderRadius={10}
+              marginRight='12px'
               colorScheme='regular'
+              variant='outline'
               isLoading={loading}
-              disabled={loading || !title}>
-              Publish </Button>
+              disabled={loading || !title || !(Object.keys(drafts!)?.length < 5)}>
+              {!(Object.keys(drafts!)?.length < 5) ? 'Draft Limited' : 'Save Draft'}</Button>
+            <Flex alignItems='center'
+              border='1px solid #6993FF'
+              borderRadius={12}>
+              <Badge variant='solid'
+                borderRadius={12}
+                m='0 8px' pr='2' fontSize={14}
+                colorScheme={nft ? 'regular' : 'gray'} >
+                <i>NFT</i></Badge>
+              <Switch size='md'
+                mr='10px'
+                checked={nft}
+                disabled={loading}
+                onChange={() => {
+                  setNft(!nft)
+                }}
+                colorScheme='regular' />
+              <Button onClick={handlePublish}
+                width='120px'
+                borderRadius={10}
+                colorScheme='regular'
+                isLoading={loading}
+                disabled={loading || !title}>
+                Publish </Button>
+            </Flex>
           </Flex>
-
         </Flex>
         {/* <Center borderRadius={10}
           bgColor='gray.200' h='49px'

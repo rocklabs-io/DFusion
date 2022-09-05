@@ -47,7 +47,10 @@ export const Header: React.FC = () => {
             margin='0 20px'
             padding='4px'
             cursor='pointer'
-            onClick={() => { navigate('/edit') }}>
+            onClick={() => { 
+              navigate('/edit')
+              navigate(0)
+            }}>
             <IoMdAddCircleOutline color="#bebebe" size='32px' />
             &nbsp;Create
           </Flex>
