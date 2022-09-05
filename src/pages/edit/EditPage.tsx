@@ -5,7 +5,7 @@ import Editor from "rich-markdown-editor";
 import styles from "./EditPage.module.css"
 import { light as lightTheme } from "./styles/theme";
 import { Identity, useDfusionActor } from "src/canisters/actor";
-import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center, useEditable } from "@chakra-ui/react";
+import { useToast, Button, Box, Input, Textarea, Flex, Switch, Badge, Center, useEditable, Spinner } from "@chakra-ui/react";
 import { useBatchHook, useCreateEntryBatch } from "src/batch";
 import { Batch } from "src/batch/model";
 import { Result_1 } from "src/canisters/model/dfusion.did";
@@ -209,9 +209,6 @@ export const EditPage: React.FC = () => {
               width='120px'
               borderRadius={10}
               colorScheme='regular'
-              loadingText={
-                createEntrybatch.state + '...'
-              }
               isLoading={loading}
               disabled={loading || !title}>
               Publish </Button>
