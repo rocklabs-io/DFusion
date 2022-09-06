@@ -11,8 +11,9 @@ import { Batch } from "src/batch/model";
 import { Result_1 } from "src/canisters/model/dfusion.did";
 import RichMarkdownEditor from "rich-markdown-editor";
 import { userExtAction, useUserExtStore } from "src/store/features/userExt";
-import { useAppDispatch } from "src/store";
+import { useAppDispatch, usePlugStore } from "src/store";
 import { useDraftsActor } from "src/canisters/actor/use-drafts-actor";
+import { ConnectButton } from "src/components/connectButton";
 
 const { NFTStorage } = require('nft.storage')
 
@@ -23,6 +24,7 @@ export const EditPage: React.FC = () => {
   const [nft, setNft] = useState(false)
   let navigate = useNavigate()
   const toast = useToast()
+  const { principalId } = usePlugStore()
   const { drafts } = useUserExtStore()
   let { search } = useLocation();
   const draftsActor = useDraftsActor(Identity.caller ?? undefined)
@@ -175,117 +177,120 @@ export const EditPage: React.FC = () => {
         minHeight='100%'
         padding='100px 0'
         fontSize='25'>
-        <Flex alignItems='center'
-          width='100%'
-          justifyContent='space-between'>
-          <Flex alignItems='center'>
-            <Badge marginRight='8px'
-              borderRadius={12}
-              p='2px 8px'>
-              {onDraft ? "Draft Mode" : "Create Mode"}
-            </Badge>
-            <Link fontSize={12}
-              color='#2663FF'
-              href="/drafts"
-            >
-              View All Drafts
-            </Link>
-          </Flex>
-          <Flex>
-            <Button onClick={handleSaveDraft}
-              width='120px'
-              borderRadius={10}
-              marginRight='12px'
-              colorScheme='regular'
-              variant='outline'
-              isLoading={loading}
-              disabled={loading || !title || !(Object.keys(drafts!)?.length < 5)}>
-              {!(Object.keys(drafts!)?.length < 5) ? 'Draft Limited' : 'Save Draft'}</Button>
-            <Flex alignItems='center'
-              border='1px solid #6993FF'
-              borderRadius={12}>
-              <Badge variant='solid'
-                borderRadius={12}
-                m='0 8px' pr='2' fontSize={14}
-                colorScheme={nft ? 'regular' : 'gray'} >
-                <i>NFT</i></Badge>
-              <Switch size='md'
-                mr='10px'
-                checked={nft}
-                disabled={loading}
-                onChange={() => {
-                  setNft(!nft)
+        {
+          principalId
+            ?
+            <>
+              <Flex alignItems='center'
+                width='100%'
+                justifyContent='space-between'>
+                <Flex alignItems='center'>
+                  <Badge marginRight='8px'
+                    borderRadius={12}
+                    p='2px 8px'>
+                    {onDraft ? "Draft Mode" : "Create Mode"}
+                  </Badge>
+                  <Link fontSize={12}
+                    color='#2663FF'
+                    href="/drafts"
+                  >
+                    View All Drafts
+                  </Link>
+                </Flex>
+                <Flex>
+                  <Button onClick={handleSaveDraft}
+                    width='120px'
+                    borderRadius={10}
+                    marginRight='12px'
+                    colorScheme='regular'
+                    variant='outline'
+                    isLoading={loading}
+                    disabled={loading || !title || !(Object.keys(drafts!)?.length < 5)}>
+                    {!(Object.keys(drafts!)?.length < 5) ? 'Draft Limited' : 'Save Draft'}</Button>
+                  <Flex alignItems='center'
+                    border='1px solid #6993FF'
+                    borderRadius={12}>
+                    <Badge variant='solid'
+                      borderRadius={12}
+                      m='0 8px' pr='2' fontSize={14}
+                      colorScheme={nft ? 'regular' : 'gray'} >
+                      <i>NFT</i></Badge>
+                    <Switch size='md'
+                      mr='10px'
+                      checked={nft}
+                      disabled={loading}
+                      onChange={() => {
+                        setNft(!nft)
+                      }}
+                      colorScheme='regular' />
+                    <Button onClick={handlePublish}
+                      width='120px'
+                      borderRadius={10}
+                      colorScheme='regular'
+                      isLoading={loading}
+                      disabled={loading || !title}>
+                      Publish </Button>
+                  </Flex>
+                </Flex>
+              </Flex>
+              <Textarea placeholder="Give me a title!"
+                rows={1}
+                height='70px'
+                border='0'
+                paddingInline='0'
+                fontWeight='medium'
+                fontSize='4xl'
+                resize='none'
+                overflow='hidden'
+                value={title}
+                onReset={(e) => {
+                  e.currentTarget.style.height = ""
+                  e.currentTarget.style.height = (e.currentTarget.scrollHeight + 5).toString() + 'px'
                 }}
-                colorScheme='regular' />
-              <Button onClick={handlePublish}
-                width='120px'
-                borderRadius={10}
-                colorScheme='regular'
-                isLoading={loading}
-                disabled={loading || !title}>
-                Publish </Button>
-            </Flex>
-          </Flex>
-        </Flex>
-        {/* <Center borderRadius={10}
-          bgColor='gray.200' h='49px'
-          margin='20px 0'
-          color='gray.400'
-          fontSize={14}><i>
-            You have not add a banner picture now
-          </i></Center> */}
-        <Textarea placeholder="Give me a title!"
-          rows={1}
-          height='70px'
-          border='0'
-          paddingInline='0'
-          fontWeight='medium'
-          fontSize='4xl'
-          resize='none'
-          overflow='hidden'
-          value={title}
-          onReset={(e) => {
-            e.currentTarget.style.height = ""
-            e.currentTarget.style.height = (e.currentTarget.scrollHeight + 5).toString() + 'px'
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault()
-              edit.current && edit.current.focusAtStart()
-            }
-          }}
-          onChange={(e) => {
-            e.target.style.height = ""
-            e.target.style.height = (e.target.scrollHeight).toString() + 'px'
-            setTitle(e.target.value)
-          }}
-          _focus={{
-            border: 'none',
-          }}
-        ></Textarea>
-        <Editor
-          ref={edit as any}
-          theme={lightTheme}
-          className={styles.editor}
-          onChange={(value) => onChange(value())}
-          value={drafts && onDraft ? drafts[onDraft]?.content : ''}
-          placeholder={'Hello creator! Write something here.'}
-          onImageUploadStart={() => {
-            toast({
-              title: 'start upload',
-              duration: 3000,
-            })
-          }}
-          onImageUploadStop={() => {
-            toast({
-              title: 'upload stoped',
-              duration: 3000,
-            })
-          }}
-          uploadImage={async file => {
-            return uploadCar(file)
-          }} />
-
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    edit.current && edit.current.focusAtStart()
+                  }
+                }}
+                onChange={(e) => {
+                  e.target.style.height = ""
+                  e.target.style.height = (e.target.scrollHeight).toString() + 'px'
+                  setTitle(e.target.value)
+                }}
+                _focus={{
+                  border: 'none',
+                }}
+              ></Textarea>
+              <Editor
+                ref={edit as any}
+                theme={lightTheme}
+                className={styles.editor}
+                onChange={(value) => onChange(value())}
+                value={drafts && onDraft ? drafts[onDraft]?.content : ''}
+                placeholder={'Hello creator! Write something here.'}
+                onImageUploadStart={() => {
+                  toast({
+                    title: 'start upload',
+                    duration: 3000,
+                  })
+                }}
+                onImageUploadStop={() => {
+                  toast({
+                    title: 'upload stoped',
+                    duration: 3000,
+                  })
+                }}
+                uploadImage={async file => {
+                  return uploadCar(file)
+                }} />
+            </>
+            :
+            <Center height='200' flexDir='column'>
+              <Text fontSize='2xl' marginBottom='20px'> Connect your Plug-wallet</Text>
+              <ConnectButton />
+            </Center>
+        }
       </Flex>
     </>)
 }
