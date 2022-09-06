@@ -1,6 +1,6 @@
 import { shortPrincipal } from "src/utils/utils";
 import { useMemo } from "react"
-import { MdChildCare, MdFavoriteBorder, MdLogout, MdOutlineSettings, MdPersonOutline } from 'react-icons/md'
+import { MdChildCare, MdOutlineDrafts, MdFavoriteBorder, MdLogout, MdOutlineSettings, MdPersonOutline } from 'react-icons/md'
 import { useAppDispatch, usePlugStore, plugActions, FeatureState, } from "src/store";
 import { ENV } from "src/config/env"
 import { disconnect, requestConnect, usePlugInit } from 'src/components/plug';
@@ -126,6 +126,13 @@ export const ConnectButton = () => {
           onClick={() => {
             navigate('/following/' + principalId)
           }}>Following</MenuItem>
+        <MenuItem
+          margin='10px 0'
+          icon={<MdOutlineDrafts color='black' opacity={0.6} size={24} />}
+          borderRadius={10}
+          onClick={() => {
+            navigate('/drafts')
+          }}>Drafts</MenuItem>
         <MenuItem
           margin='10px 0'
           icon={<MdPersonOutline color='black' opacity={0.6} size={24} />}

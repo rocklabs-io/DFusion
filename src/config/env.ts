@@ -15,5 +15,7 @@ export const ENV = {
     "iuwup-dqaaa-aaaai-qniuq-cai",
     reverse_registrar: process.env.REVERSE_TRGISTRAR_CANISTER_ID || 
     'etiyd-ciaaa-aaaan-qabbq-cai',
+    drafts: 
+    "6obhc-uyaaa-aaaai-qnmqq-cai",
   },
 };

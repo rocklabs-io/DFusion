@@ -103,7 +103,7 @@ export const EntriesColumn = () => {
             }}
             _focus={{
               border: 'none'
-            }}>Latests</Tab>
+            }}>Latest</Tab>
         </TabList>
         <TabPanels>
           <TabPanel padding='4px' marginTop='20px'>
